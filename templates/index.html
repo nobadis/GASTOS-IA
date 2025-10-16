@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💰 Gestión de Gastos</title>
+    <title>💳 Gestion des Dépenses</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -1995,7 +1995,7 @@
             transition: all 0.2s ease;
         }
 
-        #nuevoDetalleImporte:focus, #nuevoDetalleMoneda:focus {
+        #nuevoDetalleImporte:focus, #nuevoDetalleDevise:focus {
             outline: none;
             border-color: var(--accent-color);
             box-shadow: 0 0 0 2px rgba(0, 184, 148, 0.2);
@@ -4684,7 +4684,7 @@
     <!-- Botón toggle sidebar -->
     <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
         <span id="sidebarToggleIcon">◀</span>
-    </button>
+            </button>
 
     <div class="cms-layout">
         <!-- Sidebar CMS -->
@@ -4694,10 +4694,10 @@
                 <div class="sidebar-user-avatar">{{ current_user[0].upper() }}</div>
                 <div class="sidebar-user-info">
                     <div class="sidebar-user-name">{{ current_user }}</div>
-                    <div class="sidebar-user-role">{{ 'Administrador' if is_admin else 'Usuario' }}</div>
+                    <div class="sidebar-user-role">{{ 'Administrateur' if is_admin else 'Utilisateur' }}</div>
                 </div>
-            </div>
-            
+        </div>
+        
             <div class="sidebar-divider"></div>
             
             <div class="sidebar-menu">
@@ -4712,7 +4712,7 @@
                 <div class="sidebar-item" id="sidebarDashboard" onclick="showViewCMS('dashboard')">
                     <span class="sidebar-item-icon">📊</span>
                     <span class="sidebar-item-text">Tableau de Bord</span>
-                </div>
+            </div>
                 {% endif %}
                 
                 <div class="sidebar-divider"></div>
@@ -4722,8 +4722,8 @@
                 <div class="sidebar-item" onclick="openManageMotivosModal()">
                     <span class="sidebar-item-icon">📁</span>
                     <span class="sidebar-item-text">Groupes de Dépenses</span>
-                </div>
-                
+        </div>
+        
                 <div class="sidebar-divider"></div>
                 
                 <div class="sidebar-item sidebar-logout" onclick="window.location.href='/logout'">
@@ -4739,30 +4739,30 @@
             <div id="gastos-view" class="content-view active">
     <div class="container">
         <div class="header">
-                        <h1>💳 Gestión de Gastos</h1>
-                        <p>Añade y gestiona tus gastos</p>
+                        <h1>💳 Gestion des Dépenses</h1>
+                        <p>Ajoutez et gérez vos dépenses</p>
                     </div>
 
                     <!-- Filtros de fecha -->
                     <div class="date-filters">
                         <div class="date-filters-header">
-                            <h3>🗓️ Filtrado por Fechas</h3>
-                            <p>Selecciona el rango de fechas para filtrar tus gastos</p>
+                            <h3>🗓️ Filtrage par Dates</h3>
+                            <p>Sélectionnez la plage de dates pour filtrer vos dépenses</p>
                         </div>
                         
                         {% if is_admin %}
                         <!-- Selector de día de corte del mes GLOBAL -->
                         <div class="cutoff-day-selector">
                             <div class="cutoff-day-label">
-                                <strong>📅 Día de inicio del mes (Global)</strong>
-                                <small>Define el día de inicio del periodo mensual para TODOS los usuarios y sus gastos</small>
+                                <strong>📅 Jour de début du mois (Global)</strong>
+                                <small>Définir le jour de début de la période mensuelle pour TOUS les utilisateurs</small>
                             </div>
                             <div class="cutoff-day-input">
-                                <span style="color: var(--text-secondary); font-size: 14px;">Día:</span>
+                                <span style="color: var(--text-secondary); font-size: 14px;">Jour:</span>
                                 <input type="number" id="gastosCutoffDayInput" min="1" max="31" value="23" 
-                                       title="Día de inicio del mes (1-31) - Afecta a todos los usuarios">
+                                       title="Jour de début du mois (1-31) - Affecte tous les utilisateurs">
                                 <button class="btn-confirm-cutoff" onclick="confirmCutoffDayChange('gastos')">
-                                    ✅ Confirmar
+                                    ✅ Confirmer
                                 </button>
                             </div>
                         </div>
@@ -4772,7 +4772,7 @@
                             <div class="date-input-row date-input-inline">
                                 <div class="date-input-group">
                                     <div class="date-input-label">
-                                        📅 Fecha Inicio:
+                                        📅 Date Début:
                                     </div>
                                     <div class="date-input-field">
                                         <input type="date" id="fechaInicio">
@@ -4781,7 +4781,7 @@
                                 
                                 <div class="date-input-group">
                                     <div class="date-input-label">
-                                        📅 Fecha Fin:
+                                        📅 Date Fin:
                                     </div>
                                     <div class="date-input-field">
                                         <input type="date" id="fechaFin">
@@ -4793,22 +4793,22 @@
                         <!-- Filtro multi-select por grupo de gastos -->
                         <div class="user-filter-section">
                             <div class="filter-group">
-                                <label for="gastosViajeFilter">📁 Filtrar por Grupo de Gastos:</label>
+                                <label for="gastosViajeFilter">📁 Filtrer par Groupe de Dépenses:</label>
                                 <div class="multiselect-container" id="gastosViajeMultiselect">
                                     <div class="multiselect-display" onclick="toggleMultiselect('gastosViajeMultiselect')">
-                                        <span class="multiselect-selected placeholder">Todos los grupos</span>
+                                        <span class="multiselect-selected placeholder">Tous les groupes</span>
                                         <span class="multiselect-arrow">▼</span>
                                     </div>
                                     <div class="multiselect-dropdown">
                                         <div class="multiselect-search">
-                                            <input type="text" placeholder="🔍 Buscar grupo..." onkeyup="filterMultiselectOptions('gastosViajeMultiselect', this.value)">
+                                            <input type="text" placeholder="🔍 Rechercher groupe..." onkeyup="filterMultiselectOptions('gastosViajeMultiselect', this.value)">
                                         </div>
                                         <div class="multiselect-options" id="gastosViajeOptions">
                                             <!-- Options will be populated dynamically -->
                                         </div>
                                         <div class="multiselect-actions">
-                                            <button class="multiselect-btn multiselect-btn-all" onclick="selectAllMultiselect('gastosViajeMultiselect')">✓ Todos</button>
-                                            <button class="multiselect-btn multiselect-btn-clear" onclick="clearMultiselect('gastosViajeMultiselect')">✗ Limpiar</button>
+                                            <button class="multiselect-btn multiselect-btn-all" onclick="selectAllMultiselect('gastosViajeMultiselect')">✓ Tous</button>
+                                            <button class="multiselect-btn multiselect-btn-clear" onclick="clearMultiselect('gastosViajeMultiselect')">✗ Effacer</button>
                                         </div>
                                     </div>
                                 </div>
@@ -4816,30 +4816,30 @@
                         </div>
                         
                         <div class="actions-section">
-                            <button class="btn-filter btn-today" onclick="setLastMonthRange()">📅 Último Mes</button>
-                            <button class="btn-filter btn-clear-dates" onclick="clearDateFilters()">🗑️ Limpiar</button>
-                            <button class="btn-filter btn-confirm" onclick="applyDateFilters()">✅ Aplicar Filtros</button>
+                            <button class="btn-filter btn-today" onclick="setLastMonthRange()">📅 Dernier Mois</button>
+                            <button class="btn-filter btn-clear-dates" onclick="clearDateFilters()">🗑️ Effacer</button>
+                            <button class="btn-filter btn-confirm" onclick="applyDateFilters()">✅ Appliquer Filtres</button>
                         </div>
                     </div>
 
         <div class="stats">
             <div class="stat-card">
-                            <h3>Tickets Totales</h3>
+                            <h3>Tickets Totaux</h3>
                             <div class="value" id="totalTickets">0</div>
             </div>
             <div class="stat-card">
-                            <h3>Tickets Filtrados</h3>
+                            <h3>Tickets Filtrés</h3>
                             <div class="value" id="ticketsFiltrados">0</div>
             </div>
             <div class="stat-card">
-                            <h3>Total Filtrado</h3>
+                            <h3>Total Filtré</h3>
                             <div class="value" id="totalFiltrado">€0.00</div>
             </div>
         </div>
 
         <div class="expenses-container">
             <div class="table-header">
-                            🎫 Lista de Tickets
+                            🎫 Liste des Tickets
             </div>
             <div class="table-content" id="expensesList">
                 <!-- Los gastos se cargarán aquí -->
@@ -4848,17 +4848,17 @@
             <!-- Sección de selección múltiple integrada -->
             <div class="integrated-selection-section">
                 <div class="selection-header">
-                    <h4>☑️ Selección Múltiple</h4>
+                    <h4>☑️ Sélection Multiple</h4>
                     <div class="selection-info">
-                        <span id="selectedGastosCount">0 tickets seleccionados</span>
+                        <span id="selectedGastosCount">0 tickets sélectionnés</span>
                     </div>
                 </div>
                 <div class="bulk-actions-centered">
                     <button class="btn-secondary" onclick="toggleSelectAll('gastos')" id="selectAllGastosBtn">
-                        ☑️ Seleccionar Todo
+                        ☑️ Tout Sélectionner
                     </button>
                     <button class="btn-danger" onclick="deleteSelectedGastos()" id="deleteSelectedGastosBtn" disabled>
-                        🗑️ Eliminar Seleccionados
+                        🗑️ Supprimer Sélectionnés
                     </button>
                 </div>
             </div>
@@ -4866,20 +4866,20 @@
 
                     <!-- Sección de acciones principales -->
                     <div class="action-section">
-                        <h3>🎯 Acciones Principales</h3>
+                        <h3>🎯 Actions Principales</h3>
                         <div class="main-actions">
-                            <button class="btn-primary" onclick="openModal()" title="Añadir Nuevo Ticket">
-                                ➕ Añadir Nuevo Ticket
+                            <button class="btn-primary" onclick="openModal()" title="Ajouter Nouveau Ticket">
+                                ➕ Ajouter Nouveau Ticket
                             </button>
-                                                <button class="btn-secondary" onclick="openManageMotivosModal()" title="Gestionar Grupos de Gastos">
-                        ⚙️ Gestionar Grupos de Gastos
+                                                <button class="btn-secondary" onclick="openManageMotivosModal()" title="Gérer Groupes de Dépenses">
+                        ⚙️ Gérer Groupes de Dépenses
             </button>
                         </div>
                     </div>
 
                     <!-- Resumen de Grupos con Detalles -->
                     <div class="action-section" id="resumenViajesSection" style="display: none;">
-                        <h3>🎯 Resumen de Grupos de Gastos con Detalles Pendientes</h3>
+                        <h3>🎯 Résumé des Groupes de Dépenses avec Détails en Attente</h3>
                         <div id="resumenViajesList" class="resumen-viajes-container">
                             <!-- El resumen se cargará aquí -->
                         </div>
@@ -4910,30 +4910,30 @@
             <div id="dashboard-view" class="content-view">
                 <div class="container">
                     <div class="header">
-                        <h1>📊 Dashboard</h1>
-                        <p>Visualiza y confirma tus gastos</p>
+                        <h1>📊 Tableau de Bord</h1>
+                        <p>Visualisez et confirmez vos dépenses</p>
                     </div>
 
                     <!-- Filtros de fecha para dashboard -->
                     <div class="date-filters">
                         <div class="date-filters-header">
-                            <h3>🗓️ Filtrado por Fechas</h3>
-                            <p>Selecciona el rango de fechas para el dashboard</p>
+                            <h3>🗓️ Filtrage par Dates</h3>
+                            <p>Sélectionnez la plage de dates pour le tableau de bord</p>
                         </div>
                         
                         {% if is_admin %}
                         <!-- Selector de día de corte del mes GLOBAL -->
                         <div class="cutoff-day-selector">
                             <div class="cutoff-day-label">
-                                <strong>📅 Día de inicio del mes (Global)</strong>
-                                <small>Define el día de inicio del periodo mensual para TODOS los usuarios y sus gastos</small>
+                                <strong>📅 Jour de début du mois (Global)</strong>
+                                <small>Définir le jour de début de la période mensuelle pour TOUS les utilisateurs</small>
                             </div>
                             <div class="cutoff-day-input">
-                                <span style="color: var(--text-secondary); font-size: 14px;">Día:</span>
+                                <span style="color: var(--text-secondary); font-size: 14px;">Jour:</span>
                                 <input type="number" id="cutoffDayInput" min="1" max="31" value="23" 
-                                       title="Día de inicio del mes (1-31) - Afecta a todos los usuarios">
+                                       title="Jour de début du mois (1-31) - Affecte tous les utilisateurs">
                                 <button class="btn-confirm-cutoff" onclick="confirmCutoffDayChange('dashboard')">
-                                    ✅ Confirmar
+                                    ✅ Confirmer
                                 </button>
                             </div>
                         </div>
@@ -4943,7 +4943,7 @@
                             <div class="date-input-row date-input-inline">
                                 <div class="date-input-group">
                                     <div class="date-input-label">
-                                        📅 Fecha Inicio:
+                                        📅 Date Début:
                                     </div>
                                     <div class="date-input-field">
                                         <input type="date" id="dashboardFechaInicio">
@@ -4952,7 +4952,7 @@
                                 
                                 <div class="date-input-group">
                                     <div class="date-input-label">
-                                        📅 Fecha Fin:
+                                        📅 Date Fin:
                                     </div>
                                     <div class="date-input-field">
                                         <input type="date" id="dashboardFechaFin">
@@ -4964,22 +4964,22 @@
                         {% if is_admin %}
                         <div class="user-filter-section">
                             <div class="filter-group">
-                                <label for="dashboardUserFilter">👤 Filtrar por Usuario:</label>
+                                <label for="dashboardUserFilter">👤 Filtrer par Utilisateur:</label>
                                 <div class="multiselect-container" id="dashboardUserMultiselect">
                                     <div class="multiselect-display" onclick="toggleMultiselect('dashboardUserMultiselect')">
-                                        <span class="multiselect-selected placeholder">Todos los usuarios</span>
+                                        <span class="multiselect-selected placeholder">Tous les utilisateurs</span>
                                         <span class="multiselect-arrow">▼</span>
                                     </div>
                                     <div class="multiselect-dropdown">
                                         <div class="multiselect-search">
-                                            <input type="text" placeholder="🔍 Buscar usuario..." onkeyup="filterMultiselectOptions('dashboardUserMultiselect', this.value)">
+                                            <input type="text" placeholder="🔍 Rechercher utilisateur..." onkeyup="filterMultiselectOptions('dashboardUserMultiselect', this.value)">
                                         </div>
                                         <div class="multiselect-options" id="dashboardUserOptions">
                                             <!-- Options will be populated dynamically -->
                                         </div>
                                         <div class="multiselect-actions">
-                                            <button class="multiselect-btn multiselect-btn-all" onclick="selectAllMultiselect('dashboardUserMultiselect')">✓ Todos</button>
-                                            <button class="multiselect-btn multiselect-btn-clear" onclick="clearMultiselect('dashboardUserMultiselect')">✗ Limpiar</button>
+                                            <button class="multiselect-btn multiselect-btn-all" onclick="selectAllMultiselect('dashboardUserMultiselect')">✓ Tous</button>
+                                            <button class="multiselect-btn multiselect-btn-clear" onclick="clearMultiselect('dashboardUserMultiselect')">✗ Effacer</button>
                                         </div>
                                     </div>
                                 </div>
@@ -4990,7 +4990,7 @@
                         <!-- Filtro multi-select por grupo de gastos -->
                         <div class="user-filter-section">
                             <div class="filter-group">
-                                <label for="dashboardViajeFilter">📁 Filtrar por Grupo de Gastos:</label>
+                                <label for="dashboardViajeFilter">📁 Filtrar por Groupe de Dépenses:</label>
                                 <div class="multiselect-container" id="dashboardViajeMultiselect">
                                     <div class="multiselect-display" onclick="toggleMultiselect('dashboardViajeMultiselect')">
                                         <span class="multiselect-selected placeholder">Todos los grupos</span>
@@ -5004,8 +5004,8 @@
                                             <!-- Options will be populated dynamically -->
                                         </div>
                                         <div class="multiselect-actions">
-                                            <button class="multiselect-btn multiselect-btn-all" onclick="selectAllMultiselect('dashboardViajeMultiselect')">✓ Todos</button>
-                                            <button class="multiselect-btn multiselect-btn-clear" onclick="clearMultiselect('dashboardViajeMultiselect')">✗ Limpiar</button>
+                                            <button class="multiselect-btn multiselect-btn-all" onclick="selectAllMultiselect('dashboardViajeMultiselect')">✓ Tous</button>
+                                            <button class="multiselect-btn multiselect-btn-clear" onclick="clearMultiselect('dashboardViajeMultiselect')">✗ Effacer</button>
                                         </div>
                                     </div>
                                 </div>
@@ -5013,23 +5013,23 @@
                         </div>
                         
                         <div class="actions-section">
-                            <button class="btn-filter btn-today" onclick="setDashboardLastMonthRange()">📅 Último Mes</button>
-                            <button class="btn-filter btn-clear-dates" onclick="clearDashboardDateFilters()">🗑️ Limpiar</button>
-                            <button class="btn-filter btn-confirm" onclick="applyDashboardDateFilters()">✅ Aplicar Filtros</button>
+                            <button class="btn-filter btn-today" onclick="setDashboardLastMonthRange()">📅 Dernier Mois</button>
+                            <button class="btn-filter btn-clear-dates" onclick="clearDashboardDateFilters()">🗑️ Effacer</button>
+                            <button class="btn-filter btn-confirm" onclick="applyDashboardDateFilters()">✅ Appliquer Filtres</button>
                         </div>
                     </div>
 
                     <div class="stats">
                         <div class="stat-card">
-                            <h3>Tickets Totales</h3>
+                            <h3>Tickets Totaux</h3>
                             <div class="value" id="dashboardTotalTickets">0</div>
                         </div>
                         <div class="stat-card">
-                            <h3>Tickets Filtrados</h3>
+                            <h3>Tickets Filtrés</h3>
                             <div class="value" id="dashboardTicketsFiltrados">0</div>
                         </div>
                         <div class="stat-card">
-                            <h3>Total Filtrado</h3>
+                            <h3>Total Filtré</h3>
                             <div class="value" id="dashboardTotalFiltrado">€0.00</div>
                         </div>
                     </div>
@@ -5045,14 +5045,14 @@
                         <!-- Sección de selección múltiple integrada -->
                         <div class="integrated-selection-section">
                             <div class="selection-header">
-                                <h4>☑️ Acciones Múltiples</h4>
+                                <h4>☑️ Actions Multiples</h4>
                                 <div class="selection-info">
-                                    <span id="selectedDashboardCount">0 tickets seleccionados</span>
+                                    <span id="selectedDashboardCount">0 tickets sélectionnés</span>
                                 </div>
                             </div>
                             <div class="bulk-actions-centered">
                                 <button class="btn-secondary" onclick="toggleSelectAll('dashboard')" id="selectAllDashboardBtn">
-                                    ☑️ Seleccionar Todo
+                                    ☑️ Tout Sélectionner
                                 </button>
                                 <button class="btn-success" onclick="confirmSelectedTickets()" id="confirmSelectedBtn" disabled>
                                     ✅ Confirmar Seleccionados
@@ -5128,11 +5128,11 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="fecha">📅 Fecha</label>
+                            <label for="fecha">📅 Date</label>
                             <input type="date" id="fecha" required>
                         </div>
                         <div class="form-group">
-                            <label for="concepto">🏷️ Concepto</label>
+                            <label for="concepto">🏷️ Concept</label>
                             <select id="concepto" required>
                                 <option value="">Selecciona un concepto</option>
                             </select>
@@ -5142,7 +5142,7 @@
                     {% if is_admin %}
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="usuario">👤 Usuario</label>
+                            <label for="usuario">👤 Utilisateur</label>
                             <select id="usuario" required>
                                 <option value="">Selecciona un usuario</option>
                             </select>
@@ -5157,13 +5157,13 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="motivo">📁 Grupo de Gastos</label>
+                            <label for="motivo">📁 Groupe de Dépenses</label>
                             <select id="motivo">
                                 <option value="">Selecciona un grupo</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="importeEur">💰 Importe (EUR)</label>
+                            <label for="importeEur">💰 Montant (EUR)</label>
                             <input type="number" id="importeEur" step="0.01" min="0" placeholder="0.00" required>
                         </div>
                     </div>
@@ -5198,7 +5198,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="importeOtraMoneda">💱 Importe en Otra Moneda</label>
+                            <label for="importeOtraMoneda">💱 Montant dans Autre Devise</label>
                             <input type="number" id="importeOtraMoneda" step="0.01" min="0" placeholder="0.00">
                         </div>
                     </div>
@@ -5223,11 +5223,11 @@
                     <div class="modal-title-section">
                         <h2>Gestión de Grupos de Gastos</h2>
                         <p>Organiza tus gastos en grupos personalizados</p>
-                    </div>
-                </div>
+            </div>
+                        </div>
                 <button class="close-btn-modern" onclick="closeManageMotivosModal()">
                     <span>✕</span>
-                </button>
+                            </button>
             </div>
             <div class="modal-body-modern">
                 <!-- Sección para añadir nuevo grupo -->
@@ -5267,32 +5267,32 @@
                 <div class="modal-footer-modern">
                     <button type="button" class="btn-close-modern" onclick="closeManageMotivosModal()">
                         <span>✓</span>
-                        <span>Cerrar</span>
+                        <span>Fermer</span>
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal de Detalles de Grupo de Gastos -->
+    <!-- Modal de Detalles de Groupe de Dépenses -->
     <div id="viajeDetalleModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <span class="close" onclick="closeViajeDetalleModal()">&times;</span>
-                <h2 id="viajeDetalleModalTitle">📋 Detalles del Grupo de Gastos</h2>
+                <h2 id="viajeDetalleModalTitle">📋 Detalles del Groupe de Dépenses</h2>
             </div>
             <div class="modal-body">
                 <!-- Sección para añadir nuevo gasto esperado -->
                 <div class="add-detalle-section">
-                    <h3>➕ Añadir Gasto Esperado</h3>
+                    <h3>➕ Ajouter Dépense Prévue</h3>
                     <div class="add-detalle-form">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="nuevoDetalleImporte">💰 Importe:</label>
+                                <label for="nuevoDetalleImporte">💰 Montant:</label>
                                 <input type="number" id="nuevoDetalleImporte" step="0.01" min="0.01" placeholder="0.00" required>
                             </div>
                             <div class="form-group">
-                                <label for="nuevoDetalleMoneda">🌍 Moneda:</label>
+                                <label for="nuevoDetalleMoneda">🌍 Devise:</label>
                                 <select id="nuevoDetalleMoneda">
                                     <option value="EUR">EUR - Euro</option>
                                     <option value="USD">USD - Dólar Americano</option>
@@ -5314,10 +5314,10 @@
                         </div>
                         <div class="add-detalle-actions">
                             <button type="button" class="btn btn-primary" onclick="addDetalleFromModal()">
-                                ➕ Añadir Gasto
+                                ➕ Ajouter Dépense
                             </button>
                             <button type="button" class="btn btn-secondary" onclick="clearNewDetalleInput()">
-                                🗑️ Limpiar
+                                🗑️ Effacer
                             </button>
                         </div>
                     </div>
@@ -5332,7 +5332,7 @@
                 </div>
                 
                 <div style="text-align: center; margin-top: 20px;">
-                    <button type="button" class="btn ripple" onclick="closeViajeDetalleModal()">✅ Cerrar</button>
+                    <button type="button" class="btn ripple" onclick="closeViajeDetalleModal()">✅ Fermer</button>
                 </div>
             </div>
         </div>
@@ -5370,7 +5370,7 @@
                             <i class="fas fa-save"></i> Guardar Todos los Tickets
                         </button>
                         <button type="button" class="btn btn-secondary" onclick="closeBatchVerificationModal()" style="margin-left: 10px;">
-                            <i class="fas fa-times"></i> Cancelar
+                            <i class="fas fa-times"></i> Annuler
                         </button>
                     </div>
                 </div>
@@ -5431,7 +5431,7 @@
                 if (dashboardInput) dashboardInput.value = newDay;
                 
                 console.log(`📅 Día de corte global actualizado y guardado: ${ADMIN_CUTOFF_DAY}`);
-                showMessage('✅ Día de inicio del mes actualizado a: ' + newDay + ' (aplicando cambios...)', 'success');
+                showMessage('✅ Jour de début du mois mis à jour: ' + newDay + ' (application des changements...)', 'success');
                 
                 // Recargar la vista actual con los nuevos filtros
                 if (section === 'gastos') {
@@ -5442,12 +5442,12 @@
                     setDashboardLastMonthRange();
                 }
             } else {
-                alert('❌ El día debe estar entre 1 y 31');
+                alert('❌ Le jour doit être entre 1 et 31');
                 // Restaurar el valor anterior
                 if (section === 'gastos') {
                     document.getElementById('gastosCutoffDayInput').value = ADMIN_CUTOFF_DAY;
                 } else {
-                    document.getElementById('cutoffDayInput').value = ADMIN_CUTOFF_DAY;
+                document.getElementById('cutoffDayInput').value = ADMIN_CUTOFF_DAY;
                 }
             }
         }
@@ -5475,7 +5475,7 @@
             const dropdown = container.querySelector('.multiselect-dropdown');
             const isActive = dropdown.classList.contains('active');
             
-            // Cerrar todos los demás
+            // Fermer todos los demás
             document.querySelectorAll('.multiselect-dropdown.active').forEach(dd => {
                 if (dd !== dropdown) {
                     dd.classList.remove('active');
@@ -5501,13 +5501,13 @@
             if (!state || state.selected.size === 0) {
                 display.className = 'multiselect-selected placeholder';
                 if (id.includes('User')) {
-                    display.textContent = 'Todos los usuarios';
+                    display.textContent = 'Tous les utilisateurs';
                 } else if (id.includes('Viaje')) {
                     display.textContent = 'Todos los grupos';
                 }
             } else if (state.selected.size === state.options.length) {
                 display.className = 'multiselect-selected';
-                display.textContent = 'Todos seleccionados';
+                display.textContent = 'Todos sélectionnés';
             } else {
                 display.className = 'multiselect-selected';
                 const selectedArray = Array.from(state.selected);
@@ -5610,7 +5610,7 @@
             return state && state.selected.size > 0 ? Array.from(state.selected) : [];
         }
         
-        // Cerrar multiselects al hacer click fuera
+        // Fermer multiselects al hacer click fuera
         document.addEventListener('click', function(event) {
             if (!event.target.closest('.multiselect-container')) {
                 document.querySelectorAll('.multiselect-dropdown.active').forEach(dd => {
@@ -5721,7 +5721,7 @@
                 targetBtn.classList.add('active');
             }
             
-            // Cerrar menú móvil si está abierto
+            // Fermer menú móvil si está abierto
             const navbarMenu = document.getElementById('navbarMenu');
             const hamburgerBtn = document.getElementById('hamburgerBtn');
             if (navbarMenu && navbarMenu.classList.contains('active')) {
@@ -5849,7 +5849,7 @@
             }
             renderDashboardExpenses(gastos);
             updateDashboardStats();
-            showMessage('🗑️ Todos los filtros eliminados', 'info');
+            showMessage('🗑️ Tous les filtres supprimés', 'info');
         }
 
         function applyDashboardDateFilters() {
@@ -6029,7 +6029,7 @@
                     
                     showMessage(checked ? '✅ Gasto confirmado' : '⏳ Gasto marcado como pendiente', 'success');
                 } else {
-                    showMessage('❌ Error al actualizar el estado', 'error');
+                    showMessage('❌ Erreur lors de la mise à jour du statut', 'error');
                 }
             } catch (error) {
                 console.error('Error al actualizar estado:', error);
@@ -6074,7 +6074,7 @@
                 lastUsedConcepto = savedConcepto;
             }
             
-            // Cerrar modal con Escape
+            // Fermer modal con Escape
             document.addEventListener('keydown', function(event) {
                 if (event.key === 'Escape') {
                     closeModal();
@@ -6294,7 +6294,7 @@
             }
             renderGastos();
             updateFilteredStats();
-            showMessage('🗑️ Filtros eliminados', 'info');
+            showMessage('🗑️ Filtres supprimés', 'info');
         }
 
         // Aplicar filtros de fecha (solo cuando se confirma)
@@ -6599,7 +6599,7 @@
                         }
                     }, 200);
                 } else {
-                    showMessage('❌ Error al añadir el motivo', 'error');
+                    showMessage('❌ Erreur lors de l\'ajout du groupe', 'error');
                 }
             } catch (error) {
                 showMessage('❌ Error al añadir el motivo', 'error');
@@ -6620,7 +6620,7 @@
             resetForm();
         }
 
-        // Cerrar modal
+        // Fermer modal
         function closeModal() {
             const modal = document.getElementById('expenseModal');
             modal.classList.remove('show');
@@ -6756,7 +6756,7 @@
 
         // Eliminar imagen
         function deleteImage() {
-            if (confirm('¿Estás seguro de que quieres eliminar esta imagen?')) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cette image?')) {
                 capturedImage = null;
                 processedImageFilename = null;
                 existingImageFilename = null;
@@ -6796,7 +6796,7 @@
                     
                     if (extracted.date) {
                         document.getElementById('fecha').value = extracted.date;
-                        extractedFields.push('📅 Fecha');
+                        extractedFields.push('📅 Date');
                     }
                     
                     if (extracted.amount) {
@@ -6814,7 +6814,7 @@
                         } else {
                             // Si es EUR o no se detecta moneda, asumir EUR
                             document.getElementById('importeEur').value = extracted.amount;
-                            extractedFields.push('💰 Importe (EUR)');
+                            extractedFields.push('💰 Montant (EUR)');
                             // Trigger conversion if currency is selected
                             if (document.getElementById('monedaOtra').value) {
                                 convertCurrency();
@@ -6829,7 +6829,7 @@
                     
                     if (extracted.concept) {
                         document.getElementById('concepto').value = extracted.concept;
-                        extractedFields.push('🏷️ Concepto');
+                        extractedFields.push('🏷️ Concept');
                     }
                     
                     if (extractedFields.length > 0) {
@@ -6838,7 +6838,7 @@
                         showMessage('⚠️ No se pudo extraer información. Completa manualmente.', 'warning');
                     }
                 } else {
-                    showMessage('❌ Error al analizar la imagen. ¿Deseas completar manualmente?', 'error');
+                    showMessage('❌ Erreur lors de l\'analyse de l\'image. Voulez-vous compléter manuellement?', 'error');
                 }
             } catch (error) {
                 showMessage('❌ Error de conexión al analizar la imagen. Completa manualmente.', 'error');
@@ -6904,7 +6904,7 @@
                 
                 if (result.success) {
                     showMessage(
-                        currentExpenseId ? '✅ Gasto actualizado correctamente' : '✅ Gasto añadido correctamente', 
+                        currentExpenseId ? '✅ Dépense mise à jour correctement' : '✅ Dépense ajoutée correctement', 
                         'success');
                     
                     // Actualizar último motivo usado si se especificó uno
@@ -6943,7 +6943,7 @@
                     
                     return true;
                 } else {
-                    showMessage(`❌ Error al guardar: ${result.message || 'Error desconocido'}`, 'error');
+                    showMessage(`❌ Erreur lors de l'enregistrement: ${result.message || 'Erreur inconnue'}`, 'error');
                     return false;
                 }
             } catch (error) {
@@ -7046,14 +7046,14 @@
                     showMessage('❌ No se encontró el gasto para editar', 'error');
                 }
             } catch (error) {
-                showMessage('❌ Error al cargar el gasto para editar', 'error');
+                showMessage('❌ Erreur lors du chargement de la dépense', 'error');
                 console.error('Error:', error);
             }
         }
 
         // Eliminar gasto
         async function deleteGasto(id) {
-            if (confirm('¿Estás seguro de que quieres eliminar este gasto?')) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cette dépense?')) {
                 try {
                     const response = await fetch(`/api/gastos/${id}`, {
                         method: 'DELETE'
@@ -7062,10 +7062,10 @@
                     const result = await response.json();
                     
                     if (result.success) {
-                        showMessage('✅ Gasto eliminado correctamente', 'success');
+                        showMessage('✅ Dépense supprimée correctement', 'success');
                         loadGastos();
                     } else {
-                        showMessage('❌ Error al eliminar el gasto', 'error');
+                        showMessage('❌ Erreur lors de la suppression de la dépense', 'error');
                     }
                 } catch (error) {
                     showMessage('❌ Error al eliminar el gasto', 'error');
@@ -7344,7 +7344,7 @@
             loadMotivosForManagement();
         }
 
-        // Cerrar modal de gestión de motivos
+        // Fermer modal de gestión de motivos
         function closeManageMotivosModal() {
             const modal = document.getElementById('manageMotivosModal');
             modal.classList.remove('show');
@@ -7361,7 +7361,7 @@
                 renderMotivosList(motivosData);
             } catch (error) {
                 console.error('Error cargando motivos:', error);
-                showMessage('❌ Error al cargar motivos', 'error');
+                showMessage('❌ Erreur lors du chargement des groupes', 'error');
             }
         }
 
@@ -7437,7 +7437,7 @@
 
         // Eliminar motivo
         async function deleteMotivo(motivoNombre) {
-            if (!confirm(`¿Estás seguro de que quieres eliminar el motivo "${motivoNombre}"?`)) {
+            if (!confirm(`Êtes-vous sûr de vouloir supprimer le groupe "${motivoNombre}"?`)) {
                 return;
             }
 
@@ -7449,7 +7449,7 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    showMessage('✅ Motivo eliminado correctamente', 'success');
+                    showMessage('✅ Groupe supprimé correctement', 'success');
                     // Recargar lista de motivos en el modal
                     loadMotivosForManagement();
                     // Recargar dropdown de motivos en el formulario
@@ -7547,7 +7547,7 @@
             }
         });
         
-        // Cerrar modales con ESC
+        // Fermer modales con ESC
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeModal();
@@ -7582,7 +7582,7 @@
             loadViajeDetalles(motivo);
         }
 
-        // Cerrar modal de detalles de viaje
+        // Fermer modal de detalles de viaje
         function closeViajeDetalleModal() {
             const modal = document.getElementById('viajeDetalleModal');
             modal.classList.remove('show');
@@ -7719,7 +7719,7 @@
 
         // Eliminar detalle de viaje
         async function deleteViajeDetalle(detalleId) {
-            if (!confirm('¿Estás seguro de que quieres eliminar este gasto esperado?')) {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer cette dépense prévue?')) {
                 return;
             }
 
@@ -7879,7 +7879,7 @@
 
         // Descuadrar gasto
         async function descuadrarGasto(gastoId) {
-            if (!confirm('¿Estás seguro de que quieres descuadrar este gasto?')) {
+            if (!confirm('Êtes-vous sûr de vouloir débalancer cette dépense?')) {
                 return;
             }
 
@@ -8468,7 +8468,7 @@
             document.getElementById('batchProgressText').textContent = 'Preparando procesamiento...';
         }
 
-        // Cerrar modal de verificación por lotes
+        // Fermer modal de verificación por lotes
         function closeBatchVerificationModal() {
             const modal = document.getElementById('batchVerificationModal');
             modal.style.display = 'none';
@@ -8785,7 +8785,7 @@
                         }
                     }, 200);
                 } else {
-                    showMessage('❌ Error al añadir el motivo', 'error');
+                    showMessage('❌ Erreur lors de l\'ajout du groupe', 'error');
                 }
             } catch (error) {
                 showMessage('❌ Error al añadir el motivo', 'error');
@@ -8838,7 +8838,7 @@
 
         // Eliminar ticket del lote
         function removeBatchTicket(index) {
-            if (confirm('¿Eliminar este ticket del lote?')) {
+            if (confirm('Supprimer ce ticket du lot?')) {
                 const ticket = batchTickets[index];
                 
                 // Actualizar estadísticas
@@ -8872,7 +8872,7 @@
                 return;
             }
 
-            const confirmMsg = `¿Guardar ${processedTickets.length} tickets en la base de datos?`;
+            const confirmMsg = `Enregistrer ${processedTickets.length} tickets dans la base de données?`;
             if (!confirm(confirmMsg)) return;
 
             const saveBtn = document.getElementById('saveAllBatchBtn');
@@ -8914,9 +8914,9 @@
                     // Debug: Verificar valores obtenidos del formulario
                     console.log(`Ticket ${index} datos del formulario:`, {
                         originalImporte: importeValue,
-                        originalMoneda: monedaValue,
+                        originalDevise: monedaValue,
                         finalImporte: finalImporte,
-                        finalMoneda: finalMoneda,
+                        finalDevise: finalMoneda,
                         isEUR: isEUR,
                         ticketData: ticketData
                     });
@@ -8963,7 +8963,7 @@
                 // Recargar lista de gastos
                 loadGastos();
                 
-                // Cerrar modal
+                // Fermer modal
                 setTimeout(() => {
                     closeBatchVerificationModal();
                 }, 1500);
@@ -8992,16 +8992,16 @@
             });
             
             const count = selectedGastos.size;
-            document.getElementById('selectedGastosCount').textContent = `${count} tickets seleccionados`;
+            document.getElementById('selectedGastosCount').textContent = `${count} tickets sélectionnés`;
             document.getElementById('deleteSelectedGastosBtn').disabled = count === 0;
             
-            // Actualizar botón "Seleccionar Todo"
+            // Actualizar botón "Tout Sélectionner"
             const allCheckboxes = document.querySelectorAll('.gasto-checkbox');
             const selectAllBtn = document.getElementById('selectAllGastosBtn');
             if (count === allCheckboxes.length && count > 0) {
                 selectAllBtn.textContent = '☐ Deseleccionar Todo';
             } else {
-                selectAllBtn.textContent = '☑️ Seleccionar Todo';
+                selectAllBtn.textContent = '☑️ Tout Sélectionner';
             }
         }
 
@@ -9013,17 +9013,17 @@
             });
             
             const count = selectedDashboard.size;
-            document.getElementById('selectedDashboardCount').textContent = `${count} tickets seleccionados`;
+            document.getElementById('selectedDashboardCount').textContent = `${count} tickets sélectionnés`;
             document.getElementById('confirmSelectedBtn').disabled = count === 0;
             document.getElementById('unconfirmSelectedBtn').disabled = count === 0;
             
-            // Actualizar botón "Seleccionar Todo"
+            // Actualizar botón "Tout Sélectionner"
             const allCheckboxes = document.querySelectorAll('.dashboard-checkbox');
             const selectAllBtn = document.getElementById('selectAllDashboardBtn');
             if (count === allCheckboxes.length && count > 0) {
                 selectAllBtn.textContent = '☐ Deseleccionar Todo';
             } else {
-                selectAllBtn.textContent = '☑️ Seleccionar Todo';
+                selectAllBtn.textContent = '☑️ Tout Sélectionner';
             }
         }
 
@@ -9048,11 +9048,11 @@
             }
         }
 
-        // Eliminar gastos seleccionados
+        // Eliminar gastos sélectionnés
         async function deleteSelectedGastos() {
             if (selectedGastos.size === 0) return;
             
-            const confirmMsg = `¿Estás seguro de que quieres eliminar ${selectedGastos.size} tickets seleccionados?`;
+            const confirmMsg = `Êtes-vous sûr de vouloir supprimer ${selectedGastos.size} tickets sélectionnés?`;
             if (!confirm(confirmMsg)) return;
             
             const btn = document.getElementById('deleteSelectedGastosBtn');
@@ -9083,7 +9083,7 @@
             
             // Restaurar botón
             btn.disabled = false;
-            btn.innerHTML = '🗑️ Eliminar Seleccionados';
+            btn.innerHTML = '🗑️ Supprimer Sélectionnés';
             
             // Mostrar resultado y recargar
             if (deletedCount > 0) {
@@ -9096,7 +9096,7 @@
             }
         }
 
-        // Confirmar tickets seleccionados
+        // Confirmar tickets sélectionnés
         async function confirmSelectedTickets() {
             if (selectedDashboard.size === 0) return;
             
@@ -9153,7 +9153,7 @@
             }
         }
 
-        // Desmarcar tickets seleccionados
+        // Desmarcar tickets sélectionnés
         async function unconfirmSelectedTickets() {
             if (selectedDashboard.size === 0) return;
             
