@@ -3019,6 +3019,11 @@
             opacity: 1;
         }
 
+        /* Bloquear scroll del body cuando modal está abierto */
+        body.modal-open {
+            overflow: hidden;
+        }
+
         .modal-content {
             background-color: var(--surface-color);
             margin: 5% auto;
@@ -4438,8 +4443,11 @@
         /* === ESTILOS MODERNOS MODAL GRUPOS DE GASTOS === */
         .modal-grupos-gastos {
             max-width: 900px;
+            max-height: 90vh;
             border-radius: 24px;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .modal-header-modern {
@@ -4500,6 +4508,9 @@
         .modal-body-modern {
             padding: 32px;
             background: var(--background-color);
+            overflow-y: auto;
+            flex: 1;
+            max-height: calc(90vh - 200px);
         }
 
         .add-grupo-section {
@@ -6696,6 +6707,8 @@
             setTimeout(() => {
                 modal.classList.add('show');
             }, 10);
+            // Bloquear scroll del body
+            document.body.classList.add('modal-open');
             document.getElementById('modalTitle').textContent = '🎫 Nuevo Ticket';
             currentExpenseId = null;
             resetForm();
@@ -6703,6 +6716,8 @@
 
         // Fermer modal
         function closeModal() {
+            // Desbloquear scroll del body
+            document.body.classList.remove('modal-open');
             const modal = document.getElementById('expenseModal');
             modal.classList.remove('show');
             setTimeout(() => {
@@ -7418,6 +7433,9 @@
                 modal.classList.add('show');
             }, 10);
             
+            // Bloquear scroll del body
+            document.body.classList.add('modal-open');
+            
             // Limpiar el input de nuevo motivo
             clearNewMotivoInput();
             
@@ -7427,6 +7445,8 @@
 
         // Fermer modal de gestión de motivos
         function closeManageMotivosModal() {
+            // Desbloquear scroll del body
+            document.body.classList.remove('modal-open');
             const modal = document.getElementById('manageMotivosModal');
             modal.classList.remove('show');
             setTimeout(() => {
