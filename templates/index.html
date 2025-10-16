@@ -583,16 +583,106 @@
             transform: rotate(-45deg) translate(7px, -6px);
         }
         
-        /* Layout moderno */
+        /* === LAYOUT CMS PROFESIONAL === */
         .cms-layout {
+            display: flex;
             min-height: 100vh;
             padding-top: 70px;
         }
 
-        /* Main content */
+        /* Sidebar CMS */
+        .cms-sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 280px;
+            height: calc(100vh - 70px);
+            background: linear-gradient(180deg, #ffffff 0%, #f8f9ff 100%);
+            border-right: 2px solid rgba(99, 102, 241, 0.1);
+            padding: 24px 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+            overflow-y: auto;
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.04);
+        }
+
+        .cms-sidebar.collapsed {
+            left: -280px;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 0 16px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            border-radius: 14px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 2px solid transparent;
+            letter-spacing: -0.01em;
+        }
+
+        .sidebar-item:hover {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
+            border-color: rgba(99, 102, 241, 0.2);
+            transform: translateX(4px);
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+            transform: translateX(4px);
+        }
+
+        .sidebar-item-icon {
+            font-size: 22px;
+            width: 28px;
+            text-align: center;
+        }
+
+        .sidebar-item-text {
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.2), transparent);
+            margin: 16px 0;
+        }
+
+        .sidebar-section-title {
+            padding: 12px 18px 8px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.7;
+        }
+
+        /* Main content ajustado */
         .main-content {
-            width: 100%;
+            flex: 1;
+            margin-left: 280px;
             padding: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .main-content.expanded {
+            margin-left: 0;
         }
 
         .content-view {
@@ -604,9 +694,62 @@
             display: block;
         }
 
+        /* Toggle sidebar button */
+        .sidebar-toggle {
+            position: fixed;
+            left: 292px;
+            top: 85px;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 101;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .sidebar-toggle.collapsed {
+            left: 12px;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============= RESPONSIVE CMS SIDEBAR ============= */
+        @media (max-width: 1200px) {
+            .cms-sidebar {
+                left: -280px;
+            }
+
+            .cms-sidebar.collapsed {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar-toggle {
+                left: 12px;
+            }
+
+            .sidebar-toggle.collapsed {
+                left: 292px;
+            }
         }
 
         /* ============= RESPONSIVE MOBILE ============= */
@@ -4430,9 +4573,54 @@
         </button>
     </nav>
     
+    <!-- Botón toggle sidebar -->
+    <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
+        <span id="sidebarToggleIcon">◀</span>
+    </button>
+
     <div class="cms-layout">
+        <!-- Sidebar CMS -->
+        <aside class="cms-sidebar" id="cmsSidebar">
+            <div class="sidebar-menu">
+                <div class="sidebar-section-title">Principal</div>
+                
+                <div class="sidebar-item active" onclick="showViewCMS('gastos')">
+                    <span class="sidebar-item-icon">💳</span>
+                    <span class="sidebar-item-text">Gestión de Gastos</span>
+                </div>
+                
+                {% if is_admin %}
+                <div class="sidebar-item" onclick="showViewCMS('dashboard')">
+                    <span class="sidebar-item-icon">📊</span>
+                    <span class="sidebar-item-text">Dashboard Admin</span>
+                </div>
+                {% endif %}
+                
+                <div class="sidebar-divider"></div>
+                
+                <div class="sidebar-section-title">Configuración</div>
+                
+                <div class="sidebar-item" onclick="openManageMotivosModal()">
+                    <span class="sidebar-item-icon">📁</span>
+                    <span class="sidebar-item-text">Grupos de Gastos</span>
+                </div>
+                
+                <div class="sidebar-item" onclick="openConfigModal()">
+                    <span class="sidebar-item-icon">⚙️</span>
+                    <span class="sidebar-item-text">Configuración</span>
+                </div>
+                
+                <div class="sidebar-divider"></div>
+                
+                <div class="sidebar-item" onclick="window.location.href='/logout'">
+                    <span class="sidebar-item-icon">🚪</span>
+                    <span class="sidebar-item-text">Cerrar Sesión</span>
+                </div>
+            </div>
+        </aside>
+
         <!-- Main content -->
-        <div class="main-content">
+        <div class="main-content" id="mainContent">
             <!-- Vista GASTOS -->
             <div id="gastos-view" class="content-view active">
     <div class="container">
@@ -5336,7 +5524,79 @@
 
         // Función para cambiar entre vistas
         // ============ NAVEGACIÓN MODERNA ============
+        // === FUNCIONES CMS SIDEBAR ===
+        function toggleSidebar() {
+            const sidebar = document.getElementById('cmsSidebar');
+            const mainContent = document.getElementById('mainContent');
+            const toggleBtn = document.getElementById('sidebarToggle');
+            const toggleIcon = document.getElementById('sidebarToggleIcon');
+            
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+            toggleBtn.classList.toggle('collapsed');
+            
+            // Cambiar icono
+            if (sidebar.classList.contains('collapsed')) {
+                toggleIcon.textContent = '▶';
+            } else {
+                toggleIcon.textContent = '◀';
+            }
+        }
+
+        function showViewCMS(viewName) {
+            // Actualizar vista actual
+            currentView = viewName;
+            
+            // Ocultar todas las vistas
+            document.querySelectorAll('.content-view').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            // Mostrar vista seleccionada
+            document.getElementById(viewName + '-view').classList.add('active');
+            
+            // Actualizar items del sidebar
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Actualizar botones de navegación navbar
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const targetBtn = document.getElementById(viewName + 'NavBtn');
+            if (targetBtn) {
+                targetBtn.classList.add('active');
+            }
+            
+            // Cerrar menú móvil si está abierto
+            const navbarMenu = document.getElementById('navbarMenu');
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            if (navbarMenu && navbarMenu.classList.contains('active')) {
+                navbarMenu.classList.remove('active');
+                hamburgerBtn.classList.remove('active');
+            }
+            
+            // Cargar datos según la vista
+            if (viewName === 'gastos') {
+                loadGastos();
+            } else if (viewName === 'dashboard') {
+                loadDashboard();
+            }
+        }
+
+        function openConfigModal() {
+            showMessage('🚧 Panel de configuración en desarrollo', 'info');
+        }
+
         function showViewModern(viewName) {
+            // Redirigir a la función CMS
+            showViewCMS(viewName);
+        }
+
+        // Legacy function - mantener compatibilidad
+        function showViewModernOld(viewName) {
             // Actualizar vista actual
             currentView = viewName;
             
