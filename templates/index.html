@@ -392,23 +392,67 @@
         }
 
         /* ============= NAVBAR MODERNA PROFESIONAL ============= */
-        .app-navbar {
+        /* === HEADER MINIMALISTA === */
+        .app-header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 70px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-            z-index: 1000;
+            height: 60px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             display: flex;
             align-items: center;
-            justify-content: space-between;
             padding: 0 24px;
-            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .sidebar-toggle-header {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-toggle-header:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-left: 20px;
+        }
+
+        .header-icon {
+            font-size: 28px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .header-text {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .header-spacer {
+            flex: 1;
+        }
+        
+        /* Legacy navbar styles - ocultar */
+        .app-navbar {
+            display: none;
         }
         
         .navbar-brand {
@@ -587,16 +631,16 @@
         .cms-layout {
             display: flex;
             min-height: 100vh;
-            padding-top: 70px;
+            padding-top: 60px;
         }
 
         /* Sidebar CMS */
         .cms-sidebar {
             position: fixed;
             left: 0;
-            top: 70px;
+            top: 60px;
             width: 280px;
-            height: calc(100vh - 70px);
+            height: calc(100vh - 60px);
             background: linear-gradient(180deg, #ffffff 0%, #f8f9ff 100%);
             border-right: 2px solid rgba(99, 102, 241, 0.1);
             padding: 24px 0;
@@ -604,6 +648,61 @@
             z-index: 100;
             overflow-y: auto;
             box-shadow: 4px 0 24px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Perfil usuario en sidebar */
+        .sidebar-user-profile {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            margin: 0 16px 16px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.12));
+            border-radius: 16px;
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sidebar-user-profile:hover {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(139, 92, 246, 0.18));
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        .sidebar-user-avatar {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+            border: 3px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .sidebar-user-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sidebar-user-name {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .sidebar-user-role {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.85;
         }
 
         .cms-sidebar.collapsed {
@@ -644,6 +743,19 @@
             color: white;
             box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
             transform: translateX(4px);
+        }
+
+        .sidebar-item.sidebar-logout {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(220, 38, 38, 0.08));
+            border-color: rgba(239, 68, 68, 0.2);
+            color: #dc2626;
+        }
+
+        .sidebar-item.sidebar-logout:hover {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
         }
 
         .sidebar-item-icon {
@@ -698,7 +810,7 @@
         .sidebar-toggle {
             position: fixed;
             left: 292px;
-            top: 85px;
+            top: 72px;
             width: 36px;
             height: 36px;
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
@@ -710,7 +822,7 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 101;
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-            display: flex;
+            display: none; /* Oculto en desktop, visible en mobile */
             align-items: center;
             justify-content: center;
         }
@@ -744,11 +856,16 @@
             }
 
             .sidebar-toggle {
+                display: flex; /* Mostrar en tablet/mobile */
                 left: 12px;
             }
 
             .sidebar-toggle.collapsed {
                 left: 292px;
+            }
+
+            .sidebar-toggle-header {
+                display: flex; /* Mostrar hamburger en header móvil */
             }
         }
 
@@ -4532,46 +4649,17 @@
     </style>
 </head>
 <body>
-    <!-- Navbar moderna profesional -->
-    <nav class="app-navbar">
-        <div class="navbar-brand">
-            <span class="navbar-brand-icon">💰</span>
-            <span>Gestión de Gastos</span>
-        </div>
-        
-        <div class="navbar-menu" id="navbarMenu">
-            <button class="nav-btn active" id="gastosNavBtn" onclick="showViewModern('gastos')">
-                <span>💳</span>
-                <span>Gastos</span>
-            </button>
-            {% if is_admin %}
-            <button class="nav-btn" id="dashboardNavBtn" onclick="showViewModern('dashboard')">
-                <span>📊</span>
-                <span>Dashboard</span>
-            </button>
-            {% endif %}
-        </div>
-        
-        <div class="navbar-user">
-            <div class="user-badge">
-                <div class="user-avatar">{{ current_user[0].upper() }}</div>
-                <div class="user-details">
-                    <div class="user-name-navbar">{{ current_user }}</div>
-                    <div class="user-role-navbar">{{ 'Administrador' if is_admin else 'Usuario' }}</div>
-                </div>
-            </div>
-            <a href="/logout" class="logout-btn-navbar">
-                <span>🚪</span>
-                <span>Salir</span>
-            </a>
-        </div>
-        
-        <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileMenu()">
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
+    <!-- Header minimalista solo con toggle -->
+    <header class="app-header">
+        <button class="sidebar-toggle-header" id="sidebarToggleHeader" onclick="toggleSidebar()">
+            <span id="sidebarToggleIconHeader">☰</span>
         </button>
-    </nav>
+        <div class="header-title">
+            <span class="header-icon">💰</span>
+            <span class="header-text">Gestión de Gastos</span>
+        </div>
+        <div class="header-spacer"></div>
+    </header>
     
     <!-- Botón toggle sidebar -->
     <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
@@ -4581,16 +4669,27 @@
     <div class="cms-layout">
         <!-- Sidebar CMS -->
         <aside class="cms-sidebar" id="cmsSidebar">
+            <!-- Perfil de usuario en sidebar -->
+            <div class="sidebar-user-profile">
+                <div class="sidebar-user-avatar">{{ current_user[0].upper() }}</div>
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-name">{{ current_user }}</div>
+                    <div class="sidebar-user-role">{{ 'Administrador' if is_admin else 'Usuario' }}</div>
+                </div>
+            </div>
+            
+            <div class="sidebar-divider"></div>
+            
             <div class="sidebar-menu">
                 <div class="sidebar-section-title">Principal</div>
                 
-                <div class="sidebar-item active" onclick="showViewCMS('gastos')">
+                <div class="sidebar-item active" id="sidebarGastos" onclick="showViewCMS('gastos')">
                     <span class="sidebar-item-icon">💳</span>
                     <span class="sidebar-item-text">Gestión de Gastos</span>
                 </div>
                 
                 {% if is_admin %}
-                <div class="sidebar-item" onclick="showViewCMS('dashboard')">
+                <div class="sidebar-item" id="sidebarDashboard" onclick="showViewCMS('dashboard')">
                     <span class="sidebar-item-icon">📊</span>
                     <span class="sidebar-item-text">Dashboard Admin</span>
                 </div>
@@ -4598,21 +4697,16 @@
                 
                 <div class="sidebar-divider"></div>
                 
-                <div class="sidebar-section-title">Configuración</div>
+                <div class="sidebar-section-title">Gestión</div>
                 
                 <div class="sidebar-item" onclick="openManageMotivosModal()">
                     <span class="sidebar-item-icon">📁</span>
                     <span class="sidebar-item-text">Grupos de Gastos</span>
                 </div>
                 
-                <div class="sidebar-item" onclick="openConfigModal()">
-                    <span class="sidebar-item-icon">⚙️</span>
-                    <span class="sidebar-item-text">Configuración</span>
-                </div>
-                
                 <div class="sidebar-divider"></div>
                 
-                <div class="sidebar-item" onclick="window.location.href='/logout'">
+                <div class="sidebar-item sidebar-logout" onclick="window.location.href='/logout'">
                     <span class="sidebar-item-icon">🚪</span>
                     <span class="sidebar-item-text">Cerrar Sesión</span>
                 </div>
@@ -5530,16 +5624,19 @@
             const mainContent = document.getElementById('mainContent');
             const toggleBtn = document.getElementById('sidebarToggle');
             const toggleIcon = document.getElementById('sidebarToggleIcon');
+            const toggleHeaderIcon = document.getElementById('sidebarToggleIconHeader');
             
             sidebar.classList.toggle('collapsed');
             mainContent.classList.toggle('expanded');
-            toggleBtn.classList.toggle('collapsed');
+            if (toggleBtn) toggleBtn.classList.toggle('collapsed');
             
-            // Cambiar icono
+            // Cambiar iconos
             if (sidebar.classList.contains('collapsed')) {
-                toggleIcon.textContent = '▶';
+                if (toggleIcon) toggleIcon.textContent = '▶';
+                if (toggleHeaderIcon) toggleHeaderIcon.textContent = '✕';
             } else {
-                toggleIcon.textContent = '◀';
+                if (toggleIcon) toggleIcon.textContent = '◀';
+                if (toggleHeaderIcon) toggleHeaderIcon.textContent = '☰';
             }
         }
 
@@ -5559,23 +5656,10 @@
             document.querySelectorAll('.sidebar-item').forEach(item => {
                 item.classList.remove('active');
             });
-            event.currentTarget.classList.add('active');
-            
-            // Actualizar botones de navegación navbar
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            const targetBtn = document.getElementById(viewName + 'NavBtn');
-            if (targetBtn) {
-                targetBtn.classList.add('active');
-            }
-            
-            // Cerrar menú móvil si está abierto
-            const navbarMenu = document.getElementById('navbarMenu');
-            const hamburgerBtn = document.getElementById('hamburgerBtn');
-            if (navbarMenu && navbarMenu.classList.contains('active')) {
-                navbarMenu.classList.remove('active');
-                hamburgerBtn.classList.remove('active');
+            // Activar el item correcto
+            const sidebarItem = document.getElementById('sidebar' + viewName.charAt(0).toUpperCase() + viewName.slice(1));
+            if (sidebarItem) {
+                sidebarItem.classList.add('active');
             }
             
             // Cargar datos según la vista
@@ -9227,4 +9311,5 @@
         // === FIN FUNCIONES PARA SELECCIÓN MÚLTIPLE Y EXPORTACIÓN ===
     </script>
 </body>
+</html>
 </html>
