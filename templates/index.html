@@ -392,58 +392,79 @@
         }
 
         /* ============= NAVBAR MODERNA PROFESIONAL ============= */
-        /* === HEADER MINIMALISTA === */
+        /* === HEADER MINIMALISTA PROFESIONAL === */
         .app-header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 60px;
+            height: 64px;
             background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             display: flex;
             align-items: center;
+            justify-content: center;
             padding: 0 24px;
             z-index: 1000;
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 24px rgba(99, 102, 241, 0.4);
         }
 
         .sidebar-toggle-header {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
+            position: absolute;
+            left: 20px;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.18);
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            border-radius: 14px;
             color: white;
-            font-size: 22px;
+            font-size: 24px;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(10px);
         }
 
         .sidebar-toggle-header:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.28);
+            transform: scale(1.08);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .sidebar-toggle-header:active {
+            transform: scale(0.95);
         }
 
         .header-title {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-left: 20px;
+            gap: 14px;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 10px 28px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
         }
 
         .header-icon {
-            font-size: 28px;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+            font-size: 32px;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .header-text {
             color: white;
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .header-spacer {
@@ -631,16 +652,16 @@
         .cms-layout {
             display: flex;
             min-height: 100vh;
-            padding-top: 60px;
+            padding-top: 64px;
         }
 
         /* Sidebar CMS */
         .cms-sidebar {
             position: fixed;
             left: 0;
-            top: 60px;
+            top: 64px;
             width: 280px;
-            height: calc(100vh - 60px);
+            height: calc(100vh - 64px);
             background: linear-gradient(180deg, #ffffff 0%, #f8f9ff 100%);
             border-right: 2px solid rgba(99, 102, 241, 0.1);
             padding: 24px 0;
@@ -4655,10 +4676,9 @@
             <span id="sidebarToggleIconHeader">☰</span>
         </button>
         <div class="header-title">
-            <span class="header-icon">💰</span>
-            <span class="header-text">Gestión de Gastos</span>
+            <span class="header-icon">💳</span>
+            <span class="header-text">Gestion des Dépenses</span>
         </div>
-        <div class="header-spacer"></div>
     </header>
     
     <!-- Botón toggle sidebar -->
@@ -4685,30 +4705,30 @@
                 
                 <div class="sidebar-item active" id="sidebarGastos" onclick="showViewCMS('gastos')">
                     <span class="sidebar-item-icon">💳</span>
-                    <span class="sidebar-item-text">Gestión de Gastos</span>
+                    <span class="sidebar-item-text">Gestion des Dépenses</span>
                 </div>
                 
                 {% if is_admin %}
                 <div class="sidebar-item" id="sidebarDashboard" onclick="showViewCMS('dashboard')">
                     <span class="sidebar-item-icon">📊</span>
-                    <span class="sidebar-item-text">Dashboard Admin</span>
+                    <span class="sidebar-item-text">Tableau de Bord</span>
                 </div>
                 {% endif %}
                 
                 <div class="sidebar-divider"></div>
                 
-                <div class="sidebar-section-title">Gestión</div>
+                <div class="sidebar-section-title">Gestion</div>
                 
                 <div class="sidebar-item" onclick="openManageMotivosModal()">
                     <span class="sidebar-item-icon">📁</span>
-                    <span class="sidebar-item-text">Grupos de Gastos</span>
+                    <span class="sidebar-item-text">Groupes de Dépenses</span>
                 </div>
                 
                 <div class="sidebar-divider"></div>
                 
                 <div class="sidebar-item sidebar-logout" onclick="window.location.href='/logout'">
                     <span class="sidebar-item-icon">🚪</span>
-                    <span class="sidebar-item-text">Cerrar Sesión</span>
+                    <span class="sidebar-item-text">Déconnexion</span>
                 </div>
             </div>
         </aside>
