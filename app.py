@@ -482,40 +482,40 @@ def extract_with_llm(image_data, ocr_text=""):
             return extract_ticket_info(ocr_text)
         
         # Preparar prompt específico para análisis de tickets
-        prompt = """Analiza este ticket de compra y extrae la información exacta que aparece en él. 
+        prompt = """Analysez ce ticket d'achat et extrayez les informations exactes qui y apparaissent.
 
-PASOS A SEGUIR:
-1. Identifica el TOTAL a pagar (la cantidad final más grande, no subtotales)
-2. Busca la FECHA de la transacción (puede estar en formato DD/MM/YYYY, DD-MM-YYYY o similar)
-3. Encuentra el NOMBRE del establecimiento o comercio
-4. Clasifica el TIPO de establecimiento
+ÉTAPES À SUIVRE:
+1. Identifiez le TOTAL à payer (le montant final le plus important, pas les sous-totaux)
+2. Recherchez la DATE de la transaction (peut être au format DD/MM/YYYY, DD-MM-YYYY ou similaire)
+3. Trouvez le NOM de l'établissement ou commerce
+4. Classifiez le TYPE d'établissement
 
-EXTRAE estos campos:
-- "amount": Solo el número del total a pagar (ejemplo: 15.50, 120.00)
-- "currency": Código de 3 letras de la moneda (EUR, USD, GBP, JPY, etc.) - Si no se ve claramente, usar "EUR"
-- "date": Fecha en formato YYYY-MM-DD (convierte DD/MM/YYYY a YYYY-MM-DD)
-- "description": Nombre exacto del establecimiento que aparece en el ticket
-- "concept": Una de estas categorías exactas: Restaurante, Transporte, Alojamiento, Combustible, Supermercado, Farmacia, Tecnología, Ropa, Entretenimiento, Otros
+EXTRAYEZ ces champs:
+- "amount": Seulement le nombre du total à payer (exemple: 15.50, 120.00)
+- "currency": Code de 3 lettres de la devise (EUR, USD, GBP, JPY, etc.) - Si pas clair, utiliser "EUR"
+- "date": Date au format YYYY-MM-DD (convertir DD/MM/YYYY en YYYY-MM-DD)
+- "description": Nom exact de l'établissement qui apparaît sur le ticket
+- "concept": Une de ces catégories exactes: Restaurante, Transporte, Alojamiento, Combustible, Supermercado, Farmacia, Tecnología, Ropa, Entretenimiento, Otros
 
-EJEMPLOS de conversión de fecha:
+EXEMPLES de conversion de date:
 - 15/03/2024 → 2024-03-15
 - 7/12/2023 → 2023-12-07
 
-DETECCIÓN DE MONEDA:
-- Busca símbolos: €, $, £, ¥, CHF, CAD, etc.
-- Busca texto: "EUR", "USD", "GBP", "JPY", "CHF", etc.
-- Si es símbolo € o dice "EUR" → "EUR"
-- Si es símbolo $ o dice "USD" → "USD"
-- Si es símbolo £ o dice "GBP" → "GBP"
-- Si es símbolo ¥ o dice "JPY" → "JPY"
-- Si no está claro, usar "EUR"
+DÉTECTION DE DEVISE:
+- Cherchez les symboles: €, $, £, ¥, CHF, CAD, etc.
+- Cherchez le texte: "EUR", "USD", "GBP", "JPY", "CHF", etc.
+- Si symbole € ou dit "EUR" → "EUR"
+- Si symbole $ ou dit "USD" → "USD"
+- Si symbole £ ou dit "GBP" → "GBP"
+- Si symbole ¥ ou dit "JPY" → "JPY"
+- Si pas clair, utiliser "EUR"
 
-IMPORTANTE: 
-- Si no ves claramente algún dato, usa null
-- Solo extrae información que realmente aparece en el ticket
-- Responde ÚNICAMENTE con JSON válido
+IMPORTANT: 
+- Si vous ne voyez pas clairement une donnée, utilisez null
+- Extrayez uniquement les informations qui apparaissent réellement sur le ticket
+- Répondez UNIQUEMENT avec du JSON valide
 
-Formato de respuesta:
+Format de réponse:
 {
     "amount": 15.50,
     "currency": "EUR",
@@ -539,7 +539,7 @@ Formato de respuesta:
             
             # Preparar mensaje con imagen usando modelo multimodal
             messages = [
-                {"role": "system", "content": "Eres un experto en análisis de tickets de compra. Respondes únicamente con JSON válido."},
+                {"role": "system", "content": "Vous êtes un expert en analyse de tickets d'achat. Vous répondez uniquement avec du JSON valide."},
                 {
                     "role": "user", 
                     "content": [
