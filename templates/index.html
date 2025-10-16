@@ -5350,16 +5350,16 @@
                     <div class="progress-bar">
                         <div class="progress-fill" id="batchProgressFill"></div>
                     </div>
-                    <div class="progress-text" id="batchProgressText">Procesando tickets...</div>
+                    <div class="progress-text" id="batchProgressText">Traitement des tickets...</div>
                 </div>
                 
                 <div id="batchVerificationContainer" style="display: none;">
                     <div class="batch-summary" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                        <h3>🎯 Resumen del Lote</h3>
+                        <h3>🎯 Résumé du Lot</h3>
                         <div class="summary-stats">
                             <span class="stat-badge">📊 Total: <span id="batchTotalCount">0</span></span>
-                            <span class="stat-badge">✅ Procesados: <span id="batchProcessedCount">0</span></span>
-                            <span class="stat-badge">❌ Errores: <span id="batchErrorCount">0</span></span>
+                            <span class="stat-badge">✅ Traités: <span id="batchProcessedCount">0</span></span>
+                            <span class="stat-badge">❌ Erreurs: <span id="batchErrorCount">0</span></span>
                         </div>
                     </div>
                     
@@ -5910,8 +5910,8 @@
             if (gastosList.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <h3>🎯 Sin tickets en este período</h3>
-                        <p>No hay tickets que coincidan con las fechas seleccionadas</p>
+                        <h3>🎯 Aucun ticket dans cette période</h3>
+                        <p>Aucun ticket ne correspond aux dates sélectionnées</p>
                     </div>
                 `;
                 return;
@@ -6347,8 +6347,8 @@
             if (gastosFiltrados.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <h3>🎯 Sin tickets en este período</h3>
-                        <p>No hay tickets que coincidan con las fechas seleccionadas</p>
+                        <h3>🎯 Aucun ticket dans cette période</h3>
+                        <p>Aucun ticket ne correspond aux dates sélectionnées</p>
                     </div>
                 `;
                 return;
@@ -6833,15 +6833,15 @@
                     }
                     
                     if (extractedFields.length > 0) {
-                        showMessage(`✅ Extraído: ${extractedFields.join(', ')}`, 'success');
+                        showMessage(`✅ Extrait: ${extractedFields.join(', ')}`, 'success');
                     } else {
-                        showMessage('⚠️ No se pudo extraer información. Completa manualmente.', 'warning');
+                        showMessage('⚠️ Impossible d\'extraire les informations. Complétez manuellement.', 'warning');
                     }
                 } else {
                     showMessage('❌ Erreur lors de l\'analyse de l\'image. Voulez-vous compléter manuellement?', 'error');
                 }
             } catch (error) {
-                showMessage('❌ Error de conexión al analizar la imagen. Completa manualmente.', 'error');
+                showMessage('❌ Erreur de connexion lors de l\'analyse de l\'image. Complétez manuellement.', 'error');
                 console.error('Error:', error);
             }
         }
@@ -6862,8 +6862,8 @@
             
             saveExitButton.disabled = true;
             saveAddButton.disabled = true;
-            saveExitButton.textContent = '⏳ Guardando...';
-            saveAddButton.textContent = '⏳ Guardando...';
+            saveExitButton.textContent = '⏳ Enregistrement...';
+            saveAddButton.textContent = '⏳ Enregistrement...';
             saveExitButton.style.opacity = '0.6';
             saveAddButton.style.opacity = '0.6';
 
@@ -6947,7 +6947,7 @@
                     return false;
                 }
             } catch (error) {
-                showMessage('❌ Error de conexión al guardar el gasto', 'error');
+                showMessage('❌ Erreur de connexion lors de l\'enregistrement', 'error');
                 console.error('Error:', error);
                 return false;
             } finally {
@@ -7043,7 +7043,7 @@
                         modal.classList.add('show');
                     }, 10);
                 } else {
-                    showMessage('❌ No se encontró el gasto para editar', 'error');
+                    showMessage('❌ Dépense non trouvée', 'error');
                 }
             } catch (error) {
                 showMessage('❌ Erreur lors du chargement de la dépense', 'error');
@@ -7431,7 +7431,7 @@
                 }
             } catch (error) {
                 console.error('Error toggle viaje:', error);
-                showMessage('❌ Error al cambiar estado del viaje', 'error');
+                showMessage('❌ Erreur lors du changement de statut du groupe', 'error');
             }
         }
 
@@ -7608,7 +7608,7 @@
                 }
             } catch (error) {
                 console.error('Error cargando detalles:', error);
-                showMessage('❌ Error al cargar detalles del viaje', 'error');
+                showMessage('❌ Erreur lors du chargement des détails du groupe', 'error');
             }
         }
 
@@ -7678,7 +7678,7 @@
             }
             
             if (!currentViajeDetalle) {
-                showMessage('❌ Error: No hay viaje seleccionado', 'error');
+                showMessage('❌ Erreur: Aucun groupe sélectionné', 'error');
                 return;
             }
             
@@ -7971,8 +7971,8 @@
             if (resumen.length === 0) {
                 container.innerHTML = `
                     <div style="text-align: center; padding: 32px; color: var(--text-secondary);">
-                        <h4>🎯 Todos los viajes están cuadrados</h4>
-                        <p>No hay viajes con detalles pendientes de cuadrar</p>
+                        <h4>🎯 Tous les groupes sont équilibrés</h4>
+                        <p>Aucun groupe avec des détails en attente</p>
                     </div>
                 `;
                 return;
@@ -8492,7 +8492,7 @@
                 // Actualizar progreso
                 const progress = ((i + 1) / total) * 100;
                 document.getElementById('batchProgressFill').style.width = progress + '%';
-                document.getElementById('batchProgressText').textContent = `Procesando ${i + 1} de ${total}: ${ticket.filename}`;
+                document.getElementById('batchProgressText').textContent = `Traitement ${i + 1} sur ${total}: ${ticket.filename}`;
 
                 try {
                     // Procesar imagen con IA
@@ -8520,11 +8520,11 @@
                             currency: ticket.extractedData?.currency
                         });
                     } else {
-                        ticket.error = result.error || 'Error al procesar imagen';
+                        ticket.error = result.error || 'Erreur lors du traitement de l\'image';
                         errors++;
                     }
                 } catch (error) {
-                    ticket.error = 'Error de conexión: ' + error.message;
+                    ticket.error = 'Erreur de connexion: ' + error.message;
                     errors++;
                 }
 
@@ -8825,14 +8825,14 @@
                     // Re-renderizar tickets
                     renderBatchTickets();
                     
-                    showMessage(`✅ ${ticket.filename} procesado exitosamente`, 'success');
+                    showMessage(`✅ ${ticket.filename} traité avec succès`, 'success');
                 } else {
                     ticket.error = result.error || 'Error al procesar imagen';
-                    showMessage(`❌ Error al procesar ${ticket.filename}`, 'error');
+                    showMessage(`❌ Erreur lors du traitement ${ticket.filename}`, 'error');
                 }
             } catch (error) {
                 ticket.error = 'Error de conexión: ' + error.message;
-                showMessage(`❌ Error de conexión al procesar ${ticket.filename}`, 'error');
+                showMessage(`❌ Erreur de connexion lors du traitement ${ticket.filename}`, 'error');
             }
         }
 
@@ -8868,7 +8868,7 @@
             const processedTickets = batchTickets.filter(ticket => ticket.processed);
             
             if (processedTickets.length === 0) {
-                showMessage('❌ No hay tickets procesados para guardar', 'error');
+                showMessage('❌ Aucun ticket traité à enregistrer', 'error');
                 return;
             }
 
@@ -8877,7 +8877,7 @@
 
             const saveBtn = document.getElementById('saveAllBatchBtn');
             saveBtn.disabled = true;
-            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enregistrement...';
 
             let savedCount = 0;
             let errorCount = 0;
@@ -9057,7 +9057,7 @@
             
             const btn = document.getElementById('deleteSelectedGastosBtn');
             btn.disabled = true;
-            btn.innerHTML = '⏳ Eliminando...';
+            btn.innerHTML = '⏳ Suppression...';
             
             let deletedCount = 0;
             let errorCount = 0;
@@ -9087,12 +9087,12 @@
             
             // Mostrar resultado y recargar
             if (deletedCount > 0) {
-                showMessage(`✅ ${deletedCount} tickets eliminados correctamente${errorCount > 0 ? ` (${errorCount} errores)` : ''}`, 'success');
+                showMessage(`✅ ${deletedCount} tickets supprimés correctement${errorCount > 0 ? ` (${errorCount} erreurs)` : ''}`, 'success');
                 loadGastos();
                 selectedGastos.clear();
                 updateGastosSelection();
             } else {
-                showMessage('❌ No se pudieron eliminar los tickets', 'error');
+                showMessage('❌ Impossible de supprimer les tickets', 'error');
             }
         }
 
@@ -9149,7 +9149,7 @@
                 // Asegurar que las estadísticas se mantengan actualizadas
                 updateDashboardStats();
             } else {
-                showMessage('❌ No se pudieron confirmar los tickets', 'error');
+                showMessage('❌ Impossible de confirmer les tickets', 'error');
             }
         }
 
@@ -9206,7 +9206,7 @@
                 // Asegurar que las estadísticas se mantengan actualizadas
                 updateDashboardStats();
             } else {
-                showMessage('❌ No se pudieron desmarcar los tickets', 'error');
+                showMessage('❌ Impossible de décocher les tickets', 'error');
             }
         }
 
