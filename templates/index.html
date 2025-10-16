@@ -5686,9 +5686,204 @@
         let selectedViajes = [];
 
         // Variable de idioma actual
-        let currentLanguage = 'fr'; // Por defecto francés
+        let currentLanguage = localStorage.getItem('preferredLanguage') || 'fr';
 
-        // === FUNCIÓN DE CAMBIO DE IDIOMA ===
+        // === DICCIONARIO DE TRADUCCIONES COMPLETO ===
+        const translations = {
+            es: {
+                // Header
+                headerTitle: 'Gestión de Gastos',
+                // Sidebar
+                userRole: { admin: 'Administrador', user: 'Usuario' },
+                menuPrincipal: 'Principal',
+                menuGestion: 'Gestión de Gastos',
+                menuDashboard: 'Dashboard Admin',
+                menuGrupos: 'Grupos de Gastos',
+                menuLogout: 'Cerrar Sesión',
+                // Vista GASTOS
+                addExpenses: 'Añade y gestiona tus gastos',
+                dateFiltering: 'Filtrado por Fechas',
+                selectDateRange: 'Selecciona el rango de fechas para filtrar tus gastos',
+                startDay: 'Día de inicio del mes (Global)',
+                startDayDesc: 'Define el día de inicio del periodo mensual para TODOS los usuarios',
+                day: 'Día:',
+                confirm: 'Confirmar',
+                startDate: 'Fecha Inicio:',
+                endDate: 'Fecha Fin:',
+                filterByGroup: 'Filtrar por Grupo de Gastos:',
+                allGroups: 'Todos los grupos',
+                searchGroup: 'Buscar grupo...',
+                lastMonth: 'Último Mes',
+                clear: 'Limpiar',
+                applyFilters: 'Aplicar Filtros',
+                totalTickets: 'Tickets Totales',
+                filteredTickets: 'Tickets Filtrados',
+                filteredTotal: 'Total Filtrado',
+                ticketsList: 'Lista de Tickets',
+                multipleSelection: 'Selección Múltiple',
+                ticketsSelected: 'tickets seleccionados',
+                selectAll: 'Seleccionar Todo',
+                deleteSelected: 'Eliminar Seleccionados',
+                addNewTicket: 'Añadir Nuevo Ticket',
+                manageGroups: 'Gestionar Grupos de Gastos',
+                // Vista DASHBOARD
+                dashboard: 'Dashboard',
+                viewConfirmExpenses: 'Visualiza y confirma tus gastos',
+                filterByUser: 'Filtrar por Usuario:',
+                allUsers: 'Todos los usuarios',
+                searchUser: 'Buscar usuario...',
+                multipleActions: 'Acciones Múltiples',
+                // Formularios
+                date: 'Fecha',
+                concept: 'Concepto',
+                user: 'Usuario',
+                amount: 'Importe (EUR)',
+                amountOther: 'Importe en Otra Moneda',
+                currency: 'Moneda',
+                group: 'Grupo de Gastos',
+                description: 'Descripción',
+                addExpectedExpense: 'Añadir Gasto Esperado',
+                addExpense: 'Añadir Gasto',
+                close: 'Cerrar',
+                cancel: 'Cancelar',
+                save: 'Guardar',
+                // Mensajes
+                langChanged: '✅ Idioma cambiado a Español',
+                dayBetween: '❌ El día debe estar entre 1 y 31',
+                confirmDeleteImage: '¿Estás seguro de que quieres eliminar esta imagen?',
+                confirmDeleteExpense: '¿Estás seguro de que quieres eliminar este gasto?',
+                confirmDeleteGroup: '¿Estás seguro de que quieres eliminar el grupo',
+                confirmDeleteExpected: '¿Estás seguro de que quieres eliminar este gasto esperado?',
+                deleteTicketBatch: '¿Eliminar este ticket del lote?',
+                saveTicketsBatch: 'tickets en la base de datos?',
+                confirmDeleteTickets: '¿Estás seguro de que quieres eliminar',
+                noTicketsPeriod: 'Sin tickets en este período',
+                noTicketsMatch: 'No hay tickets que coincidan con las fechas seleccionadas',
+                cantExtract: 'No se pudo extraer información. Completa manualmente.',
+                connectionError: 'Error de conexión',
+                saving: 'Guardando...',
+                deleting: 'Eliminando...',
+                processing: 'Procesando',
+                expenseUpdated: 'Gasto actualizado correctamente',
+                expenseAdded: 'Gasto añadido correctamente',
+                expenseDeleted: 'Gasto eliminado correctamente',
+                groupDeleted: 'Grupo eliminado correctamente',
+                allFiltersRemoved: 'Todos los filtros eliminados',
+                filtersRemoved: 'Filtros eliminados',
+                extracted: 'Extraído:',
+                processingTickets: 'Procesando tickets...',
+                batchSummary: 'Resumen del Lote',
+                processed: 'Procesados:',
+                errors: 'Errores:',
+                noProcessedTickets: 'No hay tickets procesados para guardar',
+                ticketsDeleted: 'tickets eliminados correctamente',
+                cantDeleteTickets: 'No se pudieron eliminar los tickets',
+                cantConfirmTickets: 'No se pudieron confirmar los tickets',
+                all: 'Todos',
+                allGroupsBalanced: 'Todos los grupos están cuadrados',
+                noGroupsPending: 'No hay grupos con detalles pendientes de cuadrar'
+            },
+            fr: {
+                // Header
+                headerTitle: 'Gestion des Dépenses',
+                // Sidebar
+                userRole: { admin: 'Administrateur', user: 'Utilisateur' },
+                menuPrincipal: 'Principal',
+                menuGestion: 'Gestion des Dépenses',
+                menuDashboard: 'Tableau de Bord',
+                menuGrupos: 'Groupes de Dépenses',
+                menuLogout: 'Déconnexion',
+                // Vista GASTOS
+                addExpenses: 'Ajoutez et gérez vos dépenses',
+                dateFiltering: 'Filtrage par Dates',
+                selectDateRange: 'Sélectionnez la plage de dates pour filtrer vos dépenses',
+                startDay: 'Jour de début du mois (Global)',
+                startDayDesc: 'Définir le jour de début de la période mensuelle pour TOUS les utilisateurs',
+                day: 'Jour:',
+                confirm: 'Confirmer',
+                startDate: 'Date Début:',
+                endDate: 'Date Fin:',
+                filterByGroup: 'Filtrer par Groupe de Dépenses:',
+                allGroups: 'Tous les groupes',
+                searchGroup: 'Rechercher groupe...',
+                lastMonth: 'Dernier Mois',
+                clear: 'Effacer',
+                applyFilters: 'Appliquer Filtres',
+                totalTickets: 'Tickets Totaux',
+                filteredTickets: 'Tickets Filtrés',
+                filteredTotal: 'Total Filtré',
+                ticketsList: 'Liste des Tickets',
+                multipleSelection: 'Sélection Multiple',
+                ticketsSelected: 'tickets sélectionnés',
+                selectAll: 'Tout Sélectionner',
+                deleteSelected: 'Supprimer Sélectionnés',
+                addNewTicket: 'Ajouter Nouveau Ticket',
+                manageGroups: 'Gérer Groupes de Dépenses',
+                // Vista DASHBOARD
+                dashboard: 'Tableau de Bord',
+                viewConfirmExpenses: 'Visualisez et confirmez vos dépenses',
+                filterByUser: 'Filtrer par Utilisateur:',
+                allUsers: 'Tous les utilisateurs',
+                searchUser: 'Rechercher utilisateur...',
+                multipleActions: 'Actions Multiples',
+                // Formularios
+                date: 'Date',
+                concept: 'Concept',
+                user: 'Utilisateur',
+                amount: 'Montant (EUR)',
+                amountOther: 'Montant dans Autre Devise',
+                currency: 'Devise',
+                group: 'Groupe de Dépenses',
+                description: 'Description',
+                addExpectedExpense: 'Ajouter Dépense Prévue',
+                addExpense: 'Ajouter Dépense',
+                close: 'Fermer',
+                cancel: 'Annuler',
+                save: 'Enregistrer',
+                // Mensajes
+                langChanged: '✅ Langue changée en Français',
+                dayBetween: '❌ Le jour doit être entre 1 et 31',
+                confirmDeleteImage: 'Êtes-vous sûr de vouloir supprimer cette image?',
+                confirmDeleteExpense: 'Êtes-vous sûr de vouloir supprimer cette dépense?',
+                confirmDeleteGroup: 'Êtes-vous sûr de vouloir supprimer le groupe',
+                confirmDeleteExpected: 'Êtes-vous sûr de vouloir supprimer cette dépense prévue?',
+                deleteTicketBatch: 'Supprimer ce ticket du lot?',
+                saveTicketsBatch: 'tickets dans la base de données?',
+                confirmDeleteTickets: 'Êtes-vous sûr de vouloir supprimer',
+                noTicketsPeriod: 'Aucun ticket dans cette période',
+                noTicketsMatch: 'Aucun ticket ne correspond aux dates sélectionnées',
+                cantExtract: 'Impossible d\'extraire les informations. Complétez manuellement.',
+                connectionError: 'Erreur de connexion',
+                saving: 'Enregistrement...',
+                deleting: 'Suppression...',
+                processing: 'Traitement',
+                expenseUpdated: 'Dépense mise à jour correctement',
+                expenseAdded: 'Dépense ajoutée correctement',
+                expenseDeleted: 'Dépense supprimée correctement',
+                groupDeleted: 'Groupe supprimé correctement',
+                allFiltersRemoved: 'Tous les filtres supprimés',
+                filtersRemoved: 'Filtres supprimés',
+                extracted: 'Extrait:',
+                processingTickets: 'Traitement des tickets...',
+                batchSummary: 'Résumé du Lot',
+                processed: 'Traités:',
+                errors: 'Erreurs:',
+                noProcessedTickets: 'Aucun ticket traité à enregistrer',
+                ticketsDeleted: 'tickets supprimés correctement',
+                cantDeleteTickets: 'Impossible de supprimer les tickets',
+                cantConfirmTickets: 'Impossible de confirmer les tickets',
+                all: 'Tous',
+                allGroupsBalanced: 'Tous les groupes sont équilibrés',
+                noGroupsPending: 'Aucun groupe avec des détails en attente'
+            }
+        };
+
+        // === FUNCIÓN DE TRADUCCIÓN ===
+        function t(key) {
+            return translations[currentLanguage][key] || key;
+        }
+
+        // === FUNCIÓN DE CAMBIO DE IDIOMA MEJORADA ===
         function changeLanguage(lang) {
             currentLanguage = lang;
             localStorage.setItem('preferredLanguage', lang);
@@ -5697,35 +5892,46 @@
             document.getElementById('langEs').classList.toggle('active', lang === 'es');
             document.getElementById('langFr').classList.toggle('active', lang === 'fr');
             
-            // Actualizar título del header
-            const translations = {
-                es: 'Gestión de Gastos',
-                fr: 'Gestion des Dépenses'
-            };
-            document.getElementById('headerTitle').textContent = translations[lang];
+            // Mostrar mensaje
+            showMessage(t('langChanged'), 'success');
             
-            // Mostrar mensaje de confirmación
-            const messages = {
-                es: '✅ Idioma cambiado a Español',
-                fr: '✅ Langue changée en Français'
-            };
-            showMessage(messages[lang], 'success');
-            
-            // Recargar la página para aplicar todos los cambios
+            // Aplicar traducciones sin recargar
             setTimeout(() => {
-                location.reload();
-            }, 800);
+                applyTranslations();
+            }, 500);
+        }
+
+        // === APLICAR TODAS LAS TRADUCCIONES ===
+        function applyTranslations() {
+            const lang = currentLanguage;
+            const t = translations[lang];
+            
+            // Header
+            const headerTitle = document.getElementById('headerTitle');
+            if (headerTitle) headerTitle.textContent = t.headerTitle;
+            
+            // Sidebar
+            const sidebarTexts = document.querySelectorAll('.sidebar-item-text');
+            if (sidebarTexts[0]) sidebarTexts[0].textContent = t.menuGestion;
+            if (sidebarTexts[1]) sidebarTexts[1].textContent = t.menuDashboard;
+            if (sidebarTexts[2]) sidebarTexts[2].textContent = t.menuGrupos;
+            if (sidebarTexts[3]) sidebarTexts[3].textContent = t.menuLogout;
+            
+            // Recargar vistas para aplicar traducciones
+            if (currentView === 'gastos') {
+                loadGastos();
+            } else if (currentView === 'dashboard') {
+                renderDashboardExpenses(gastos);
+            }
         }
 
         // Cargar idioma guardado al iniciar
         window.addEventListener('DOMContentLoaded', function() {
             const savedLang = localStorage.getItem('preferredLanguage') || 'fr';
-            if (savedLang !== currentLanguage) {
-                // Solo actualizar botones, no recargar
-                document.getElementById('langEs').classList.toggle('active', savedLang === 'es');
-                document.getElementById('langFr').classList.toggle('active', savedLang === 'fr');
-                currentLanguage = savedLang;
-            }
+            currentLanguage = savedLang;
+            document.getElementById('langEs').classList.toggle('active', savedLang === 'es');
+            document.getElementById('langFr').classList.toggle('active', savedLang === 'fr');
+            applyTranslations();
         });
 
         // Función para cambiar entre vistas
