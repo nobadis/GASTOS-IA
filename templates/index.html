@@ -423,7 +423,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(10px);
         }
 
         .sidebar-toggle-header:hover {
@@ -443,7 +442,6 @@
             background: rgba(255, 255, 255, 0.12);
             padding: 10px 28px;
             border-radius: 16px;
-            backdrop-filter: blur(10px);
             border: 2px solid rgba(255, 255, 255, 0.25);
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
         }
@@ -469,6 +467,42 @@
 
         .header-spacer {
             flex: 1;
+        }
+
+        /* === SELECTOR DE IDIOMA === */
+        .language-selector {
+            position: absolute;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: #6366f1;
+            border-color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
         
         /* Legacy navbar styles - ocultar */
@@ -4677,7 +4711,11 @@
         </button>
         <div class="header-title">
             <span class="header-icon">💳</span>
-            <span class="header-text">Gestion des Dépenses</span>
+            <span class="header-text" id="headerTitle">Gestion des Dépenses</span>
+        </div>
+        <div class="language-selector">
+            <button class="lang-btn" onclick="changeLanguage('es')" id="langEs">🇪🇸 ES</button>
+            <button class="lang-btn active" onclick="changeLanguage('fr')" id="langFr">🇫🇷 FR</button>
         </div>
     </header>
     
@@ -5636,6 +5674,49 @@
         let selectedUsers = [];
         let selectedViajes = [];
 
+        // Variable de idioma actual
+        let currentLanguage = 'fr'; // Por defecto francés
+
+        // === FUNCIÓN DE CAMBIO DE IDIOMA ===
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('preferredLanguage', lang);
+            
+            // Actualizar botones activos
+            document.getElementById('langEs').classList.toggle('active', lang === 'es');
+            document.getElementById('langFr').classList.toggle('active', lang === 'fr');
+            
+            // Actualizar título del header
+            const translations = {
+                es: 'Gestión de Gastos',
+                fr: 'Gestion des Dépenses'
+            };
+            document.getElementById('headerTitle').textContent = translations[lang];
+            
+            // Mostrar mensaje de confirmación
+            const messages = {
+                es: '✅ Idioma cambiado a Español',
+                fr: '✅ Langue changée en Français'
+            };
+            showMessage(messages[lang], 'success');
+            
+            // Recargar la página para aplicar todos los cambios
+            setTimeout(() => {
+                location.reload();
+            }, 800);
+        }
+
+        // Cargar idioma guardado al iniciar
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('preferredLanguage') || 'fr';
+            if (savedLang !== currentLanguage) {
+                // Solo actualizar botones, no recargar
+                document.getElementById('langEs').classList.toggle('active', savedLang === 'es');
+                document.getElementById('langFr').classList.toggle('active', savedLang === 'fr');
+                currentLanguage = savedLang;
+            }
+        });
+
         // Función para cambiar entre vistas
         // ============ NAVEGACIÓN MODERNA ============
         // === FUNCIONES CMS SIDEBAR ===
@@ -5650,10 +5731,10 @@
             mainContent.classList.toggle('expanded');
             if (toggleBtn) toggleBtn.classList.toggle('collapsed');
             
-            // Cambiar iconos
+            // Cambiar iconos (CORREGIDO: invertido)
             if (sidebar.classList.contains('collapsed')) {
                 if (toggleIcon) toggleIcon.textContent = '▶';
-                if (toggleHeaderIcon) toggleHeaderIcon.textContent = '✕';
+                if (toggleHeaderIcon) toggleHeaderIcon.textContent = '☰';
             } else {
                 if (toggleIcon) toggleIcon.textContent = '◀';
                 if (toggleHeaderIcon) toggleHeaderIcon.textContent = '☰';
