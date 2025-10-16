@@ -4199,18 +4199,18 @@
                             </div>
                         </div>
                         
-                        <!-- Filtro multi-select por viaje -->
+                        <!-- Filtro multi-select por grupo de gastos -->
                         <div class="user-filter-section">
                             <div class="filter-group">
-                                <label for="gastosViajeFilter">🚗 Filtrar por Viaje:</label>
+                                <label for="gastosViajeFilter">📁 Filtrar por Grupo de Gastos:</label>
                                 <div class="multiselect-container" id="gastosViajeMultiselect">
                                     <div class="multiselect-display" onclick="toggleMultiselect('gastosViajeMultiselect')">
-                                        <span class="multiselect-selected placeholder">Todos los viajes</span>
+                                        <span class="multiselect-selected placeholder">Todos los grupos</span>
                                         <span class="multiselect-arrow">▼</span>
                                     </div>
                                     <div class="multiselect-dropdown">
                                         <div class="multiselect-search">
-                                            <input type="text" placeholder="🔍 Buscar viaje..." onkeyup="filterMultiselectOptions('gastosViajeMultiselect', this.value)">
+                                            <input type="text" placeholder="🔍 Buscar grupo..." onkeyup="filterMultiselectOptions('gastosViajeMultiselect', this.value)">
                                         </div>
                                         <div class="multiselect-options" id="gastosViajeOptions">
                                             <!-- Options will be populated dynamically -->
@@ -4280,15 +4280,15 @@
                             <button class="btn-primary" onclick="openModal()" title="Añadir Nuevo Ticket">
                                 ➕ Añadir Nuevo Ticket
                             </button>
-                                                <button class="btn-secondary" onclick="openManageMotivosModal()" title="Gestionar Viajes">
-                        ⚙️ Gestionar Viajes
+                                                <button class="btn-secondary" onclick="openManageMotivosModal()" title="Gestionar Grupos de Gastos">
+                        ⚙️ Gestionar Grupos de Gastos
             </button>
                         </div>
                     </div>
 
-                    <!-- Resumen de Viajes con Detalles -->
+                    <!-- Resumen de Grupos con Detalles -->
                     <div class="action-section" id="resumenViajesSection" style="display: none;">
-                        <h3>🎯 Resumen de Viajes con Detalles Pendientes</h3>
+                        <h3>🎯 Resumen de Grupos de Gastos con Detalles Pendientes</h3>
                         <div id="resumenViajesList" class="resumen-viajes-container">
                             <!-- El resumen se cargará aquí -->
                         </div>
@@ -4396,18 +4396,18 @@
                         </div>
                         {% endif %}
                         
-                        <!-- Filtro multi-select por viaje -->
+                        <!-- Filtro multi-select por grupo de gastos -->
                         <div class="user-filter-section">
                             <div class="filter-group">
-                                <label for="dashboardViajeFilter">🚗 Filtrar por Viaje:</label>
+                                <label for="dashboardViajeFilter">📁 Filtrar por Grupo de Gastos:</label>
                                 <div class="multiselect-container" id="dashboardViajeMultiselect">
                                     <div class="multiselect-display" onclick="toggleMultiselect('dashboardViajeMultiselect')">
-                                        <span class="multiselect-selected placeholder">Todos los viajes</span>
+                                        <span class="multiselect-selected placeholder">Todos los grupos</span>
                                         <span class="multiselect-arrow">▼</span>
                                     </div>
                                     <div class="multiselect-dropdown">
                                         <div class="multiselect-search">
-                                            <input type="text" placeholder="🔍 Buscar viaje..." onkeyup="filterMultiselectOptions('dashboardViajeMultiselect', this.value)">
+                                            <input type="text" placeholder="🔍 Buscar grupo..." onkeyup="filterMultiselectOptions('dashboardViajeMultiselect', this.value)">
                                         </div>
                                         <div class="multiselect-options" id="dashboardViajeOptions">
                                             <!-- Options will be populated dynamically -->
@@ -4566,9 +4566,9 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="motivo">🚗 Viaje</label>
+                            <label for="motivo">📁 Grupo de Gastos</label>
                             <select id="motivo">
-                                <option value="">Selecciona un viaje</option>
+                                <option value="">Selecciona un grupo</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -4894,7 +4894,7 @@
                 if (id.includes('User')) {
                     display.textContent = 'Todos los usuarios';
                 } else if (id.includes('Viaje')) {
-                    display.textContent = 'Todos los viajes';
+                    display.textContent = 'Todos los grupos';
                 }
             } else if (state.selected.size === state.options.length) {
                 display.className = 'multiselect-selected';
