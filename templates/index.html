@@ -5917,7 +5917,178 @@
             if (sidebarTexts[2]) sidebarTexts[2].textContent = t.menuGrupos;
             if (sidebarTexts[3]) sidebarTexts[3].textContent = t.menuLogout;
             
-            // Recargar vistas para aplicar traducciones
+            // Vista GASTOS - Títulos y descripciones
+            const gastosView = document.getElementById('gastos-view');
+            if (gastosView) {
+                const headers = gastosView.querySelectorAll('.header h1');
+                if (headers[0]) headers[0].innerHTML = '💳 ' + t.headerTitle;
+                
+                const headerP = gastosView.querySelectorAll('.header p');
+                if (headerP[0]) headerP[0].textContent = t.addExpenses;
+                
+                const dateFilterH3 = gastosView.querySelectorAll('.date-filters-header h3');
+                if (dateFilterH3[0]) dateFilterH3[0].innerHTML = '🗓️ ' + t.dateFiltering;
+                
+                const dateFilterP = gastosView.querySelectorAll('.date-filters-header p');
+                if (dateFilterP[0]) dateFilterP[0].textContent = t.selectDateRange;
+                
+                // Día de corte
+                const cutoffStrong = gastosView.querySelectorAll('.cutoff-day-label strong');
+                if (cutoffStrong[0]) cutoffStrong[0].innerHTML = '📅 ' + t.startDay;
+                
+                const cutoffSmall = gastosView.querySelectorAll('.cutoff-day-label small');
+                if (cutoffSmall[0]) cutoffSmall[0].textContent = t.startDayDesc;
+                
+                const daySpan = gastosView.querySelectorAll('.cutoff-day-input span');
+                if (daySpan[0]) daySpan[0].textContent = t.day;
+                
+                const confirmBtn = gastosView.querySelector('.btn-confirm-cutoff');
+                if (confirmBtn) confirmBtn.innerHTML = '✅ ' + t.confirm;
+                
+                // Fechas
+                const dateLabels = gastosView.querySelectorAll('.date-input-label');
+                if (dateLabels[0]) dateLabels[0].innerHTML = '📅 ' + t.startDate;
+                if (dateLabels[1]) dateLabels[1].innerHTML = '📅 ' + t.endDate;
+                
+                // Filtro por grupo
+                const filterLabels = gastosView.querySelectorAll('.filter-group label');
+                if (filterLabels[0]) filterLabels[0].innerHTML = '📁 ' + t.filterByGroup;
+                
+                // Multiselect placeholders
+                const multiselectPlaceholder = gastosView.querySelector('#gastosViajeMultiselect .multiselect-selected');
+                if (multiselectPlaceholder && multiselectPlaceholder.classList.contains('placeholder')) {
+                    multiselectPlaceholder.textContent = t.allGroups;
+                }
+                
+                const searchInput = gastosView.querySelector('#gastosViajeMultiselect input[type="text"]');
+                if (searchInput) searchInput.placeholder = '🔍 ' + t.searchGroup;
+                
+                // Botones multiselect
+                const multiselectBtns = gastosView.querySelectorAll('#gastosViajeMultiselect .multiselect-btn');
+                if (multiselectBtns[0]) multiselectBtns[0].innerHTML = '✓ ' + t.all;
+                if (multiselectBtns[1]) multiselectBtns[1].innerHTML = '✗ ' + t.clear;
+                
+                // Botones de acciones
+                const actionBtns = gastosView.querySelectorAll('.actions-section .btn-filter');
+                if (actionBtns[0]) actionBtns[0].innerHTML = '📅 ' + t.lastMonth;
+                if (actionBtns[1]) actionBtns[1].innerHTML = '🗑️ ' + t.clear;
+                if (actionBtns[2]) actionBtns[2].innerHTML = '✅ ' + t.applyFilters;
+                
+                // Stats
+                const statCards = gastosView.querySelectorAll('.stat-card h3');
+                if (statCards[0]) statCards[0].textContent = t.totalTickets;
+                if (statCards[1]) statCards[1].textContent = t.filteredTickets;
+                if (statCards[2]) statCards[2].textContent = t.filteredTotal;
+                
+                // Tabla
+                const tableHeader = gastosView.querySelector('.table-header');
+                if (tableHeader) tableHeader.innerHTML = '🎫 ' + t.ticketsList;
+                
+                // Selección múltiple
+                const selectionH4 = gastosView.querySelector('.selection-header h4');
+                if (selectionH4) selectionH4.innerHTML = '☑️ ' + t.multipleSelection;
+                
+                const selectAllBtn = document.getElementById('selectAllGastosBtn');
+                if (selectAllBtn) selectAllBtn.innerHTML = '☑️ ' + t.selectAll;
+                
+                const deleteSelectedBtn = document.getElementById('deleteSelectedGastosBtn');
+                if (deleteSelectedBtn) deleteSelectedBtn.innerHTML = '🗑️ ' + t.deleteSelected;
+                
+                // Acciones principales
+                const mainActionH3 = gastosView.querySelector('.action-section h3');
+                if (mainActionH3) mainActionH3.innerHTML = '🎯 ' + (lang === 'es' ? 'Acciones Principales' : 'Actions Principales');
+                
+                const mainBtns = gastosView.querySelectorAll('.main-actions .btn-primary, .main-actions .btn-secondary');
+                if (mainBtns[0]) mainBtns[0].innerHTML = '➕ ' + t.addNewTicket;
+                if (mainBtns[1]) mainBtns[1].innerHTML = '⚙️ ' + t.manageGroups;
+            }
+            
+            // Vista DASHBOARD
+            const dashboardView = document.getElementById('dashboard-view');
+            if (dashboardView) {
+                const dashHeaders = dashboardView.querySelectorAll('.header h1');
+                if (dashHeaders[0]) dashHeaders[0].innerHTML = '📊 ' + t.dashboard;
+                
+                const dashHeaderP = dashboardView.querySelectorAll('.header p');
+                if (dashHeaderP[0]) dashHeaderP[0].textContent = t.viewConfirmExpenses;
+                
+                const dashDateFilterH3 = dashboardView.querySelectorAll('.date-filters-header h3');
+                if (dashDateFilterH3[0]) dashDateFilterH3[0].innerHTML = '🗓️ ' + t.dateFiltering;
+                
+                const dashDateFilterP = dashboardView.querySelectorAll('.date-filters-header p');
+                if (dashDateFilterP[0]) dashDateFilterP[0].textContent = (lang === 'es' ? 'Selecciona el rango de fechas para el dashboard' : 'Sélectionnez la plage de dates pour le tableau de bord');
+                
+                // Día de corte dashboard
+                const dashCutoffStrong = dashboardView.querySelectorAll('.cutoff-day-label strong');
+                if (dashCutoffStrong[0]) dashCutoffStrong[0].innerHTML = '📅 ' + t.startDay;
+                
+                const dashCutoffSmall = dashboardView.querySelectorAll('.cutoff-day-label small');
+                if (dashCutoffSmall[0]) dashCutoffSmall[0].textContent = t.startDayDesc;
+                
+                const dashDaySpan = dashboardView.querySelectorAll('.cutoff-day-input span');
+                if (dashDaySpan[0]) dashDaySpan[0].textContent = t.day;
+                
+                const dashConfirmBtn = dashboardView.querySelector('.btn-confirm-cutoff');
+                if (dashConfirmBtn) dashConfirmBtn.innerHTML = '✅ ' + t.confirm;
+                
+                // Fechas dashboard
+                const dashDateLabels = dashboardView.querySelectorAll('.date-input-label');
+                if (dashDateLabels[0]) dashDateLabels[0].innerHTML = '📅 ' + t.startDate;
+                if (dashDateLabels[1]) dashDateLabels[1].innerHTML = '📅 ' + t.endDate;
+                
+                // Filtros dashboard
+                const dashFilterLabels = dashboardView.querySelectorAll('.filter-group label');
+                if (dashFilterLabels[0]) dashFilterLabels[0].innerHTML = '👤 ' + t.filterByUser;
+                if (dashFilterLabels[1]) dashFilterLabels[1].innerHTML = '📁 ' + t.filterByGroup;
+                
+                // Placeholders dashboard
+                const dashUserPlaceholder = dashboardView.querySelector('#dashboardUserMultiselect .multiselect-selected');
+                if (dashUserPlaceholder && dashUserPlaceholder.classList.contains('placeholder')) {
+                    dashUserPlaceholder.textContent = t.allUsers;
+                }
+                
+                const dashViajesPlaceholder = dashboardView.querySelector('#dashboardViajeMultiselect .multiselect-selected');
+                if (dashViajesPlaceholder && dashViajesPlaceholder.classList.contains('placeholder')) {
+                    dashViajesPlaceholder.textContent = t.allGroups;
+                }
+                
+                const dashUserSearch = dashboardView.querySelector('#dashboardUserMultiselect input[type="text"]');
+                if (dashUserSearch) dashUserSearch.placeholder = '🔍 ' + t.searchUser;
+                
+                const dashGroupSearch = dashboardView.querySelector('#dashboardViajeMultiselect input[type="text"]');
+                if (dashGroupSearch) dashGroupSearch.placeholder = '🔍 ' + t.searchGroup;
+                
+                // Botones multiselect dashboard
+                const dashUserBtns = dashboardView.querySelectorAll('#dashboardUserMultiselect .multiselect-btn');
+                if (dashUserBtns[0]) dashUserBtns[0].innerHTML = '✓ ' + t.all;
+                if (dashUserBtns[1]) dashUserBtns[1].innerHTML = '✗ ' + t.clear;
+                
+                const dashViajeBtns = dashboardView.querySelectorAll('#dashboardViajeMultiselect .multiselect-btn');
+                if (dashViajeBtns[0]) dashViajeBtns[0].innerHTML = '✓ ' + t.all;
+                if (dashViajeBtns[1]) dashViajeBtns[1].innerHTML = '✗ ' + t.clear;
+                
+                // Botones acciones dashboard
+                const dashActionBtns = dashboardView.querySelectorAll('.actions-section .btn-filter');
+                if (dashActionBtns[0]) dashActionBtns[0].innerHTML = '📅 ' + t.lastMonth;
+                if (dashActionBtns[1]) dashActionBtns[1].innerHTML = '🗑️ ' + t.clear;
+                if (dashActionBtns[2]) dashActionBtns[2].innerHTML = '✅ ' + t.applyFilters;
+                
+                // Stats dashboard
+                const dashStatCards = dashboardView.querySelectorAll('.stat-card h3');
+                if (dashStatCards[0]) dashStatCards[0].textContent = t.totalTickets;
+                if (dashStatCards[1]) dashStatCards[1].textContent = t.filteredTickets;
+                if (dashStatCards[2]) dashStatCards[2].textContent = t.filteredTotal;
+                
+                // Tabla dashboard
+                const dashTableHeader = dashboardView.querySelector('.table-header');
+                if (dashTableHeader) dashTableHeader.innerHTML = '🎫 ' + t.ticketsList + (lang === 'es' ? ' (Todos los Usuarios)' : ' (Tous les Utilisateurs)');
+                
+                // Selección múltiple dashboard
+                const dashSelectionH4 = dashboardView.querySelector('.selection-header h4');
+                if (dashSelectionH4) dashSelectionH4.innerHTML = '☑️ ' + t.multipleActions;
+            }
+            
+            // Recargar vistas para aplicar traducciones en los datos
             if (currentView === 'gastos') {
                 loadGastos();
             } else if (currentView === 'dashboard') {
