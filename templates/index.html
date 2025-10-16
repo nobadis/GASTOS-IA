@@ -4743,41 +4743,41 @@
                 <div class="sidebar-user-avatar">{{ current_user[0].upper() }}</div>
                 <div class="sidebar-user-info">
                     <div class="sidebar-user-name">{{ current_user }}</div>
-                    <div class="sidebar-user-role">{{ 'Administrateur' if is_admin else 'Utilisateur' }}</div>
+                    <div class="sidebar-user-role" id="sidebarUserRole">{{ 'Administrateur' if is_admin else 'Utilisateur' }}</div>
                 </div>
         </div>
         
             <div class="sidebar-divider"></div>
             
             <div class="sidebar-menu">
-                <div class="sidebar-section-title">Principal</div>
+                <div class="sidebar-section-title" id="sidebarPrincipal">Principal</div>
                 
                 <div class="sidebar-item active" id="sidebarGastos" onclick="showViewCMS('gastos')">
                     <span class="sidebar-item-icon">💳</span>
-                    <span class="sidebar-item-text">Gestion des Dépenses</span>
+                    <span class="sidebar-item-text" id="sidebarTextGastos">Gestion des Dépenses</span>
                 </div>
                 
                 {% if is_admin %}
                 <div class="sidebar-item" id="sidebarDashboard" onclick="showViewCMS('dashboard')">
                     <span class="sidebar-item-icon">📊</span>
-                    <span class="sidebar-item-text">Tableau de Bord</span>
+                    <span class="sidebar-item-text" id="sidebarTextDashboard">Tableau de Bord</span>
             </div>
                 {% endif %}
                 
                 <div class="sidebar-divider"></div>
                 
-                <div class="sidebar-section-title">Gestion</div>
+                <div class="sidebar-section-title" id="sidebarGestion">Gestion</div>
                 
                 <div class="sidebar-item" onclick="openManageMotivosModal()">
                     <span class="sidebar-item-icon">📁</span>
-                    <span class="sidebar-item-text">Groupes de Dépenses</span>
+                    <span class="sidebar-item-text" id="sidebarTextGrupos">Groupes de Dépenses</span>
         </div>
         
                 <div class="sidebar-divider"></div>
                 
                 <div class="sidebar-item sidebar-logout" onclick="window.location.href='/logout'">
                     <span class="sidebar-item-icon">🚪</span>
-                    <span class="sidebar-item-text">Déconnexion</span>
+                    <span class="sidebar-item-text" id="sidebarTextLogout">Déconnexion</span>
                 </div>
             </div>
         </aside>
@@ -5910,12 +5910,30 @@
             const headerTitle = document.getElementById('headerTitle');
             if (headerTitle) headerTitle.textContent = t.headerTitle;
             
-            // Sidebar
-            const sidebarTexts = document.querySelectorAll('.sidebar-item-text');
-            if (sidebarTexts[0]) sidebarTexts[0].textContent = t.menuGestion;
-            if (sidebarTexts[1]) sidebarTexts[1].textContent = t.menuDashboard;
-            if (sidebarTexts[2]) sidebarTexts[2].textContent = t.menuGrupos;
-            if (sidebarTexts[3]) sidebarTexts[3].textContent = t.menuLogout;
+            // Sidebar - Usar IDs específicos
+            const sidebarUserRole = document.getElementById('sidebarUserRole');
+            if (sidebarUserRole) {
+                const isAdmin = sidebarUserRole.textContent.includes('Administr');
+                sidebarUserRole.textContent = isAdmin ? t.userRole.admin : t.userRole.user;
+            }
+            
+            const sidebarPrincipal = document.getElementById('sidebarPrincipal');
+            if (sidebarPrincipal) sidebarPrincipal.textContent = t.menuPrincipal;
+            
+            const sidebarGestion = document.getElementById('sidebarGestion');
+            if (sidebarGestion) sidebarGestion.textContent = (lang === 'es' ? 'Gestión' : 'Gestion');
+            
+            const sidebarTextGastos = document.getElementById('sidebarTextGastos');
+            if (sidebarTextGastos) sidebarTextGastos.textContent = t.menuGestion;
+            
+            const sidebarTextDashboard = document.getElementById('sidebarTextDashboard');
+            if (sidebarTextDashboard) sidebarTextDashboard.textContent = t.menuDashboard;
+            
+            const sidebarTextGrupos = document.getElementById('sidebarTextGrupos');
+            if (sidebarTextGrupos) sidebarTextGrupos.textContent = t.menuGrupos;
+            
+            const sidebarTextLogout = document.getElementById('sidebarTextLogout');
+            if (sidebarTextLogout) sidebarTextLogout.textContent = t.menuLogout;
             
             // Vista GASTOS - Títulos y descripciones
             const gastosView = document.getElementById('gastos-view');
