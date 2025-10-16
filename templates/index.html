@@ -4097,6 +4097,273 @@
                 align-items: center;
             }
         }
+
+        /* === ESTILOS MODERNOS MODAL GRUPOS DE GASTOS === */
+        .modal-grupos-gastos {
+            max-width: 900px;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .modal-header-modern {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            padding: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: none;
+        }
+
+        .modal-header-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .modal-icon {
+            font-size: 48px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        }
+
+        .modal-title-section h2 {
+            color: white;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 4px 0;
+            letter-spacing: -0.02em;
+        }
+
+        .modal-title-section p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .close-btn-modern {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 24px;
+            color: white;
+        }
+
+        .close-btn-modern:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-body-modern {
+            padding: 32px;
+            background: var(--background-color);
+        }
+
+        .add-grupo-section {
+            margin-bottom: 32px;
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
+            border-radius: 16px;
+            border: 2px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h3 {
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: -0.01em;
+        }
+
+        .grupos-count {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--secondary-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .add-grupo-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .input-group-modern {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group-modern label {
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .input-modern {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            font-size: 15px;
+            background: var(--surface-color);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .input-modern:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .form-actions-modern {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-start;
+        }
+
+        .btn-primary-modern,
+        .btn-secondary-modern {
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            letter-spacing: -0.01em;
+        }
+
+        .btn-primary-modern {
+            background: linear-gradient(135deg, var(--btn-primary-bg), var(--secondary-color));
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary-modern:hover {
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .btn-secondary-modern {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--secondary-color);
+            border: 2px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .btn-secondary-modern:hover {
+            background: rgba(99, 102, 241, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 16px;
+        }
+
+        .existing-grupos-section {
+            margin-bottom: 24px;
+        }
+
+        .grupos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 4px;
+        }
+
+        .modal-footer-modern {
+            padding: 20px 32px;
+            background: rgba(99, 102, 241, 0.05);
+            border-top: 2px solid rgba(99, 102, 241, 0.1);
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-close-modern {
+            padding: 14px 32px;
+            background: linear-gradient(135deg, var(--success-color), #059669);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-close-modern:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .modal-grupos-gastos {
+                margin: 20px;
+                max-width: calc(100% - 40px);
+            }
+            
+            .modal-header-modern {
+                padding: 24px 20px;
+            }
+            
+            .modal-header-content {
+                gap: 12px;
+            }
+            
+            .modal-icon {
+                font-size: 36px;
+            }
+            
+            .modal-title-section h2 {
+                font-size: 22px;
+            }
+            
+            .modal-body-modern {
+                padding: 20px;
+            }
+            
+            .grupos-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions-modern {
+                flex-direction: column;
+            }
+            
+            .btn-primary-modern,
+            .btn-secondary-modern {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -4623,54 +4890,72 @@
         </div>
     </div>
 
-    <!-- Modal de Gestión de Motivos -->
+    <!-- Modal de Gestión de Grupos de Gastos - Rediseñado -->
     <div id="manageMotivosModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close" onclick="closeManageMotivosModal()">&times;</span>
-                                    <h2>⚙️ Gestionar Viajes</h2>
+        <div class="modal-content modal-grupos-gastos">
+            <div class="modal-header-modern">
+                <div class="modal-header-content">
+                    <div class="modal-icon">📁</div>
+                    <div class="modal-title-section">
+                        <h2>Gestión de Grupos de Gastos</h2>
+                        <p>Organiza tus gastos en grupos personalizados</p>
+                    </div>
+                </div>
+                <button class="close-btn-modern" onclick="closeManageMotivosModal()">
+                    <span>✕</span>
+                </button>
             </div>
-            <div class="modal-body">
-                <!-- Sección para añadir nuevo viaje -->
-                <div class="add-motivo-section">
-                    <h3>➕ Añadir Nuevo Viaje</h3>
-                    <div class="add-motivo-form">
-                        <div class="form-group">
-                            <label for="newMotivoName">🎯 Nombre del Viaje:</label>
-                            <input type="text" id="newMotivoName" placeholder="Introduce el nombre del viaje..." maxlength="100">
+            <div class="modal-body-modern">
+                <!-- Sección para añadir nuevo grupo -->
+                <div class="add-grupo-section">
+                    <div class="section-header">
+                        <h3>➕ Crear Nuevo Grupo</h3>
+                    </div>
+                    <div class="add-grupo-form">
+                        <div class="input-group-modern">
+                            <label for="newMotivoName">📝 Nombre del Grupo</label>
+                            <input type="text" id="newMotivoName" placeholder="Ej: Viaje Madrid 2025, Proyecto Alpha..." maxlength="100" class="input-modern">
                         </div>
-                        <div class="add-motivo-actions">
-                            <button type="button" class="btn btn-primary" onclick="addMotivoFromModal()">
-                                ➕ Añadir Viaje
+                        <div class="form-actions-modern">
+                            <button type="button" class="btn-primary-modern" onclick="addMotivoFromModal()">
+                                <span class="btn-icon">➕</span>
+                                <span>Crear Grupo</span>
                             </button>
-                            <button type="button" class="btn btn-secondary" onclick="clearNewMotivoInput()">
-                                🗑️ Limpiar
+                            <button type="button" class="btn-secondary-modern" onclick="clearNewMotivoInput()">
+                                <span class="btn-icon">↺</span>
+                                <span>Limpiar</span>
                             </button>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Lista de viajes existentes -->
-                <div class="existing-motivos-section">
-                    <h3>📋 Viajes Existentes</h3>
-                    <div class="motivos-list" id="motivosList">
-                        <!-- Los motivos se cargarán aquí -->
+                <!-- Lista de grupos existentes -->
+                <div class="existing-grupos-section">
+                    <div class="section-header">
+                        <h3>📋 Grupos Existentes</h3>
+                        <span class="grupos-count" id="gruposCount">0 grupos</span>
+                    </div>
+                    <div class="grupos-grid" id="motivosList">
+                        <!-- Los grupos se cargarán aquí -->
                     </div>
                 </div>
                 
-                <div style="text-align: center; margin-top: 20px;">
-                    <button type="button" class="btn ripple" onclick="closeManageMotivosModal()">✅ Cerrar</button>
+                <div class="modal-footer-modern">
+                    <button type="button" class="btn-close-modern" onclick="closeManageMotivosModal()">
+                        <span>✓</span>
+                        <span>Cerrar</span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal de Detalles de Viaje -->
+    <!-- Modal de Detalles de Grupo de Gastos -->
     <div id="viajeDetalleModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <span class="close" onclick="closeViajeDetalleModal()">&times;</span>
-                <h2 id="viajeDetalleModalTitle">📋 Detalles del Viaje</h2>
+                <h2 id="viajeDetalleModalTitle">📋 Detalles del Grupo de Gastos</h2>
             </div>
             <div class="modal-body">
                 <!-- Sección para añadir nuevo gasto esperado -->
