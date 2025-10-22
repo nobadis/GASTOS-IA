@@ -28,23 +28,37 @@ from functools import wraps
 
 app = Flask(__name__)
 CORS(app)
-app.secret_key = 'gastos_app_secret_key_2025'  # Clave secreta para sesiones
 
-# Configuración
-UPLOAD_FOLDER = 'uploads'
-DATABASE = 'gastos.db'
+# Configuración desde variables de entorno (Railway)
+app.secret_key = os.getenv('SECRET_KEY', 'gastos_app_secret_key_2025')
+UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'uploads')
+DATABASE = os.getenv('DATABASE_URL', 'gastos.db').replace('sqlite:///', '') if os.getenv('DATABASE_URL', '').startswith('sqlite:///') else os.getenv('DATABASE_URL', 'gastos.db')
+
+# Crear directorio de uploads
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# Sistema de usuarios
-USERS = {
-    'paul': {'password': 'paul', 'role': 'user', 'name': 'Paul'},
-    'edurne': {'password': 'edurne', 'role': 'admin', 'name': 'Edurne'}
-}
-
+# Sistema de usuarios - ahora desde base de datos
 def authenticate_user(username, password):
-    """Verifica credenciales de usuario"""
-    if username in USERS and USERS[username]['password'] == password:
-        return USERS[username]
+    """Verifica credenciales de usuario desde la base de datos"""
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    
+    cursor.execute('''
+        SELECT username, password, name, role, parent_admin, active 
+        FROM users 
+        WHERE username = ? AND active = TRUE
+    ''', (username,))
+    
+    user = cursor.fetchone()
+    conn.close()
+    
+    if user and user[1] == password:  # user[1] es password
+        return {
+            'username': user[0],
+            'name': user[2],
+            'role': user[3],
+            'parent_admin': user[4]
+        }
     return None
 
 def is_admin():
@@ -248,6 +262,34 @@ def init_db():
             pass  # La columna ya existe
         else:
             raise
+    
+    # Tabla de usuarios
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            name TEXT NOT NULL,
+            role TEXT NOT NULL DEFAULT 'user',
+            parent_admin TEXT,
+            active BOOLEAN DEFAULT TRUE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    
+    # Insertar usuarios por defecto si no existen
+    default_users = [
+        ('paul', 'paul', 'Paul', 'user', 'edurne'),
+        ('edurne', 'edurne', 'Edurne', 'admin', None)
+    ]
+    
+    for username, password, name, role, parent_admin in default_users:
+        cursor.execute('''
+            INSERT OR IGNORE INTO users (username, password, name, role, parent_admin) 
+            VALUES (?, ?, ?, ?, ?)
+        ''', (username, password, name, role, parent_admin))
+    
+    print("✅ Tabla de usuarios creada y usuarios por defecto insertados")
     
     # Migración: Agregar campo activo a motivos si no existe
     try:
@@ -2306,4 +2348,5 @@ def export_zip():
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True, host='0.0.0.0', port=5100) 
+    port = int(os.getenv('PORT', 5100))
+    app.run(debug=False, host='0.0.0.0', port=port) 

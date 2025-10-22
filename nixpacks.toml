@@ -1,0 +1,16 @@
+[phases.setup]
+nixPkgs = ["python39", "python39Packages.pip"]
+
+[phases.install]
+cmds = [
+    "pip install -r requirements.txt",
+    "python -c \"import nltk; nltk.download('punkt')\""
+]
+
+[phases.build]
+cmds = [
+    "echo 'Build completed'"
+]
+
+[start]
+cmd = "python app.py"
