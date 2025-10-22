@@ -28,4 +28,4 @@ ENV PORT=5100
 ENV FLASK_ENV=production
 
 # Run the application
-CMD ["python3", "app-with-ocr.py"]
+CMD ["python3", "app-complete.py"]
