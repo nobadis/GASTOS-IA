@@ -1,217 +1,175 @@
-# 💰 Gestor de Gastos Inteligente
+# 💰 GASTOS IA - Sistema Inteligente de Gestión de Gastos
 
-Una aplicación web moderna y extremadamente user-friendly para gestionar gastos mediante captura de tickets con OCR automático.
+Sistema avanzado de gestión de gastos con extracción automática de datos mediante IA (Novita AI - Qwen2.5-VL-72B).
 
-## ✨ Características
+## 🚀 Características Principales
 
-- **📸 Captura de Tickets**: Toma fotos directamente o selecciona archivos
-- **🤖 OCR Automático**: Extrae automáticamente importe, fecha y tipo de gasto
-- **💱 Conversión de Monedas**: Soporte para múltiples monedas con conversión automática
-- **🏷️ Categorización Inteligente**: Conceptos predeterminados y motivos personalizables
-- **📱 Diseño Responsive**: Funciona perfectamente en móviles y escritorio
-- **⚡ Interfaz Intuitiva**: Diseño moderno con UX optimizada para velocidad
+- **Extracción Automática con IA**: Procesa imágenes de tickets y extrae datos automáticamente
+- **Gestión de Usuarios**: Sistema de usuarios con roles (admin/user) y parent_admin
+- **Gestión de Viajes**: Organiza gastos en grupos/viajes
+- **Cuadre Automático**: Reconcilia gastos con gastos esperados
+- **Conversión de Monedas**: Soporte para múltiples monedas
+- **Exportación**: PDF, Excel y ZIP de imágenes
+- **Multiusuario**: Soporte para múltiples usuarios con diferentes roles
+- **Interfaz Moderna**: UI/UX intuitiva y responsive
 
-## 🚀 Instalación Rápida
+## 📋 Requisitos
 
-### Requisitos Previos
+- Python 3.9+
+- Flask
+- SQLite
+- Novita AI API Key (opcional, para extracción automática)
 
-- Python 3.8 o superior
-- Tesseract OCR
+## 🔧 Instalación Local
 
-### Instalación de Tesseract
-
-**Windows:**
-1. Descarga Tesseract desde: https://github.com/UB-Mannheim/tesseract/wiki
-2. Instala el archivo .exe descargado
-3. Asegúrate de que esté en el PATH del sistema
-
-**macOS:**
+### 1. Clonar el repositorio
 ```bash
-brew install tesseract
+git clone https://github.com/nobadis/GASTOS-IA.git
+cd GASTOS-IA
 ```
 
-**Linux (Ubuntu/Debian):**
-```bash
-sudo apt-get install tesseract-ocr
-```
-
-### Instalación de la Aplicación
-
-1. **Clona o descarga este repositorio**
-
-2. **Instala las dependencias:**
+### 2. Instalar dependencias
 ```bash
 pip install -r requirements.txt
 ```
 
-3. **Ejecuta la aplicación (Mac):**
+### 3. Configurar API Keys (opcional)
+Crear archivo `config_api.py`:
+```python
+NOVITA_API_KEY = "tu-api-key"
+GROQ_API_KEY = ""  # Opcional
+OPENAI_API_KEY = ""  # Opcional
+
+def is_llm_configured():
+    return bool(NOVITA_API_KEY and NOVITA_API_KEY != "tu-api-key-aquí")
+
+def get_configured_api():
+    if NOVITA_API_KEY and NOVITA_API_KEY != "tu-api-key-aquí":
+        return "novita"
+    return None
+```
+
+### 4. Ejecutar la aplicación
 ```bash
-./iniciar_app.sh
+python app.py
 ```
 
-O manualmente:
+La aplicación estará disponible en `http://localhost:5100`
+
+## 🌐 Deploy a Railway
+
+### Opción 1: Deploy Automático
 ```bash
-python3 app.py
+./railway-config/railway-deploy.sh
 ```
 
-4. **Abre tu navegador en:**
-```
-http://localhost:5100
-```
+### Opción 2: Deploy Manual
+```bash
+# 1. Instalar Railway CLI
+npm install -g @railway/cli
 
-## 📖 Guía de Uso
+# 2. Login
+railway login
 
-### 1. Añadir un Nuevo Gasto
+# 3. Crear proyecto
+railway new
 
-1. **Toca el botón "+" en la parte inferior**
-2. **Captura el ticket:**
-   - 📷 **Tomar Foto**: Abre la cámara directamente
-   - 📁 **Seleccionar Archivo**: Elige una imagen existente
-3. **Revisa los datos extraídos:** La aplicación intentará extraer automáticamente:
-   - Importe
-   - Fecha
-   - Tipo de establecimiento
-4. **Completa los campos restantes:**
-   - **Concepto**: Elige de la lista predeterminada
-   - **Descripción**: Añade detalles adicionales
-   - **Motivo**: Selecciona o crea un nuevo motivo
-5. **Guarda el gasto**
+# 4. Configurar variables de entorno
+railway variables set PORT=5100
+railway variables set FLASK_ENV=production
+railway variables set SECRET_KEY=tu-secret-key
+railway variables set NOVITA_API_KEY=tu-api-key
 
-### 2. Gestión de Monedas
-
-- **Euros**: Campo principal para todos los gastos
-- **Otra Moneda**: Campo opcional con conversión automática
-- **Monedas Soportadas**: USD, GBP, JPY, CHF, CAD, AUD, CNY, MXN, BRL, ARS, COP, CLP, PEN, UYU
-
-### 3. Conceptos y Motivos
-
-**Conceptos Predeterminados:**
-- Restaurante
-- Transporte
-- Alojamiento
-- Combustible
-- Compras
-- Otros
-
-**Motivos Inteligentes:**
-- Se crean automáticamente según uses
-- Sugerencias basadas en uso frecuente
-- Autocompletado inteligente
-
-### 4. Edición y Eliminación
-
-- **Editar**: Toca el icono ✏️ en cualquier gasto
-- **Eliminar**: Toca el icono 🗑️ con confirmación
-- **Ver Imagen**: Toca la imagen en miniatura para ampliarla
-
-## 🔧 Características Técnicas
-
-### Backend (Python/Flask)
-- **Flask**: Framework web ligero
-- **SQLite**: Base de datos integrada
-- **Pillow**: Procesamiento de imágenes
-- **OpenCV**: Mejoras de imagen para OCR
-- **Tesseract**: Reconocimiento óptico de caracteres
-
-### Frontend (HTML/CSS/JavaScript)
-- **Diseño Responsive**: CSS Grid y Flexbox
-- **Progressive Web App**: Funciona offline
-- **Interfaz Moderna**: Gradientes, sombras, transiciones
-- **UX Optimizada**: Autocompletado, sugerencias inteligentes
-
-### Funcionalidades Avanzadas
-- **Procesamiento de Imágenes**: Compresión automática manteniendo legibilidad
-- **OCR Multiidioma**: Español e inglés
-- **Conversión de Monedas**: Tasas predeterminadas actualizables
-- **Gestión de Estado**: Sincronización automática frontend-backend
-
-## 📁 Estructura del Proyecto
-
-```
-GASTOS IA/
-├── app.py                 # Servidor Flask principal
-├── requirements.txt       # Dependencias Python
-├── README.md             # Documentación
-├── gastos.db             # Base de datos SQLite (se crea automáticamente)
-├── templates/
-│   └── index.html        # Interfaz de usuario
-└── uploads/              # Imágenes de tickets (se crea automáticamente)
+# 5. Deploy
+railway up
 ```
 
-## 🛠️ Configuración Avanzada
+### Variables de Entorno Necesarias
+- `PORT`: Puerto de la aplicación (por defecto: 5100)
+- `FLASK_ENV`: Entorno (production/development)
+- `SECRET_KEY`: Clave secreta de Flask
+- `NOVITA_API_KEY`: API Key de Novita AI (opcional)
+- `DATABASE_URL`: URL de la base de datos (por defecto: sqlite:///gastos.db)
 
-### Tasas de Cambio
-Las tasas de cambio están predefinidas en `app.py`. Para actualizarlas:
+Ver más detalles en [railway-config/railway-deploy.md](railway-config/railway-deploy.md)
 
-```python
-EXCHANGE_RATES = {
-    'USD': 1.09,  # Actualizar según tasas actuales
-    'GBP': 0.87,
-    # ... más monedas
-}
+## 👥 Usuarios por Defecto
+
+- **Admin**: `edurne` / `edurne`
+- **User**: `paul` / `paul` (parent_admin: edurne)
+
+## 📂 Estructura del Proyecto
+
+```
+GASTOS-IA/
+├── app.py                    # Aplicación principal Flask
+├── config.py                 # Configuración de la aplicación
+├── requirements.txt          # Dependencias Python
+├── README.md                 # Este archivo
+├── railway.json              # Configuración Railway
+├── railway.toml              # Configuración Railway alternativa
+├── nixpacks.toml            # Configuración de build
+├── templates/               # Plantillas HTML
+│   ├── index.html           # Interfaz principal
+│   └── login.html           # Página de login
+├── static/                  # Archivos estáticos
+├── uploads/                 # Imágenes de tickets
+├── docs/                    # Documentación
+│   ├── GROQ_SETUP.md
+│   ├── GUIA_API_SETUP.md
+│   └── instalar_tesseract.md
+└── railway-config/          # Configuración Railway
+    ├── railway-deploy.md
+    ├── railway-deploy.sh
+    └── railway-variables.env
 ```
 
-### Conceptos Personalizados
-Modifica los conceptos predeterminados en `app.py`:
+## 🔑 API Endpoints
 
-```python
-DEFAULT_CONCEPTS = [
-    'Restaurante',
-    'Transporte',
-    'TuConceptoPersonalizado',
-    # ... más conceptos
-]
-```
+- `GET /` - Página principal (requiere autenticación)
+- `POST /login` - Login de usuario
+- `GET /logout` - Logout de usuario
+- `GET /api/gastos` - Listar gastos
+- `POST /api/gastos` - Crear gasto
+- `PUT /api/gastos/:id` - Actualizar gasto
+- `DELETE /api/gastos/:id` - Eliminar gasto
+- `POST /api/process-image` - Procesar imagen con IA
+- `GET /api/conceptos` - Listar conceptos
+- `GET /api/motivos` - Listar viajes/grupos
 
-### Configuración de OCR
-Para mejorar la precisión del OCR, puedes ajustar los parámetros en la función `process_image()`.
+## 🤖 Integración con IA
 
-## 🚨 Solución de Problemas
+El sistema utiliza Novita AI con el modelo Qwen2.5-VL-72B para:
+- Extraer fechas de tickets
+- Identificar importes y monedas
+- Reconocer descripciones
+- Clasificar conceptos automáticamente
 
-### Error de Tesseract
-```
-TesseractNotFoundError: tesseract is not installed
-```
-**Solución**: Instala Tesseract OCR según las instrucciones de tu sistema operativo.
+## 📊 Base de Datos
 
-### Error de Puertos
-```
-Port 5000 is already in use
-```
-**Solución**: Cambia el puerto en `app.py`:
-```python
-app.run(debug=True, host='0.0.0.0', port=5001)
-```
+SQLite con las siguientes tablas:
+- `users` - Usuarios del sistema con parent_admin
+- `gastos` - Gastos registrados
+- `conceptos` - Conceptos/categorías personalizados
+- `motivos` - Viajes/grupos de gastos
+- `viaje_detalles` - Gastos esperados por viaje
 
-### Error de Permisos de Cámara
-**Solución**: Asegúrate de permitir acceso a la cámara en tu navegador.
+## 🛡️ Seguridad
 
-## 💡 Consejos de Uso
+- Autenticación requerida para todas las rutas
+- Roles de usuario (admin/user)
+- Parent admin configurado para cada usuario
+- API Keys en variables de entorno
+- Secret key para sesiones Flask
 
-1. **Iluminación**: Toma fotos con buena iluminación para mejor OCR
-2. **Calidad**: Mantén el ticket plano y enfocado
-3. **Motivos**: Reutiliza motivos para mantener consistencia
-4. **Backup**: La base de datos `gastos.db` contiene todos tus datos
+## 📝 Licencia
 
-## 🔄 Actualizaciones Futuras
+Este proyecto es privado y está protegido por derechos de autor.
 
-- [ ] Integración con APIs de tasas de cambio en tiempo real
-- [ ] Exportación a Excel/PDF
-- [ ] Gráficos y estadísticas
-- [ ] Sincronización en la nube
-- [ ] Aplicación móvil nativa
+## 👤 Autor
 
-## 🐛 Reportar Problemas
+Paul Victor Graitec
 
-Si encuentras algún problema o tienes sugerencias, puedes:
-1. Revisar la sección de solución de problemas
-2. Verificar que todas las dependencias estén instaladas correctamente
-3. Comprobar los logs de la aplicación
+## 🆘 Soporte
 
-## 📄 Licencia
-
-Este proyecto está bajo licencia MIT. Puedes usarlo, modificarlo y distribuirlo libremente.
-
----
-
-**¡Disfruta gestionando tus gastos de forma inteligente! 💰✨** 
+Para soporte o consultas, contactar al administrador del sistema.

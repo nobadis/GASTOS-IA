@@ -4,9 +4,6 @@ __pycache__/
 *$py.class
 *.so
 .Python
-env/
-venv/
-ENV/
 build/
 develop-eggs/
 dist/
@@ -22,20 +19,16 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
-# Flask
-instance/
-.webassets-cache
-
-# Database
-*.db
-*.sqlite
-*.sqlite3
-
-# Logs
-*.log
-logs/
-nohup.out
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
 # IDE
 .vscode/
@@ -48,7 +41,18 @@ nohup.out
 .DS_Store
 Thumbs.db
 
-# Uploads
+# Database
+*.db
+*.sqlite
+*.sqlite3
+gastos.db
+
+# Logs
+*.log
+logs/
+nohup.out
+
+# Uploads (desarrollo)
 uploads/*.jpg
 uploads/*.jpeg
 uploads/*.png
@@ -68,3 +72,11 @@ config_api.py
 temp/
 tmp/
 
+# Railway local
+.railway/
+railway.env
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
