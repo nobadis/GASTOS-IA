@@ -20,7 +20,7 @@ from reportlab.lib.units import inch
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
-import pandas as pd
+# import pandas as pd  # Comentado para evitar conflictos de numpy
 import tempfile
 import zipfile
 import shutil
@@ -1895,26 +1895,28 @@ def export_excel():
         if not gastos:
             return jsonify({'error': 'No hay gastos en el rango seleccionado'}), 404
         
-        # Crear DataFrame simple
+        # Crear datos para Excel sin pandas
         if is_admin():
-            df = pd.DataFrame(gastos, columns=[
-                'Fecha', 'Concepto', 'Motivo', 'Descripcion', 'Importe EUR', 'Importe Otra Moneda', 'Moneda', 'Checkeado', 'Usuario'
-            ])
+            columns = ['Fecha', 'Concepto', 'Motivo', 'Descripcion', 'Importe EUR', 'Importe Otra Moneda', 'Moneda', 'Checkeado', 'Usuario']
         else:
-            df = pd.DataFrame(gastos, columns=[
-                'Fecha', 'Concepto', 'Motivo', 'Descripcion', 'Importe EUR', 'Importe Otra Moneda', 'Moneda', 'Checkeado', 'Usuario'
-            ])
-            # Eliminar columna usuario para usuarios normales
-            df = df.drop('Usuario', axis=1)
+            columns = ['Fecha', 'Concepto', 'Motivo', 'Descripcion', 'Importe EUR', 'Importe Otra Moneda', 'Moneda', 'Checkeado']
         
-        # Convertir campo checkeado a texto legible
-        df['Checkeado'] = df['Checkeado'].apply(lambda x: 'Si' if x else 'No')
-        
-        # Convertir valores nulos a cadenas vacías para las otras monedas
-        df['Importe Otra Moneda'] = df['Importe Otra Moneda'].fillna('')
-        df['Moneda'] = df['Moneda'].fillna('')
-        df['Motivo'] = df['Motivo'].fillna('')
-        df['Descripcion'] = df['Descripcion'].fillna('')
+        # Convertir gastos a formato de lista para Excel
+        excel_data = []
+        for gasto in gastos:
+            row = [
+                gasto.get('fecha', ''),
+                gasto.get('concepto', ''),
+                gasto.get('motivo', ''),
+                gasto.get('descripcion', ''),
+                gasto.get('importe_eur', ''),
+                gasto.get('importe_otra_moneda', ''),
+                gasto.get('moneda', ''),
+                'Sí' if gasto.get('checkeado') else 'No'
+            ]
+            if is_admin():
+                row.append(gasto.get('usuario', ''))
+            excel_data.append(row)
         
         # Formatear fechas a formato dd/mm/yyyy
         def format_date_for_excel(date_str):
@@ -1927,14 +1929,50 @@ def export_excel():
                     return date_str
             return date_str
         
-        df['Fecha'] = df['Fecha'].apply(format_date_for_excel)
+        # Aplicar formato de fecha a los datos
+        for row in excel_data:
+            if row[0]:  # Fecha está en la primera columna
+                row[0] = format_date_for_excel(row[0])
+        
+        # Crear archivo Excel usando openpyxl directamente
+        from openpyxl import Workbook
+        from openpyxl.styles import Font, PatternFill, Alignment
+        
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "Gastos"
+        
+        # Añadir encabezados
+        for col, header in enumerate(columns, 1):
+            cell = ws.cell(row=1, column=col, value=header)
+            cell.font = Font(bold=True)
+            cell.fill = PatternFill(start_color="CCCCCC", end_color="CCCCCC", fill_type="solid")
+            cell.alignment = Alignment(horizontal="center")
+        
+        # Añadir datos
+        for row_idx, row_data in enumerate(excel_data, 2):
+            for col_idx, value in enumerate(row_data, 1):
+                ws.cell(row=row_idx, column=col_idx, value=value)
+        
+        # Ajustar ancho de columnas
+        for column in ws.columns:
+            max_length = 0
+            column_letter = column[0].column_letter
+            for cell in column:
+                try:
+                    if len(str(cell.value)) > max_length:
+                        max_length = len(str(cell.value))
+                except:
+                    pass
+            adjusted_width = min(max_length + 2, 50)
+            ws.column_dimensions[column_letter].width = adjusted_width
         
         # Crear archivo Excel
         filename = f"gastos_{fecha_inicio}_{fecha_fin}.xlsx"
         filepath = os.path.join(UPLOAD_FOLDER, filename)
         
-        # Escribir archivo Excel simple
-        df.to_excel(filepath, index=False, sheet_name='Gastos')
+        # Guardar archivo
+        wb.save(filepath)
         
         # Leer archivo y enviarlo
         with open(filepath, 'rb') as f:
@@ -2262,8 +2300,6 @@ def export_zip():
                     'Usuario': usuario or ''
                 })
             
-            df = pd.DataFrame(df_data)
-            
             # Formatear fechas a formato dd/mm/yyyy
             def format_date_for_excel_zip(date_str):
                 if date_str:
@@ -2275,9 +2311,50 @@ def export_zip():
                         return date_str
                 return date_str
             
-            df['Fecha'] = df['Fecha'].apply(format_date_for_excel_zip)
+            # Aplicar formato de fecha a los datos
+            for row in df_data:
+                if 'Fecha' in row:
+                    row['Fecha'] = format_date_for_excel_zip(row['Fecha'])
             
-            df.to_excel(excel_path, index=False)
+            # Crear archivo Excel usando openpyxl directamente
+            from openpyxl import Workbook
+            from openpyxl.styles import Font, PatternFill, Alignment
+            
+            wb = Workbook()
+            ws = wb.active
+            ws.title = "Gastos"
+            
+            # Obtener columnas
+            if df_data:
+                columns = list(df_data[0].keys())
+                
+                # Añadir encabezados
+                for col, header in enumerate(columns, 1):
+                    cell = ws.cell(row=1, column=col, value=header)
+                    cell.font = Font(bold=True)
+                    cell.fill = PatternFill(start_color="CCCCCC", end_color="CCCCCC", fill_type="solid")
+                    cell.alignment = Alignment(horizontal="center")
+                
+                # Añadir datos
+                for row_idx, row_data in enumerate(df_data, 2):
+                    for col_idx, header in enumerate(columns, 1):
+                        ws.cell(row=row_idx, column=col_idx, value=row_data.get(header, ''))
+                
+                # Ajustar ancho de columnas
+                for column in ws.columns:
+                    max_length = 0
+                    column_letter = column[0].column_letter
+                    for cell in column:
+                        try:
+                            if len(str(cell.value)) > max_length:
+                                max_length = len(str(cell.value))
+                        except:
+                            pass
+                    adjusted_width = min(max_length + 2, 50)
+                    ws.column_dimensions[column_letter].width = adjusted_width
+            
+            # Guardar archivo Excel
+            wb.save(excel_path)
             
             # 3. Copiar imágenes
             images_dir = os.path.join(temp_dir, 'imagenes')
