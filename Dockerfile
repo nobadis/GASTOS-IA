@@ -4,6 +4,8 @@ FROM python:3.9-slim
 RUN apt-get update && apt-get install -y \
     tesseract-ocr \
     libtesseract-dev \
+    tesseract-ocr-spa \
+    tesseract-ocr-eng \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
@@ -26,4 +28,4 @@ ENV PORT=5100
 ENV FLASK_ENV=production
 
 # Run the application
-CMD ["python3", "app-simple.py"]
+CMD ["python3", "app-with-ocr.py"]
