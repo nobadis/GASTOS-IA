@@ -5183,7 +5183,7 @@
                         <div class="form-group">
                             <label for="concepto">🏷️ Concept</label>
                             <select id="concepto" required>
-                                <option value="">Selecciona un concepto</option>
+                                        <option value="">Sélectionner un concept</option>
                             </select>
                         </div>
                     </div>
@@ -5392,7 +5392,7 @@
         <div class="modal-content" style="max-width: 90%; max-height: 90%; overflow-y: auto;">
             <div class="modal-header">
                 <span class="close" onclick="closeBatchVerificationModal()">&times;</span>
-                <h2>📋 Verificación de Múltiples Tickets</h2>
+                <h2>📋 Vérification de Tickets Multiples</h2>
             </div>
             <div class="modal-body">
                 <div id="batchProcessingStatus" class="processing-status" style="display: none;">
@@ -5416,7 +5416,7 @@
                     
                     <div class="batch-actions" style="margin-top: 20px; padding: 15px; border-top: 1px solid #dee2e6;">
                         <button type="button" class="btn btn-success" onclick="saveAllBatchTickets()" id="saveAllBatchBtn">
-                            <i class="fas fa-save"></i> Guardar Todos los Tickets
+                            <i class="fas fa-save"></i> Enregistrer Tous les Tickets
                         </button>
                         <button type="button" class="btn btn-secondary" onclick="closeBatchVerificationModal()" style="margin-left: 10px;">
                             <i class="fas fa-times"></i> Annuler
@@ -7023,16 +7023,16 @@
         // Actualizar dropdown de conceptos
         function updateConceptoDropdown() {
             const dropdown = document.getElementById('concepto');
-            dropdown.innerHTML = '<option value="">Selecciona un concepto</option>' + 
+            dropdown.innerHTML = '<option value="">Sélectionner un concept</option>' + 
                 conceptos.map(concepto => `<option value="${concepto}">${concepto}</option>`).join('');
         }
 
         // Actualizar dropdown de motivos
         function updateMotivoDropdown() {
             const dropdown = document.getElementById('motivo');
-            dropdown.innerHTML = '<option value="">Selecciona un viaje</option>' + 
+            dropdown.innerHTML = '<option value="">Sélectionner un voyage</option>' + 
                 motivos.map(motivo => `<option value="${motivo}">${motivo}</option>`).join('') +
-                '<option value="__NEW__">➕ Crear nuevo viaje...</option>';
+                '<option value="__NEW__">➕ Créer nouveau voyage...</option>';
             
             // Reconfigurar listeners después de actualizar
             setupMotivoDropdown();
@@ -9066,7 +9066,7 @@
                         <div class="batch-ticket-header">
                             <span class="batch-ticket-filename">${ticket.filename}</span>
                             <span class="batch-ticket-status ${ticket.processed ? 'success' : 'error'}">
-                                ${ticket.processed ? 'Procesado' : 'Error'}
+                                ${ticket.processed ? 'Traité' : 'Erreur'}
                             </span>
                         </div>
                         
@@ -9098,7 +9098,7 @@
                                 <div class="batch-ticket-field">
                                     <label>Viaje</label>
                                     <select id="batch_motivo_${index}" ${!ticket.processed ? 'disabled' : ''}>
-                                        <option value="">Selecciona un viaje</option>
+                                        <option value="">Sélectionner un voyage</option>
                                     </select>
                                 </div>
                             </div>
@@ -9107,11 +9107,11 @@
                         <div class="batch-ticket-actions">
                             ${!ticket.processed ? `
                                 <button class="btn-retry" onclick="retryBatchTicket(${index})">
-                                    <i class="fas fa-redo"></i> Reintentar
+                                    <i class="fas fa-redo"></i> Réessayer
                                 </button>
                             ` : ''}
                             <button class="btn-delete" onclick="removeBatchTicket(${index})">
-                                <i class="fas fa-trash"></i> Eliminar
+                                <i class="fas fa-trash"></i> Supprimer
                             </button>
                         </div>
                     </div>
@@ -9203,9 +9203,9 @@
                 const motivoSelect = document.getElementById(`batch_motivo_${index}`);
                 if (motivoSelect && ticket.processed) {
                     // Llenar opciones
-                    motivoSelect.innerHTML = '<option value="">Selecciona un viaje</option>' + 
+                    motivoSelect.innerHTML = '<option value="">Sélectionner un voyage</option>' + 
                         motivos.map(motivo => `<option value="${motivo}">${motivo}</option>`).join('') +
-                        '<option value="__NEW__">➕ Crear nuevo viaje...</option>';
+                        '<option value="__NEW__">➕ Créer nouveau voyage...</option>';
                     
                     // Seleccionar automáticamente el motivo si existe
                     let motivoSeleccionado = false;
@@ -9239,7 +9239,7 @@
                     // Agregar listener para crear nuevo motivo
                     motivoSelect.addEventListener('change', function() {
                         if (this.value === '__NEW__') {
-                            const nuevoMotivo = prompt('Introduce el nuevo viaje:');
+                            const nuevoMotivo = prompt('Introduire le nouveau voyage:');
                             if (nuevoMotivo && nuevoMotivo.trim()) {
                                 addNewMotivoBatch(nuevoMotivo.trim(), index);
                             } else {
@@ -9459,9 +9459,11 @@
                 // Recargar lista de gastos
                 loadGastos();
                 
-                // Fermer modal
+                // Fermer modal y redirigir al dashboard
                 setTimeout(() => {
                     closeBatchVerificationModal();
+                    // Redirigir al dashboard principal
+                    showSection('dashboard');
                 }, 1500);
             } else {
                 showMessage(`❌ Error al guardar tickets: ${errorCount} errores`, 'error');
@@ -9469,7 +9471,7 @@
 
             // Restaurar botón
             saveBtn.disabled = false;
-            saveBtn.innerHTML = '<i class="fas fa-save"></i> Guardar Todos los Tickets';
+            saveBtn.innerHTML = '<i class="fas fa-save"></i> Enregistrer Tous les Tickets';
         }
 
         // === FIN FUNCIONES PARA PROCESAMIENTO POR LOTES ===
