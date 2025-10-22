@@ -11,15 +11,15 @@ import re
 from datetime import datetime
 import json
 from io import BytesIO
-import openai
-from groq import Groq
+# import openai  # Comentado para reducir dependencias
+# from groq import Groq  # Comentado para reducir dependencias
 from config import EXCHANGE_RATES as CONFIG_EXCHANGE_RATES  # Importar tasas desde config
-from reportlab.lib.pagesizes import letter, A4
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import inch
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-from reportlab.lib import colors
-from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
+# from reportlab.lib.pagesizes import letter, A4  # Comentado para reducir dependencias
+# from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle  # Comentado para reducir dependencias
+# from reportlab.lib.units import inch  # Comentado para reducir dependencias
+# from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle  # Comentado para reducir dependencias
+# from reportlab.lib import colors  # Comentado para reducir dependencias
+# from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT  # Comentado para reducir dependencias
 # import pandas as pd  # Comentado para evitar conflictos de numpy
 import tempfile
 import zipfile

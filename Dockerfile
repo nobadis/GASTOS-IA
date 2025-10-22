@@ -4,21 +4,16 @@ FROM python:3.9-slim
 RUN apt-get update && apt-get install -y \
     tesseract-ocr \
     libtesseract-dev \
-    libglib2.0-0 \
-    libsm6 \
-    libxext6 \
-    libxrender1 \
-    libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
 # Copy requirements and install Python dependencies
-COPY requirements-minimal.txt .
+COPY requirements-basic.txt .
 
-# Install dependencies without pandas to avoid numpy conflicts
-RUN pip install --no-cache-dir -r requirements-minimal.txt
+# Install only basic dependencies
+RUN pip install --no-cache-dir -r requirements-basic.txt
 
 # Copy application code
 COPY . .
