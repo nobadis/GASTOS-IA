@@ -1505,30 +1505,36 @@
 
         /* Jerarquía de botones simplificada */
         .btn-primary {
-            background: var(--btn-primary-bg);
-            color: var(--btn-primary-text);
-            border: 1px solid var(--btn-primary-bg);
-            padding: 16px 24px;
-            border-radius: var(--radius-medium);
-            font-size: 0.95rem;
-            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 20px 32px;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: var(--shadow-medium);
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            min-height: 48px;
+            gap: 12px;
+            min-height: 56px;
             justify-content: center;
             text-transform: none;
-            letter-spacing: 0;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-primary:hover {
-            background: var(--btn-primary-hover);
-            border-color: var(--btn-primary-hover);
+            background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-primary:active {
             transform: translateY(-1px);
-            box-shadow: var(--shadow-strong);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
         }
 
         .btn-secondary {
@@ -1739,20 +1745,24 @@
 
         .motivo-actions {
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+            gap: 6px;
+            flex-wrap: nowrap;
+            align-items: center;
+            min-width: 120px;
         }
         
         .motivo-toggle-btn {
             background: rgba(99, 102, 241, 0.1);
             color: var(--secondary-color);
             border: 1px solid rgba(99, 102, 241, 0.2);
-            padding: 6px 12px;
+            padding: 4px 8px;
             border-radius: var(--radius-small);
             cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 500;
             transition: all 0.2s ease;
+            white-space: nowrap;
+            min-width: 50px;
         }
         
         .motivo-toggle-btn:hover {
@@ -3118,12 +3128,19 @@
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-small);
-            font-size: 0.9rem;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 0.95rem;
             background: var(--surface-color);
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
         }
 
         .form-group input:focus,
@@ -3131,13 +3148,15 @@
         .form-group textarea:focus {
             outline: none;
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(0, 184, 148, 0.1);
+            box-shadow: 0 0 0 4px rgba(0, 184, 148, 0.15);
+            transform: translateY(-1px);
         }
 
         .form-group input:hover,
         .form-group select:hover,
         .form-group textarea:hover {
             border-color: var(--accent-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .form-row {
@@ -5156,7 +5175,7 @@
                 <form id="expenseForm">
                     <div class="camera-section">
                         <input type="file" id="ticketInput" accept="image/*" multiple style="display: none;" onchange="handleTicketFileSelect(event)">
-                        <button type="button" class="camera-btn" onclick="openTicketInput()">📷 Cargar Ticket</button>
+                        <button type="button" class="camera-btn" onclick="openTicketInput()">📷 Cargar Tickets</button>
                         <div id="previewContainer" class="preview-container" style="display: none;">
                             <img id="previewImage" class="preview-image" alt="Vista previa" onclick="showImageModal(this.src)" style="cursor: pointer;" title="Click para ver imagen completa">
                             <br>
@@ -7422,9 +7441,11 @@
                         }, 500); // Esperar un poco para que se actualice la lista
                     }
                     
-                    // Si no mantenemos el modal abierto, cerrarlo
+                    // Si no mantenemos el modal abierto, cerrarlo y redirigir al dashboard
                     if (!keepModalOpen) {
                         closeModal();
+                        // Redirigir al dashboard principal
+                        showSection('dashboard');
                     } else {
                                     // Resetear para nuevo ticket
                         currentExpenseId = null;
@@ -9093,7 +9114,9 @@
                                 </div>
                                 <div class="batch-ticket-field">
                                     <label>Concepto</label>
-                                    <input type="text" id="batch_concepto_${index}" value="${ticket.extractedData?.concept || ''}" ${!ticket.processed ? 'disabled' : ''}>
+                                    <select id="batch_concepto_${index}" ${!ticket.processed ? 'disabled' : ''}>
+                                        <option value="">Sélectionner un concept</option>
+                                    </select>
                                 </div>
                                 <div class="batch-ticket-field">
                                     <label>Viaje</label>
@@ -9174,10 +9197,23 @@
                         descripcionInput.value = ticket.extractedData.description;
                     }
                     
-                    // Actualizar concepto
-                    const conceptoInput = document.getElementById(`batch_concepto_${index}`);
-                    if (conceptoInput && ticket.extractedData.concept) {
-                        conceptoInput.value = ticket.extractedData.concept;
+                    // Actualizar concepto (select)
+                    const conceptoSelect = document.getElementById(`batch_concepto_${index}`);
+                    if (conceptoSelect && ticket.extractedData.concept) {
+                        // Buscar coincidencia exacta
+                        const exactMatch = conceptos.find(c => c.toLowerCase() === ticket.extractedData.concept.toLowerCase());
+                        if (exactMatch) {
+                            conceptoSelect.value = exactMatch;
+                        } else {
+                            // Buscar coincidencia parcial
+                            const partialMatch = conceptos.find(c => 
+                                c.toLowerCase().includes(ticket.extractedData.concept.toLowerCase()) || 
+                                ticket.extractedData.concept.toLowerCase().includes(c.toLowerCase())
+                            );
+                            if (partialMatch) {
+                                conceptoSelect.value = partialMatch;
+                            }
+                        }
                     }
                     
                     // Actualizar fecha
