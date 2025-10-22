@@ -97,11 +97,11 @@ def admin_required(f):
 
 # Configuración LLM desde archivo externo
 try:
-    from config_api import NOVITA_API_KEY, GROQ_API_KEY, OPENAI_API_KEY, is_llm_configured, get_configured_api
+    from config_local import NOVITA_API_KEY, GROQ_API_KEY, OPENAI_API_KEY, is_llm_configured, get_configured_api
     print(f"🔑 API Keys cargadas - Novita: {'✅' if NOVITA_API_KEY and NOVITA_API_KEY != 'tu-api-key-aquí' else '❌'}")
     print(f"🔑 LLM configurado: {'✅' if is_llm_configured() else '❌'}")
 except ImportError:
-    print("📝 Para usar extracción automática con LLM, configura las API keys en config_api.py")
+    print("📝 Para usar extracción automática con LLM, configura las API keys en config_local.py")
     NOVITA_API_KEY = None
     GROQ_API_KEY = None
     OPENAI_API_KEY = None
