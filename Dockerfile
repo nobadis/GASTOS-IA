@@ -10,10 +10,10 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy requirements and install Python dependencies
-COPY requirements-basic.txt .
+COPY requirements-ultra-basic.txt .
 
-# Install only basic dependencies
-RUN pip install --no-cache-dir -r requirements-basic.txt
+# Install only ultra-basic dependencies
+RUN pip install --no-cache-dir -r requirements-ultra-basic.txt
 
 # Copy application code
 COPY . .
@@ -26,4 +26,4 @@ ENV PORT=5100
 ENV FLASK_ENV=production
 
 # Run the application
-CMD ["python3", "app.py"]
+CMD ["python3", "app-simple.py"]
