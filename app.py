@@ -5,8 +5,8 @@ import os
 import base64
 from PIL import Image
 import pytesseract
-import cv2
-import numpy as np
+# import cv2  # Comentado para evitar dependencias problemáticas
+# import numpy as np  # Comentado para evitar dependencias problemáticas
 import re
 from datetime import datetime
 import json
@@ -328,13 +328,15 @@ def process_image(image_data):
         # Extraer texto con OCR
         text = ""
         try:
-            # Convertir a array numpy para OpenCV
-            img_array = np.array(image)
+            # Mejorar imagen usando PIL para OCR
+            # Convertir a escala de grises
+            if image.mode != 'L':
+                image = image.convert('L')
             
-            # Mejorar contraste para OCR
-            gray = cv2.cvtColor(img_array, cv2.COLOR_RGB2GRAY)
-            clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
-            enhanced = clahe.apply(gray)
+            # Mejorar contraste usando PIL
+            from PIL import ImageEnhance
+            enhancer = ImageEnhance.Contrast(image)
+            enhanced = enhancer.enhance(2.0)  # Aumentar contraste
             
             # Extraer texto
             text = pytesseract.image_to_string(enhanced, lang='spa+eng')
