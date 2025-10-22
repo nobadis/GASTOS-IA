@@ -1,10 +1,9 @@
 [phases.setup]
-nixPkgs = ["python39", "python39Packages.pip"]
+nixPkgs = ["python39", "python39Packages.pip", "tesseract", "libtesseract-dev"]
 
 [phases.install]
 cmds = [
-    "pip install -r requirements.txt",
-    "python -c \"import nltk; nltk.download('punkt')\""
+    "pip install -r requirements.txt"
 ]
 
 [phases.build]
@@ -13,4 +12,4 @@ cmds = [
 ]
 
 [start]
-cmd = "python app.py"
+cmd = "python3 app.py"

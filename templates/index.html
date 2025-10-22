@@ -1505,36 +1505,54 @@
 
         /* Jerarquía de botones simplificada */
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
             color: white;
             border: none;
-            padding: 20px 32px;
-            border-radius: 16px;
-            font-size: 1.1rem;
-            font-weight: 700;
+            padding: 24px 40px;
+            border-radius: 20px;
+            font-size: 1.3rem;
+            font-weight: 800;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-            display: inline-flex;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 12px 35px rgba(255, 107, 107, 0.5);
+            display: flex;
             align-items: center;
-            gap: 12px;
-            min-height: 56px;
+            gap: 15px;
+            min-height: 70px;
             justify-content: center;
-            text-transform: none;
-            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             position: relative;
             overflow: hidden;
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+            background: linear-gradient(135deg, #ff5252 0%, #d63031 100%);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(255, 107, 107, 0.7);
         }
 
         .btn-primary:active {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.6);
         }
 
         .btn-secondary {
@@ -1745,24 +1763,25 @@
 
         .motivo-actions {
             display: flex;
-            gap: 6px;
-            flex-wrap: nowrap;
+            gap: 4px;
+            flex-wrap: wrap;
             align-items: center;
-            min-width: 120px;
+            min-width: 140px;
+            justify-content: flex-end;
         }
         
         .motivo-toggle-btn {
             background: rgba(99, 102, 241, 0.1);
             color: var(--secondary-color);
             border: 1px solid rgba(99, 102, 241, 0.2);
-            padding: 4px 8px;
-            border-radius: var(--radius-small);
+            padding: 6px 10px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 0.7rem;
-            font-weight: 500;
+            font-size: 0.75rem;
+            font-weight: 600;
             transition: all 0.2s ease;
             white-space: nowrap;
-            min-width: 50px;
+            min-width: 65px;
         }
         
         .motivo-toggle-btn:hover {
@@ -1775,12 +1794,14 @@
             background: rgba(16, 185, 129, 0.1);
             color: var(--success-color);
             border: 1px solid rgba(16, 185, 129, 0.2);
-            padding: 6px 12px;
-            border-radius: var(--radius-small);
+            padding: 6px 10px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 0.75rem;
-            font-weight: 500;
+            font-weight: 600;
             transition: all 0.2s ease;
+            white-space: nowrap;
+            min-width: 60px;
         }
         
         .motivo-detail-btn:hover {
@@ -4937,11 +4958,11 @@
                         <h3>🎯 Actions Principales</h3>
                         <div class="main-actions">
                             <button class="btn-primary" onclick="openModal()" title="Ajouter Nouveau Ticket">
-                                ➕ Ajouter Nouveau Ticket
+                                ➕ AJOUTER NOUVEAU TICKET
                             </button>
-                                                <button class="btn-secondary" onclick="openManageMotivosModal()" title="Gérer Groupes de Dépenses">
-                        ⚙️ Gérer Groupes de Dépenses
-            </button>
+                            <button class="btn-secondary" onclick="openManageMotivosModal()" title="Gérer Groupes de Dépenses">
+                                ⚙️ Gérer Groupes de Dépenses
+                            </button>
                         </div>
                     </div>
 
@@ -5175,11 +5196,11 @@
                 <form id="expenseForm">
                     <div class="camera-section">
                         <input type="file" id="ticketInput" accept="image/*" multiple style="display: none;" onchange="handleTicketFileSelect(event)">
-                        <button type="button" class="camera-btn" onclick="openTicketInput()">📷 Cargar Tickets</button>
+                        <button type="button" class="camera-btn" onclick="openTicketInput()">📷 Charger Tickets</button>
                         <div id="previewContainer" class="preview-container" style="display: none;">
-                            <img id="previewImage" class="preview-image" alt="Vista previa" onclick="showImageModal(this.src)" style="cursor: pointer;" title="Click para ver imagen completa">
+                            <img id="previewImage" class="preview-image" alt="Aperçu" onclick="showImageModal(this.src)" style="cursor: pointer;" title="Cliquer pour voir l'image complète">
                             <br>
-                            <button type="button" class="btn btn-danger" onclick="deleteImage()" style="margin-top: 10px;">🗑️ Eliminar Imagen</button>
+                            <button type="button" class="btn btn-danger" onclick="deleteImage()" style="margin-top: 10px;">🗑️ Supprimer Image</button>
                         </div>
                         
                         <!-- Opción para análisis IA -->
@@ -5272,9 +5293,9 @@
                     </div>
 
                                                             <div style="text-align: center; margin-top: 20px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
-                        <button type="button" class="btn btn-success ripple" onclick="saveGastoAndExit()" id="saveExitButton">💾 Guardar y Salir</button>
-                        <button type="button" class="btn btn-primary ripple" onclick="saveGastoAndAdd()" id="saveAddButton">➕ Guardar y Añadir</button>
-                        <button type="button" class="btn ripple" onclick="closeModal()">❌ Anular</button>
+                        <button type="button" class="btn btn-success ripple" onclick="saveGastoAndExit()" id="saveExitButton">💾 Enregistrer et Sortir</button>
+                        <button type="button" class="btn btn-primary ripple" onclick="saveGastoAndAdd()" id="saveAddButton">➕ Enregistrer et Ajouter</button>
+                        <button type="button" class="btn ripple" onclick="closeModal()">❌ Annuler</button>
                     </div>
                     </div>
                 </form>
@@ -6695,7 +6716,7 @@
                             <span class="btn-text-mobile">✏️</span>
                         </button>
                         <button class="btn-action btn-delete" onclick="deleteGasto(${gasto.id})">
-                            <span class="btn-text-desktop">🗑️ Eliminar</span>
+                            <span class="btn-text-desktop">🗑️ Supprimer</span>
                             <span class="btn-text-mobile">🗑️</span>
                         </button>
                     </div>
@@ -6925,7 +6946,7 @@
                             <span class="btn-text-mobile">✏️</span>
                         </button>
                         <button class="btn-action btn-delete" onclick="deleteGasto(${gasto.id})">
-                            <span class="btn-text-desktop">🗑️ Eliminar</span>
+                            <span class="btn-text-desktop">🗑️ Supprimer</span>
                             <span class="btn-text-mobile">🗑️</span>
                         </button>
                     </div>
@@ -7911,13 +7932,13 @@
                     </div>
                     <div class="motivo-actions">
                         <button class="motivo-toggle-btn" onclick="toggleMotivoActivo('${nombreMotivo.replace(/'/g, "\\'")}')">
-                            ${estaActivo ? '⏸️ Desactivar' : '▶️ Activar'}
+                            ${estaActivo ? '⏸️ Désactiver' : '▶️ Activer'}
                         </button>
                         <button class="motivo-detail-btn" onclick="openViajeDetalleModal('${nombreMotivo.replace(/'/g, "\\'")}')">
-                            📋 Detalle
+                            📋 Détail
                         </button>
                         <button class="motivo-delete-btn" onclick="deleteMotivo('${nombreMotivo.replace(/'/g, "\\'")}')">
-                            🗑️ Eliminar
+                            🗑️ Supprimer
                         </button>
                     </div>
                 </div>
