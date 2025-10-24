@@ -1,0 +1,67 @@
+# French translations for Gastos App
+# Copyright (C) 2025 Gastos App
+# This file is distributed under the same license as the Gastos App project.
+# FIRST AUTHOR <email@example.com>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Gastos App 1.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-01-22 12:00+0000\n"
+"PO-Revision-Date: 2025-01-22 12:00+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.12.1\n"
+
+#: app.py:691
+msgid "Bienvenido, %(name)s!"
+msgstr "Bienvenue, %(name)s!"
+
+#: app.py:694
+msgid "Usuario o contraseña incorrectos"
+msgstr "Nom d'utilisateur ou mot de passe incorrect"
+
+#: app.py:702
+msgid "Has cerrado sesión correctamente"
+msgstr "Vous avez fermé la session avec succès"
+
+#: app.py:710
+msgid "Idioma cambiado correctamente"
+msgstr "Langue changée avec succès"
+
+#: app.py:78
+msgid "Autenticación requerida"
+msgstr "Authentification requise"
+
+#: app.py:93
+msgid "Acceso denegado - se requiere rol admin"
+msgstr "Accès refusé - rôle administrateur requis"
+
+#: app.py:170
+msgid "Restaurante"
+msgstr "Restaurant"
+
+#: app.py:171
+msgid "Transporte"
+msgstr "Transport"
+
+#: app.py:172
+msgid "Alojamiento"
+msgstr "Hébergement"
+
+#: app.py:173
+msgid "Combustible"
+msgstr "Carburant"
+
+#: app.py:174
+msgid "Compras"
+msgstr "Achats"
+
+#: app.py:175
+msgid "Otros"
+msgstr "Autres"

@@ -5,8 +5,8 @@ import os
 import base64
 from PIL import Image
 import pytesseract
-# import cv2  # Comentado para evitar dependencias problemáticas
-# import numpy as np  # Comentado para evitar dependencias problemáticas
+import cv2
+import numpy as np
 import re
 from datetime import datetime
 import json
@@ -14,13 +14,13 @@ from io import BytesIO
 # import openai  # Comentado para reducir dependencias
 # from groq import Groq  # Comentado para reducir dependencias
 from config import EXCHANGE_RATES as CONFIG_EXCHANGE_RATES  # Importar tasas desde config
-# from reportlab.lib.pagesizes import letter, A4  # Comentado para reducir dependencias
-# from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle  # Comentado para reducir dependencias
-# from reportlab.lib.units import inch  # Comentado para reducir dependencias
-# from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle  # Comentado para reducir dependencias
-# from reportlab.lib import colors  # Comentado para reducir dependencias
-# from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT  # Comentado para reducir dependencias
-# import pandas as pd  # Comentado para evitar conflictos de numpy
+from reportlab.lib.pagesizes import letter, A4
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib import colors
+from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
+import pandas as pd
 import tempfile
 import zipfile
 import shutil
@@ -28,6 +28,12 @@ from functools import wraps
 
 app = Flask(__name__)
 CORS(app)
+
+# Configuración de idiomas
+LANGUAGES = {
+    'es': 'Español',
+    'fr': 'Français'
+}
 
 # Configuración desde variables de entorno (Railway)
 app.secret_key = os.getenv('SECRET_KEY', 'gastos_app_secret_key_2025')
@@ -110,23 +116,21 @@ except ImportError:
 
 # Inicializar clientes LLM
 try:
-    # Cliente Novita AI (Llama 3.3 70B) - Usar requests directamente
+    # Cliente Novita AI (Llama 3.2 90B Vision) - Usar requests directamente
     if NOVITA_API_KEY and NOVITA_API_KEY != "tu-api-key-aquí":
         novita_client = "requests_direct"  # Marcador para usar requests
-        print("✅ Cliente Novita configurado (usando requests directamente)")
+        print("✅ Cliente Novita configurado (Llama 3.2 90B Vision)")
     else:
         novita_client = None
     
-    # Solo Novita por ahora
+    # Solo usamos Novita
     groq_client = None
-    openai.api_key = None
         
-    print(f"🤖 Clientes finales - Novita: {'✅' if novita_client else '❌'}, Groq: {'✅' if groq_client else '❌'}, OpenAI: {'✅' if openai.api_key else '❌'}")
+    print(f"🤖 Cliente configurado - Novita: {'✅' if novita_client else '❌'}")
 except Exception as e:
-    print(f"❌ Error general inicializando clientes LLM: {e}")
+    print(f"❌ Error inicializando cliente LLM: {e}")
     novita_client = None
     groq_client = None
-    openai.api_key = None
 
 # Usar tasas de conversión desde config.py (EUR como base)
 EXCHANGE_RATES = CONFIG_EXCHANGE_RATES
@@ -518,55 +522,36 @@ def extract_ticket_info(text):
     return info
 
 def extract_with_llm(image_data, ocr_text=""):
-    """Extraer información usando Novita AI con modelo multimodal"""
+    """Extraer información usando Novita AI con Llama 3.3 70B Instruct"""
     try:
         # Solo usar Novita AI
         if not novita_client:
             print("❌ Cliente Novita no disponible")
             return extract_ticket_info(ocr_text)
         
-        # Preparar prompt específico para análisis de tickets
-        prompt = """Analysez ce ticket d'achat et extrayez les informations exactes qui y apparaissent.
+        # Preparar prompt optimizado para Llama 3.3 70B
+        prompt = """Analiza esta imagen de ticket y extrae EXACTAMENTE esta información en formato JSON:
 
-ÉTAPES À SUIVRE:
-1. Identifiez le TOTAL à payer (le montant final le plus important, pas les sous-totaux)
-2. Recherchez la DATE de la transaction (peut être au format DD/MM/YYYY, DD-MM-YYYY ou similaire)
-3. Trouvez le NOM de l'établissement ou commerce
-4. Classifiez le TYPE d'établissement
+IMPORTANTE: Busca el TOTAL FINAL (no subtotales). Busca la FECHA completa. Busca el NOMBRE del establecimiento.
 
-EXTRAYEZ ces champs:
-- "amount": Seulement le nombre du total à payer (exemple: 15.50, 120.00)
-- "currency": Code de 3 lettres de la devise (EUR, USD, GBP, JPY, etc.) - Si pas clair, utiliser "EUR"
-- "date": Date au format YYYY-MM-DD (convertir DD/MM/YYYY en YYYY-MM-DD)
-- "description": Nom exact de l'établissement qui apparaît sur le ticket
-- "concept": Une de ces catégories exactes: Restaurante, Transporte, Alojamiento, Combustible, Supermercado, Farmacia, Tecnología, Ropa, Entretenimiento, Otros
-
-EXEMPLES de conversion de date:
-- 15/03/2024 → 2024-03-15
-- 7/12/2023 → 2023-12-07
-
-DÉTECTION DE DEVISE:
-- Cherchez les symboles: €, $, £, ¥, CHF, CAD, etc.
-- Cherchez le texte: "EUR", "USD", "GBP", "JPY", "CHF", etc.
-- Si symbole € ou dit "EUR" → "EUR"
-- Si symbole $ ou dit "USD" → "USD"
-- Si symbole £ ou dit "GBP" → "GBP"
-- Si symbole ¥ ou dit "JPY" → "JPY"
-- Si pas clair, utiliser "EUR"
-
-IMPORTANT: 
-- Si vous ne voyez pas clairement une donnée, utilisez null
-- Extrayez uniquement les informations qui apparaissent réellement sur le ticket
-- Répondez UNIQUEMENT avec du JSON valide
-
-Format de réponse:
+Devuelve SOLO este JSON (sin texto adicional):
 {
-    "amount": 15.50,
+    "amount": 0.00,
     "currency": "EUR",
-    "date": "2024-03-15",
-    "description": "Restaurante El Rincón",
+    "date": "2024-01-01",
+    "description": "Nombre del establecimiento",
     "concept": "Restaurante"
-}"""
+}
+
+CONCEPTOS válidos (elige UNO): Restaurante, Transporte, Alojamiento, Combustible, Compras, Otros
+
+MONEDAS: EUR (€), USD ($), GBP (£), JPY (¥), CHF, CAD, etc.
+
+FECHA: Convierte al formato YYYY-MM-DD (ejemplo: 15/03/2024 → 2024-03-15)
+
+Si NO puedes ver algo claramente, usa null para ese campo.
+
+Responde SOLO con el JSON, nada más."""
         
         try:
             # Usar requests directamente
@@ -581,9 +566,9 @@ Format de réponse:
             # Extraer solo la parte base64 de la imagen
             base64_image = image_data.split(',')[1] if ',' in image_data else image_data
             
-            # Preparar mensaje con imagen usando modelo multimodal
+            # Preparar mensaje con imagen usando Llama 3.3 70B Instruct Vision
             messages = [
-                {"role": "system", "content": "Vous êtes un expert en analyse de tickets d'achat. Vous répondez uniquement avec du JSON valide."},
+                {"role": "system", "content": "Eres un experto extractor de datos de tickets. Respondes SOLO con JSON válido, sin texto adicional."},
                 {
                     "role": "user", 
                     "content": [
@@ -594,10 +579,10 @@ Format de réponse:
             ]
             
             data = {
-                "model": "qwen/qwen2.5-vl-72b-instruct",  # Modelo multimodal disponible en Novita AI
+                "model": "qwen/qwen2.5-vl-72b-instruct",  # Qwen2.5-VL-72B - Modelo vision que funciona en Novita
                 "messages": messages,
-                "temperature": 0.1,
-                "max_tokens": 500
+                "temperature": 0.0,
+                "max_tokens": 1000
             }
             
             response = requests.post(url, headers=headers, json=data, timeout=30)
@@ -606,6 +591,7 @@ Format de réponse:
                 result = response.json()
                 result_text = result['choices'][0]['message']['content'].strip()
                 print(f"✅ Extracción con Qwen2.5-VL-72B (Novita AI) completada")
+                print(f"📝 Respuesta: {result_text[:150]}...")
             else:
                 print(f"❌ Error HTTP {response.status_code}: {response.text}")
                 return extract_ticket_info(ocr_text)
@@ -673,14 +659,31 @@ Format de réponse:
         return extract_ticket_info(ocr_text)
 
 @app.route('/')
+@app.route('/<lang>/')
 @login_required
-def index():
-    """Página principal"""
-    return render_template('index.html', current_user=session.get('username'), is_admin=is_admin())
+def index(lang='es'):
+    """Página principal con soporte de idioma en URL"""
+    if lang not in LANGUAGES:
+        lang = 'es'  # Idioma por defecto
+    
+    # Guardar idioma en sesión
+    session['language'] = lang
+    
+    return render_template('index.html', 
+                         current_user=session.get('username'), 
+                         is_admin=is_admin(),
+                         current_lang=lang)
 
 @app.route('/login', methods=['GET', 'POST'])
-def login():
-    """Página de login"""
+@app.route('/<lang>/login', methods=['GET', 'POST'])
+def login(lang='es'):
+    """Página de login con soporte de idioma"""
+    if lang not in LANGUAGES:
+        lang = 'es'
+    
+    # Guardar idioma en sesión
+    session['language'] = lang
+    
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
@@ -691,18 +694,28 @@ def login():
             session['role'] = user['role']
             session['name'] = user['name']
             flash(f'Bienvenido, {user["name"]}!', 'success')
-            return redirect(url_for('index'))
+            return redirect(url_for('index', lang=lang))
         else:
             flash('Usuario o contraseña incorrectos', 'error')
     
-    return render_template('login.html')
+    return render_template('login.html', current_lang=lang)
 
 @app.route('/logout')
-def logout():
-    """Cerrar sesión"""
+@app.route('/<lang>/logout')
+def logout(lang='es'):
+    """Cerrar sesión con soporte de idioma"""
     session.clear()
     flash('Has cerrado sesión correctamente', 'info')
-    return redirect(url_for('login'))
+    return redirect(url_for('login', lang=lang))
+
+@app.route('/set_language/<language>')
+def set_language(language=None):
+    """Cambiar idioma de la aplicación y redirigir con URL"""
+    if language and language in LANGUAGES:
+        session['language'] = language
+        # Redirigir a la página principal con el nuevo idioma en la URL
+        return redirect(url_for('index', lang=language))
+    return redirect(url_for('index', lang='es'))  # Redirigir a español por defecto si idioma no válido
 
 @app.route('/api/current-user')
 @login_required

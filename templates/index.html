@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ current_lang or 'es' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💳 Gestion des Dépenses</title>
+    <title id="pageTitle">💳 Gestión de Gastos</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>
+        // Configurar idioma actual desde el backend
+        window.currentLanguageFromBackend = '{{ current_lang or "es" }}';
+    </script>
+    <script src="/static/translations.js"></script>
     <style>
         :root {
             --primary-color: #0f172a;
@@ -1717,42 +1722,91 @@
 
         .motivo-item {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border-color);
-            transition: all 0.2s ease;
+            flex-direction: column;
+            gap: 16px;
+            padding: 24px;
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .motivo-item:last-child {
-            border-bottom: none;
+        .motivo-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .motivo-item:hover {
-            background: rgba(99, 102, 241, 0.05);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .motivo-item:hover::before {
+            transform: scaleX(1);
         }
         
         .motivo-item.inactivo {
-            opacity: 0.6;
-            background: rgba(0, 0, 0, 0.02);
+            background: #f8f9fa;
+            opacity: 0.75;
+        }
+
+        .motivo-item.inactivo::before {
+            background: linear-gradient(90deg, #94a3b8 0%, #64748b 100%);
+        }
+
+        .motivo-item.activo::before {
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
         }
         
         .motivo-info {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 8px;
             flex: 1;
         }
 
         .motivo-name {
-            font-weight: 500;
+            font-weight: 700;
+            font-size: 1.15rem;
             color: var(--text-primary);
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .motivo-status {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
-            font-weight: 400;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 10px;
+            display: inline-block;
+            width: fit-content;
+        }
+
+        .motivo-item.activo .motivo-status {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.15));
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .motivo-item.inactivo .motivo-status {
+            background: linear-gradient(135deg, rgba(148, 163, 184, 0.15), rgba(100, 116, 139, 0.15));
+            color: #64748b;
+            border: 1px solid rgba(148, 163, 184, 0.3);
         }
 
         .motivo-usage {
@@ -1763,104 +1817,88 @@
 
         .motivo-actions {
             display: flex;
-            gap: 4px;
+            gap: 10px;
             flex-wrap: wrap;
             align-items: center;
-            min-width: 140px;
-            justify-content: flex-end;
+            justify-content: flex-start;
+            padding-top: 4px;
         }
         
         .motivo-toggle-btn {
-            background: rgba(99, 102, 241, 0.1);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(99, 102, 241, 0.15));
             color: var(--secondary-color);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            padding: 6px 10px;
-            border-radius: 6px;
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            padding: 10px 18px;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap;
-            min-width: 65px;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         
         .motivo-toggle-btn:hover {
-            background: var(--secondary-color);
+            background: linear-gradient(135deg, var(--secondary-color), #5a67d8);
             color: white;
             border-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
         }
         
         .motivo-detail-btn {
-            background: rgba(16, 185, 129, 0.1);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.15));
             color: var(--success-color);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            padding: 6px 10px;
-            border-radius: 6px;
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            padding: 10px 18px;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap;
-            min-width: 60px;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         
         .motivo-detail-btn:hover {
-            background: var(--success-color);
+            background: linear-gradient(135deg, var(--success-color), #059669);
             color: white;
             border-color: var(--success-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
         }
         
         .motivo-delete-btn {
-            background: var(--btn-danger-bg);
-            color: var(--btn-danger-text);
-            border: 1px solid var(--btn-danger-bg);
-            padding: 8px 14px;
-            border-radius: var(--radius-small);
-            font-size: 0.8rem;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.15));
+            color: #dc2626;
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: var(--shadow-light);
-            display: inline-flex;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
+            display: flex;
             align-items: center;
-            gap: 4px;
-            min-height: 32px;
+            gap: 6px;
         }
 
         .motivo-delete-btn:hover {
-            background: var(--btn-danger-hover);
-            border-color: var(--btn-danger-hover);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-medium);
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border-color: #ef4444;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
         }
 
-        .motivo-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .motivo-detail-btn {
-            background: var(--btn-secondary-bg);
-            color: var(--btn-secondary-text);
-            border: 1px solid var(--btn-secondary-bg);
-            padding: 8px 14px;
-            border-radius: var(--radius-small);
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: var(--shadow-light);
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            min-height: 32px;
-        }
-
-        .motivo-detail-btn:hover {
-            background: var(--btn-secondary-hover);
-            border-color: var(--btn-secondary-hover);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-medium);
-        }
+        /* Estilos ya definidos arriba - no duplicar */
 
         /* Estilos para gestión de motivos */
         .add-motivo-section {
@@ -4293,17 +4331,26 @@
         }
 
         .batch-tickets-list {
-            max-height: 500px;
-            overflow-y: auto;
+            max-height: none;
+            overflow-y: visible;
+            overflow-x: hidden;
+            padding-right: 10px;
+            margin-bottom: 20px;
         }
 
         .batch-ticket-item {
             background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            padding: 20px;
             position: relative;
+            transition: all 0.3s;
+        }
+
+        .batch-ticket-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
         }
 
         .batch-ticket-item.error {
@@ -4643,6 +4690,142 @@
             letter-spacing: -0.01em;
         }
 
+        /* === ESTILOS PARA ACTION CARDS MODERNAS === */
+        .action-section-modern {
+            margin-bottom: 2rem;
+        }
+
+        .actions-grid-modern {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            border: 2px solid transparent;
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .action-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .action-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .action-card:active {
+            transform: translateY(-4px);
+        }
+
+        .action-card-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s;
+        }
+
+        .action-card:hover .action-card-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .action-card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .action-card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .action-card-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .action-card-arrow {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            align-self: center;
+        }
+
+        .action-card:hover .action-card-arrow {
+            opacity: 1;
+            transform: translateX(0);
+            color: var(--secondary-color);
+        }
+
+        /* Responsive para action cards */
+        @media (max-width: 768px) {
+            .actions-grid-modern {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .action-card {
+                padding: 1.5rem;
+            }
+
+            .action-card-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .action-card-icon span {
+                font-size: 2rem !important;
+            }
+
+            .action-card-title {
+                font-size: 1.1rem;
+            }
+
+            .action-card-description {
+                font-size: 0.9rem;
+            }
+        }
+
         .btn-primary-modern {
             background: linear-gradient(135deg, var(--btn-primary-bg), var(--secondary-color));
             color: white;
@@ -4673,13 +4856,62 @@
             margin-bottom: 24px;
         }
 
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .section-header h3 {
+            margin: 0;
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .grupos-count {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 8px 16px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
         .grupos-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px;
-            max-height: 500px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            max-height: 550px;
             overflow-y: auto;
-            padding: 4px;
+            padding: 8px;
+            margin-top: 4px;
+        }
+
+        /* Scrollbar personalizado para grupos-grid */
+        .grupos-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .grupos-grid::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+
+        .grupos-grid::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+        }
+
+        .grupos-grid::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2, #667eea);
         }
 
         .modal-footer-modern {
@@ -4762,11 +4994,11 @@
         </button>
         <div class="header-title">
             <span class="header-icon">💳</span>
-            <span class="header-text" id="headerTitle">Gestion des Dépenses</span>
+            <span class="header-text" id="headerTitle">Gestión de Gastos</span>
         </div>
         <div class="language-selector">
-            <button class="lang-btn" onclick="changeLanguage('es')" id="langEs">🇪🇸 ES</button>
-            <button class="lang-btn active" onclick="changeLanguage('fr')" id="langFr">🇫🇷 FR</button>
+            <button class="lang-btn {{ 'active' if current_lang == 'es' else '' }}" onclick="changeLanguage('es')" id="langEs">🇪🇸 ES</button>
+            <button class="lang-btn {{ 'active' if current_lang == 'fr' else '' }}" onclick="changeLanguage('fr')" id="langFr">🇫🇷 FR</button>
         </div>
     </header>
     
@@ -4783,7 +5015,7 @@
                 <div class="sidebar-user-avatar">{{ current_user[0].upper() }}</div>
                 <div class="sidebar-user-info">
                     <div class="sidebar-user-name">{{ current_user }}</div>
-                    <div class="sidebar-user-role" id="sidebarUserRole">{{ 'Administrateur' if is_admin else 'Utilisateur' }}</div>
+                    <div class="sidebar-user-role" id="sidebarUserRole" data-translate="{{ 'sidebarAdminRole' if is_admin else 'sidebarUserRole' }}">{{ 'Administrateur' if is_admin else 'Utilisateur' }}</div>
                 </div>
         </div>
         
@@ -4794,13 +5026,13 @@
                 
                 <div class="sidebar-item active" id="sidebarGastos" onclick="showViewCMS('gastos')">
                     <span class="sidebar-item-icon">💳</span>
-                    <span class="sidebar-item-text" id="sidebarTextGastos">Gestion des Dépenses</span>
+                    <span class="sidebar-item-text" id="sidebarTextGastos">Gestión de Gastos</span>
                 </div>
                 
                 {% if is_admin %}
                 <div class="sidebar-item" id="sidebarDashboard" onclick="showViewCMS('dashboard')">
                     <span class="sidebar-item-icon">📊</span>
-                    <span class="sidebar-item-text" id="sidebarTextDashboard">Tableau de Bord</span>
+                    <span class="sidebar-item-text" id="sidebarTextDashboard">Dashboard Admin</span>
             </div>
                 {% endif %}
                 
@@ -4810,7 +5042,7 @@
                 
                 <div class="sidebar-item" onclick="openManageMotivosModal()">
                     <span class="sidebar-item-icon">📁</span>
-                    <span class="sidebar-item-text" id="sidebarTextGrupos">Groupes de Dépenses</span>
+                    <span class="sidebar-item-text" id="sidebarTextGrupos">Grupos de Gastos</span>
         </div>
         
                 <div class="sidebar-divider"></div>
@@ -4828,15 +5060,59 @@
             <div id="gastos-view" class="content-view active">
     <div class="container">
         <div class="header">
-                        <h1>💳 Gestion des Dépenses</h1>
-                        <p>Ajoutez et gérez vos dépenses</p>
+                        <h1 id="mainTitle">💳 Gestión de Gastos</h1>
+                        <p id="mainDescription">Añade y gestiona tus gastos</p>
+                    </div>
+
+                    <!-- Sección de acciones principales - PRIMER ELEMENTO -->
+                    <div class="action-section-modern">
+                        <h3 id="mainActionsTitle" style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                            🎯 Acciones Principales
+                        </h3>
+                        <div class="actions-grid-modern">
+                            <!-- Card: Añadir Ticket Individual -->
+                            <div class="action-card" onclick="openModal()" style="cursor: pointer; transition: all 0.3s;">
+                                <div class="action-card-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                    <span style="font-size: 2.5rem;">📝</span>
+                                </div>
+                                <div class="action-card-content">
+                                    <h4 class="action-card-title" id="addTicketTitle">Añadir Ticket</h4>
+                                    <p class="action-card-description" id="addTicketDescription">Añade un gasto individual con foto y extracción automática</p>
+                                </div>
+                                <div class="action-card-arrow">→</div>
+                            </div>
+
+                            <!-- Card: Añadir Múltiples Tickets -->
+                            <div class="action-card" onclick="openTicketInput()" style="cursor: pointer; transition: all 0.3s;">
+                                <div class="action-card-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                    <span style="font-size: 2.5rem;">📸</span>
+                                </div>
+                                <div class="action-card-content">
+                                    <h4 class="action-card-title" id="multipleTicketsTitle">Tickets Múltiples</h4>
+                                    <p class="action-card-description" id="multipleTicketsDescription">Procesa varios tickets a la vez con verificación inteligente</p>
+                                </div>
+                                <div class="action-card-arrow">→</div>
+                            </div>
+
+                            <!-- Card: Gestionar Grupos -->
+                            <div class="action-card" onclick="openManageMotivosModal()" style="cursor: pointer; transition: all 0.3s;">
+                                <div class="action-card-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                    <span style="font-size: 2.5rem;">⚙️</span>
+                                </div>
+                                <div class="action-card-content">
+                                    <h4 class="action-card-title" id="manageGroupsTitle">Gestionar Grupos</h4>
+                                    <p class="action-card-description" id="manageGroupsDescription">Organiza y administra tus grupos de gastos</p>
+                                </div>
+                                <div class="action-card-arrow">→</div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Filtros de fecha -->
                     <div class="date-filters">
                         <div class="date-filters-header">
-                            <h3>🗓️ Filtrage par Dates</h3>
-                            <p>Sélectionnez la plage de dates pour filtrer vos dépenses</p>
+                            <h3 id="dateFilteringTitle">🗓️ Filtrado por Fechas</h3>
+                            <p id="dateFilterDescription">Selecciona el rango de fechas para filtrar tus gastos</p>
                         </div>
                         
                         {% if is_admin %}
@@ -4851,7 +5127,7 @@
                                 <input type="number" id="gastosCutoffDayInput" min="1" max="31" value="23" 
                                        title="Jour de début du mois (1-31) - Affecte tous les utilisateurs">
                                 <button class="btn-confirm-cutoff" onclick="confirmCutoffDayChange('gastos')">
-                                    ✅ Confirmer
+                                    ✅ Confirmar
                                 </button>
                             </div>
                         </div>
@@ -4882,7 +5158,7 @@
                         <!-- Filtro multi-select por grupo de gastos -->
                         <div class="user-filter-section">
                             <div class="filter-group">
-                                <label for="gastosViajeFilter">📁 Filtrer par Groupe de Dépenses:</label>
+                                <label for="gastosViajeFilter">📁 Filtrer par Grupo de Gastos:</label>
                                 <div class="multiselect-container" id="gastosViajeMultiselect">
                                     <div class="multiselect-display" onclick="toggleMultiselect('gastosViajeMultiselect')">
                                         <span class="multiselect-selected placeholder">Tous les groupes</span>
@@ -4937,38 +5213,25 @@
             <!-- Sección de selección múltiple integrada -->
             <div class="integrated-selection-section">
                 <div class="selection-header">
-                    <h4>☑️ Sélection Multiple</h4>
+                    <h4>☑️ Selección Múltiple</h4>
                     <div class="selection-info">
-                        <span id="selectedGastosCount">0 tickets sélectionnés</span>
+                        <span id="selectedGastosCount">0 tickets seleccionados</span>
                     </div>
                 </div>
                 <div class="bulk-actions-centered">
                     <button class="btn-secondary" onclick="toggleSelectAll('gastos')" id="selectAllGastosBtn">
-                        ☑️ Tout Sélectionner
+                        ☑️ Seleccionar Todo
                     </button>
                     <button class="btn-danger" onclick="deleteSelectedGastos()" id="deleteSelectedGastosBtn" disabled>
-                        🗑️ Supprimer Sélectionnés
+                        🗑️ Eliminar Seleccionados
                     </button>
                 </div>
             </div>
         </div>
 
-                    <!-- Sección de acciones principales -->
-                    <div class="action-section">
-                        <h3>🎯 Actions Principales</h3>
-                        <div class="main-actions">
-                            <button class="btn-primary" onclick="openModal()" title="Ajouter Nouveau Ticket">
-                                ➕ AJOUTER NOUVEAU TICKET
-                            </button>
-                            <button class="btn-secondary" onclick="openManageMotivosModal()" title="Gérer Groupes de Dépenses">
-                                ⚙️ Gérer Groupes de Dépenses
-                            </button>
-                        </div>
-                    </div>
-
                     <!-- Resumen de Grupos con Detalles -->
                     <div class="action-section" id="resumenViajesSection" style="display: none;">
-                        <h3>🎯 Résumé des Groupes de Dépenses avec Détails en Attente</h3>
+                        <h3 id="groupsSummaryTitle">🎯 Resumen de Grupos de Gastos con Detalles Pendientes</h3>
                         <div id="resumenViajesList" class="resumen-viajes-container">
                             <!-- El resumen se cargará aquí -->
                         </div>
@@ -4999,15 +5262,15 @@
             <div id="dashboard-view" class="content-view">
                 <div class="container">
                     <div class="header">
-                        <h1>📊 Tableau de Bord</h1>
-                        <p>Visualisez et confirmez vos dépenses</p>
+                        <h1>📊 Dashboard Admin</h1>
+                        <p id="dashboardDescription">Visualisez et confirmez vos dépenses</p>
                     </div>
 
                     <!-- Filtros de fecha para dashboard -->
                     <div class="date-filters">
                         <div class="date-filters-header">
-                            <h3>🗓️ Filtrage par Dates</h3>
-                            <p>Sélectionnez la plage de dates pour le tableau de bord</p>
+                            <h3 id="dateFilteringTitle">🗓️ Filtrado por Fechas</h3>
+                            <p id="dashboardDateFilterDescription">Selecciona el rango de fechas para el dashboard</p>
                         </div>
                         
                         {% if is_admin %}
@@ -5022,7 +5285,7 @@
                                 <input type="number" id="cutoffDayInput" min="1" max="31" value="23" 
                                        title="Jour de début du mois (1-31) - Affecte tous les utilisateurs">
                                 <button class="btn-confirm-cutoff" onclick="confirmCutoffDayChange('dashboard')">
-                                    ✅ Confirmer
+                                    ✅ Confirmar
                                 </button>
                             </div>
                         </div>
@@ -5079,7 +5342,7 @@
                         <!-- Filtro multi-select por grupo de gastos -->
                         <div class="user-filter-section">
                             <div class="filter-group">
-                                <label for="dashboardViajeFilter">📁 Filtrar por Groupe de Dépenses:</label>
+                                <label for="dashboardViajeFilter">📁 Filtrar por Grupo de Gastos:</label>
                                 <div class="multiselect-container" id="dashboardViajeMultiselect">
                                     <div class="multiselect-display" onclick="toggleMultiselect('dashboardViajeMultiselect')">
                                         <span class="multiselect-selected placeholder">Todos los grupos</span>
@@ -5136,12 +5399,12 @@
                             <div class="selection-header">
                                 <h4>☑️ Actions Multiples</h4>
                                 <div class="selection-info">
-                                    <span id="selectedDashboardCount">0 tickets sélectionnés</span>
+                                    <span id="selectedDashboardCount">0 tickets seleccionados</span>
                                 </div>
                             </div>
                             <div class="bulk-actions-centered">
                                 <button class="btn-secondary" onclick="toggleSelectAll('dashboard')" id="selectAllDashboardBtn">
-                                    ☑️ Tout Sélectionner
+                                    ☑️ Seleccionar Todo
                                 </button>
                                 <button class="btn-success" onclick="confirmSelectedTickets()" id="confirmSelectedBtn" disabled>
                                     ✅ Confirmar Seleccionados
@@ -5200,7 +5463,7 @@
                         <div id="previewContainer" class="preview-container" style="display: none;">
                             <img id="previewImage" class="preview-image" alt="Aperçu" onclick="showImageModal(this.src)" style="cursor: pointer;" title="Cliquer pour voir l'image complète">
                             <br>
-                            <button type="button" class="btn btn-danger" onclick="deleteImage()" style="margin-top: 10px;">🗑️ Supprimer Image</button>
+                            <button type="button" class="btn btn-danger" onclick="deleteImage()" style="margin-top: 10px;">🗑️ Eliminar Imagen</button>
                         </div>
                         
                         <!-- Opción para análisis IA -->
@@ -5223,7 +5486,7 @@
                         <div class="form-group">
                             <label for="concepto">🏷️ Concept</label>
                             <select id="concepto" required>
-                                        <option value="">Sélectionner un concept</option>
+                                        <option value="">Seleccionar concepto...</option>
                             </select>
                         </div>
                     </div>
@@ -5246,7 +5509,7 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="motivo">📁 Groupe de Dépenses</label>
+                            <label for="motivo">📁 Grupo de Gastos</label>
                             <select id="motivo">
                                 <option value="">Selecciona un grupo</option>
                             </select>
@@ -5293,9 +5556,9 @@
                     </div>
 
                                                             <div style="text-align: center; margin-top: 20px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
-                        <button type="button" class="btn btn-success ripple" onclick="saveGastoAndExit()" id="saveExitButton">💾 Enregistrer et Sortir</button>
-                        <button type="button" class="btn btn-primary ripple" onclick="saveGastoAndAdd()" id="saveAddButton">➕ Enregistrer et Ajouter</button>
-                        <button type="button" class="btn ripple" onclick="closeModal()">❌ Annuler</button>
+                        <button type="button" class="btn btn-success ripple" onclick="saveGastoAndExit()" id="saveExitButton">💾 Guardar y Salir</button>
+                        <button type="button" class="btn btn-primary ripple" onclick="saveGastoAndAdd()" id="saveAddButton">➕ Guardar y Añadir</button>
+                        <button type="button" class="btn ripple" onclick="closeModal()">❌ Cancelar</button>
                     </div>
                     </div>
                 </form>
@@ -5310,8 +5573,8 @@
                 <div class="modal-header-content">
                     <div class="modal-icon">📁</div>
                     <div class="modal-title-section">
-                        <h2>Gestión de Grupos de Gastos</h2>
-                        <p>Organiza tus gastos en grupos personalizados</p>
+                        <h2 id="groupsManagementTitle">Gestión de Grupos de Gastos</h2>
+                        <p id="groupsManagementDescription">Organiza tus gastos en grupos personalizados</p>
             </div>
                         </div>
                 <button class="close-btn-modern" onclick="closeManageMotivosModal()">
@@ -5363,12 +5626,12 @@
         </div>
     </div>
 
-    <!-- Modal de Detalles de Groupe de Dépenses -->
+    <!-- Modal de Detalles de Grupo de Gastos -->
     <div id="viajeDetalleModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <span class="close" onclick="closeViajeDetalleModal()">&times;</span>
-                <h2 id="viajeDetalleModalTitle">📋 Detalles del Groupe de Dépenses</h2>
+                <h2 id="viajeDetalleModalTitle">📋 Detalles del Grupo de Gastos</h2>
             </div>
             <div class="modal-body">
                 <!-- Sección para añadir nuevo gasto esperado -->
@@ -5429,40 +5692,41 @@
 
     <!-- Modal de Verificación por Lotes -->
     <div id="batchVerificationModal" class="modal">
-        <div class="modal-content" style="max-width: 90%; max-height: 90%; overflow-y: auto;">
-            <div class="modal-header">
+        <div class="modal-content" style="max-width: 95%; max-height: 95vh; display: flex; flex-direction: column; overflow: hidden;">
+            <div class="modal-header" style="flex-shrink: 0;">
                 <span class="close" onclick="closeBatchVerificationModal()">&times;</span>
-                <h2>📋 Vérification de Tickets Multiples</h2>
+                <h2>📋 Verificación de Tickets Múltiples</h2>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="flex: 1; overflow-y: auto; padding: 20px;">
                 <div id="batchProcessingStatus" class="processing-status" style="display: none;">
                     <div class="progress-bar">
                         <div class="progress-fill" id="batchProgressFill"></div>
                     </div>
-                    <div class="progress-text" id="batchProgressText">Traitement des tickets...</div>
+                    <div class="progress-text" id="batchProgressText">Procesando tickets...</div>
                 </div>
                 
                 <div id="batchVerificationContainer" style="display: none;">
-                    <div class="batch-summary" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                        <h3>🎯 Résumé du Lot</h3>
-                        <div class="summary-stats">
-                            <span class="stat-badge">📊 Total: <span id="batchTotalCount">0</span></span>
-                            <span class="stat-badge">✅ Traités: <span id="batchProcessedCount">0</span></span>
-                            <span class="stat-badge">❌ Erreurs: <span id="batchErrorCount">0</span></span>
+                    <div class="batch-summary" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);">
+                        <h3 style="margin: 0 0 15px 0; font-size: 1.3rem; color: white;">🎯 Resumen del Lote</h3>
+                        <div class="summary-stats" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                            <span class="stat-badge" style="background: rgba(255, 255, 255, 0.2); padding: 10px 20px; border-radius: 12px; backdrop-filter: blur(10px); font-weight: 600;">📊 Total: <span id="batchTotalCount">0</span></span>
+                            <span class="stat-badge" style="background: rgba(255, 255, 255, 0.2); padding: 10px 20px; border-radius: 12px; backdrop-filter: blur(10px); font-weight: 600;">✅ Procesados: <span id="batchProcessedCount">0</span></span>
+                            <span class="stat-badge" style="background: rgba(255, 255, 255, 0.2); padding: 10px 20px; border-radius: 12px; backdrop-filter: blur(10px); font-weight: 600;">❌ Errores: <span id="batchErrorCount">0</span></span>
                         </div>
                     </div>
                     
                     <div id="batchTicketsList" class="batch-tickets-list"></div>
-                    
-                    <div class="batch-actions" style="margin-top: 20px; padding: 15px; border-top: 1px solid #dee2e6;">
-                        <button type="button" class="btn btn-success" onclick="saveAllBatchTickets()" id="saveAllBatchBtn">
-                            <i class="fas fa-save"></i> Enregistrer Tous les Tickets
-                        </button>
-                        <button type="button" class="btn btn-secondary" onclick="closeBatchVerificationModal()" style="margin-left: 10px;">
-                            <i class="fas fa-times"></i> Annuler
-                        </button>
-                    </div>
                 </div>
+            </div>
+            
+            <!-- Footer fijo con botones siempre visibles -->
+            <div id="batchVerificationFooter" class="batch-actions" style="display: none; flex-shrink: 0; padding: 20px; border-top: 2px solid #e0e0e0; background: #f8f9fa; box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);">
+                <button type="button" class="btn btn-success" onclick="saveAllBatchTickets()" id="saveAllBatchBtn" style="padding: 14px 28px; font-size: 15px; font-weight: 600; border-radius: 12px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                    <i class="fas fa-save"></i> 💾 Guardar Todos los Tickets
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="closeBatchVerificationModal()" style="margin-left: 12px; padding: 14px 28px; font-size: 15px; font-weight: 600; border-radius: 12px;">
+                    <i class="fas fa-times"></i> ❌ Cancelar
+                </button>
             </div>
         </div>
     </div>
@@ -5596,7 +5860,7 @@
                 }
             } else if (state.selected.size === state.options.length) {
                 display.className = 'multiselect-selected';
-                display.textContent = 'Todos sélectionnés';
+                display.textContent = 'Todos seleccionados';
             } else {
                 display.className = 'multiselect-selected';
                 const selectedArray = Array.from(state.selected);
@@ -5725,8 +5989,10 @@
         let selectedUsers = [];
         let selectedViajes = [];
 
-        // Variable de idioma actual
-        let currentLanguage = localStorage.getItem('preferredLanguage') || 'fr';
+        // Variable de idioma actual (obtener del backend primero)
+        let currentLanguage = window.currentLanguageFromBackend || localStorage.getItem('preferredLanguage') || 'es';
+        // Guardar en localStorage para persistencia
+        localStorage.setItem('preferredLanguage', currentLanguage);
 
         // === DICCIONARIO DE TRADUCCIONES COMPLETO ===
         const translations = {
@@ -5737,7 +6003,7 @@
                 userRole: { admin: 'Administrador', user: 'Usuario' },
                 menuPrincipal: 'Principal',
                 menuGestion: 'Gestión de Gastos',
-                menuDashboard: 'Dashboard Admin',
+                menuDashboard: 'Panel de Control Admin',
                 menuGrupos: 'Grupos de Gastos',
                 menuLogout: 'Cerrar Sesión',
                 // Vista GASTOS
@@ -5756,18 +6022,18 @@
                 lastMonth: 'Último Mes',
                 clear: 'Limpiar',
                 applyFilters: 'Aplicar Filtros',
-                totalTickets: 'Tickets Totales',
-                filteredTickets: 'Tickets Filtrados',
+                totalTickets: 'Gastos Totales',
+                filteredTickets: 'Gastos Filtrados',
                 filteredTotal: 'Total Filtrado',
-                ticketsList: 'Lista de Tickets',
+                ticketsList: 'Lista de Gastos',
                 multipleSelection: 'Selección Múltiple',
-                ticketsSelected: 'tickets seleccionados',
+                ticketsSelected: 'gastos seleccionados',
                 selectAll: 'Seleccionar Todo',
                 deleteSelected: 'Eliminar Seleccionados',
-                addNewTicket: 'Añadir Nuevo Ticket',
+                addNewTicket: 'Añadir Nuevo Gasto',
                 manageGroups: 'Gestionar Grupos de Gastos',
                 // Vista DASHBOARD
-                dashboard: 'Dashboard',
+                dashboard: 'Panel de Control',
                 viewConfirmExpenses: 'Visualiza y confirma tus gastos',
                 filterByUser: 'Filtrar por Usuario:',
                 allUsers: 'Todos los usuarios',
@@ -5811,17 +6077,60 @@
                 allFiltersRemoved: 'Todos los filtros eliminados',
                 filtersRemoved: 'Filtros eliminados',
                 extracted: 'Extraído:',
-                processingTickets: 'Procesando tickets...',
+                processingTickets: 'Procesando gastos...',
                 batchSummary: 'Resumen del Lote',
                 processed: 'Procesados:',
                 errors: 'Errores:',
-                noProcessedTickets: 'No hay tickets procesados para guardar',
-                ticketsDeleted: 'tickets eliminados correctamente',
-                cantDeleteTickets: 'No se pudieron eliminar los tickets',
-                cantConfirmTickets: 'No se pudieron confirmar los tickets',
+                noProcessedTickets: 'No hay gastos procesados para guardar',
+                ticketsDeleted: 'gastos eliminados correctamente',
+                cantDeleteTickets: 'No se pudieron eliminar los gastos',
+                cantConfirmTickets: 'No se pudieron confirmar los gastos',
                 all: 'Todos',
                 allGroupsBalanced: 'Todos los grupos están cuadrados',
-                noGroupsPending: 'No hay grupos con detalles pendientes de cuadrar'
+                noGroupsPending: 'No hay grupos con detalles pendientes de cuadrar',
+                // Mensajes de error adicionales
+                errorUpdateStatus: '❌ Error al actualizar el estado',
+                errorAddGroup: '❌ Error al añadir el grupo',
+                errorAnalyzeImage: '❌ Error al analizar la imagen. ¿Desea completar manualmente?',
+                errorConnectionAnalyze: '❌ Error de conexión al analizar la imagen. Complete manualmente.',
+                errorSaving: '❌ Error al guardar',
+                errorConnectionSaving: '❌ Error de conexión al guardar',
+                errorLoadingExpense: '❌ Error al cargar el gasto',
+                errorDeletingExpense: '❌ Error al eliminar el gasto',
+                errorLoadingGroups: '❌ Error al cargar los grupos',
+                errorChangingGroupStatus: '❌ Error al cambiar el estado del grupo',
+                errorLoadingGroupDetails: '❌ Error al cargar los detalles del grupo',
+                errorNoGroupSelected: '❌ Error: Ningún grupo seleccionado',
+                errorUnknown: 'Error desconocido',
+                // Textos adicionales para hacer dinámicos
+                groupsSummaryTitle: 'Resumen de Grupos de Gastos con Detalles Pendientes',
+                groupsManagementTitle: 'Gestión de Grupos de Gastos',
+                groupsManagementDescription: 'Organiza tus gastos en grupos personalizados',
+                noExpectedExpenses: 'Sin gastos esperados aún',
+                useFormAbove: 'Utiliza el formulario de arriba para añadir gastos esperados para este viaje',
+                createFirstTrip: 'Utiliza el formulario de arriba para crear tu primer viaje',
+                // Textos de las tarjetas principales
+                addTicketTitle: 'Añadir Ticket',
+                addTicketDescription: 'Añade un gasto individual con foto y extracción automática',
+                multipleTicketsTitle: 'Tickets Múltiples',
+                multipleTicketsDescription: 'Procesa varios tickets a la vez con verificación inteligente',
+                manageGroupsTitle: 'Gestionar Grupos',
+                manageGroupsDescription: 'Organiza y administra tus grupos de gastos',
+                mainActionsTitle: 'Acciones Principales',
+                // Textos adicionales
+                noTripsYet: 'Sin viajes aún',
+                noTripsYetDescription: 'Utiliza el formulario de arriba para crear tu primer viaje',
+                noExpectedExpensesYet: 'Sin gastos esperados aún',
+                noExpectedExpensesYetDescription: 'Utiliza el formulario de arriba para añadir gastos esperados para este viaje',
+                // Textos adicionales que faltaban
+                dateFilteringTitle: 'Filtrado por Fechas',
+                mainDescription: 'Añade y gestiona tus gastos',
+                selectedTickets: 'tickets seleccionados',
+                noExpectedExpensesText: 'Sin gastos esperados aún',
+                groupsManagementDescriptionText: 'Organiza tus gastos en grupos personalizados',
+                useFormAboveText: 'Utiliza el formulario de arriba para añadir gastos esperados para este viaje',
+                createFirstTripText: 'Utiliza el formulario de arriba para crear tu primer viaje',
+                noTripsYetTitle: 'Sin viajes aún'
             },
             fr: {
                 // Header
@@ -5830,7 +6139,7 @@
                 userRole: { admin: 'Administrateur', user: 'Utilisateur' },
                 menuPrincipal: 'Principal',
                 menuGestion: 'Gestion des Dépenses',
-                menuDashboard: 'Tableau de Bord',
+                menuDashboard: 'Tableau de Bord Admin',
                 menuGrupos: 'Groupes de Dépenses',
                 menuLogout: 'Déconnexion',
                 // Vista GASTOS
@@ -5849,18 +6158,18 @@
                 lastMonth: 'Dernier Mois',
                 clear: 'Effacer',
                 applyFilters: 'Appliquer Filtres',
-                totalTickets: 'Tickets Totaux',
-                filteredTickets: 'Tickets Filtrés',
+                totalTickets: 'Dépenses Totales',
+                filteredTickets: 'Dépenses Filtrées',
                 filteredTotal: 'Total Filtré',
-                ticketsList: 'Liste des Tickets',
+                ticketsList: 'Liste des Dépenses',
                 multipleSelection: 'Sélection Multiple',
-                ticketsSelected: 'tickets sélectionnés',
+                ticketsSelected: 'dépenses sélectionnées',
                 selectAll: 'Tout Sélectionner',
                 deleteSelected: 'Supprimer Sélectionnés',
-                addNewTicket: 'Ajouter Nouveau Ticket',
-                manageGroups: 'Gérer Groupes de Dépenses',
+                addNewTicket: 'Ajouter Nouvelle Dépense',
+                manageGroups: 'Gérer les Groupes de Dépenses',
                 // Vista DASHBOARD
-                dashboard: 'Tableau de Bord',
+                dashboard: 'Tableau de Bord Admin',
                 viewConfirmExpenses: 'Visualisez et confirmez vos dépenses',
                 filterByUser: 'Filtrer par Utilisateur:',
                 allUsers: 'Tous les utilisateurs',
@@ -5904,23 +6213,159 @@
                 allFiltersRemoved: 'Tous les filtres supprimés',
                 filtersRemoved: 'Filtres supprimés',
                 extracted: 'Extrait:',
-                processingTickets: 'Traitement des tickets...',
+                processingTickets: 'Traitement des dépenses...',
                 batchSummary: 'Résumé du Lot',
                 processed: 'Traités:',
                 errors: 'Erreurs:',
-                noProcessedTickets: 'Aucun ticket traité à enregistrer',
-                ticketsDeleted: 'tickets supprimés correctement',
-                cantDeleteTickets: 'Impossible de supprimer les tickets',
-                cantConfirmTickets: 'Impossible de confirmer les tickets',
+                noProcessedTickets: 'Aucune dépense traitée à enregistrer',
+                ticketsDeleted: 'dépenses supprimées correctement',
+                cantDeleteTickets: 'Impossible de supprimer les dépenses',
+                cantConfirmTickets: 'Impossible de confirmer les dépenses',
                 all: 'Tous',
                 allGroupsBalanced: 'Tous les groupes sont équilibrés',
-                noGroupsPending: 'Aucun groupe avec des détails en attente'
+                noGroupsPending: 'Aucun groupe avec des détails en attente',
+                // Mensajes de error adicionales
+                errorUpdateStatus: '❌ Erreur lors de la mise à jour du statut',
+                errorAddGroup: '❌ Erreur lors de l\'ajout du groupe',
+                errorAnalyzeImage: '❌ Erreur lors de l\'analyse de l\'image. Voulez-vous compléter manuellement?',
+                errorConnectionAnalyze: '❌ Erreur de connexion lors de l\'analyse de l\'image. Complétez manuellement.',
+                errorSaving: '❌ Erreur lors de l\'enregistrement',
+                errorConnectionSaving: '❌ Erreur de connexion lors de l\'enregistrement',
+                errorLoadingExpense: '❌ Erreur lors du chargement de la dépense',
+                errorDeletingExpense: '❌ Erreur lors de la suppression de la dépense',
+                errorLoadingGroups: '❌ Erreur lors du chargement des groupes',
+                errorChangingGroupStatus: '❌ Erreur lors du changement de statut du groupe',
+                errorLoadingGroupDetails: '❌ Erreur lors du chargement des détails du groupe',
+                errorNoGroupSelected: '❌ Erreur: Aucun groupe sélectionné',
+                errorUnknown: 'Erreur inconnue',
+                // Textos adicionales para hacer dinámicos
+                groupsSummaryTitle: 'Résumé des Groupes de Dépenses avec Détails en Attente',
+                groupsManagementTitle: 'Gestion des Groupes de Dépenses',
+                groupsManagementDescription: 'Organisez vos dépenses en groupes personnalisés',
+                noExpectedExpenses: 'Aucune dépense prévue encore',
+                useFormAbove: 'Utilisez le formulaire ci-dessus pour ajouter des dépenses prévues pour ce voyage',
+                createFirstTrip: 'Utilisez le formulaire ci-dessus pour créer votre premier voyage',
+                // Textos de las tarjetas principales
+                addTicketTitle: 'Ajouter Ticket',
+                addTicketDescription: 'Ajoutez une dépense individuelle avec photo et extraction automatique',
+                multipleTicketsTitle: 'Tickets Multiples',
+                multipleTicketsDescription: 'Traitez plusieurs tickets à la fois avec vérification intelligente',
+                manageGroupsTitle: 'Gérer Groupes',
+                manageGroupsDescription: 'Organisez et gérez vos groupes de dépenses',
+                mainActionsTitle: 'Actions Principales',
+                // Textos adicionales
+                noTripsYet: 'Aucun voyage encore',
+                noTripsYetDescription: 'Utilisez le formulaire ci-dessus pour créer votre premier voyage',
+                noExpectedExpensesYet: 'Aucune dépense prévue encore',
+                noExpectedExpensesYetDescription: 'Utilisez le formulaire ci-dessus pour ajouter des dépenses prévues pour ce voyage',
+                // Textos adicionales que faltaban
+                dateFilteringTitle: 'Filtrage par Dates',
+                mainDescription: 'Ajoutez et gérez vos dépenses',
+                selectedTickets: 'tickets sélectionnés',
+                noExpectedExpensesText: 'Aucune dépense prévue encore',
+                groupsManagementDescriptionText: 'Organisez vos dépenses en groupes personnalisés',
+                useFormAboveText: 'Utilisez le formulaire ci-dessus pour ajouter des dépenses prévues pour ce voyage',
+                createFirstTripText: 'Utilisez le formulaire ci-dessus pour créer votre premier voyage',
+                noTripsYetTitle: 'Aucun voyage encore'
             }
         };
 
         // === FUNCIÓN DE TRADUCCIÓN ===
         function t(key) {
             return translations[currentLanguage][key] || key;
+        }
+
+        // === APLICAR TRADUCCIONES DINÁMICAS ADICIONALES ===
+        function applyDynamicTranslations() {
+            const lang = currentLanguage;
+            const t = translations[lang];
+            
+            // Tarjetas principales
+            const addTicketTitle = document.getElementById('addTicketTitle');
+            if (addTicketTitle) addTicketTitle.textContent = t.addTicketTitle;
+            
+            const addTicketDescription = document.getElementById('addTicketDescription');
+            if (addTicketDescription) addTicketDescription.textContent = t.addTicketDescription;
+            
+            const multipleTicketsTitle = document.getElementById('multipleTicketsTitle');
+            if (multipleTicketsTitle) multipleTicketsTitle.textContent = t.multipleTicketsTitle;
+            
+            const multipleTicketsDescription = document.getElementById('multipleTicketsDescription');
+            if (multipleTicketsDescription) multipleTicketsDescription.textContent = t.multipleTicketsDescription;
+            
+            const manageGroupsTitle = document.getElementById('manageGroupsTitle');
+            if (manageGroupsTitle) manageGroupsTitle.textContent = t.manageGroupsTitle;
+            
+            const manageGroupsDescription = document.getElementById('manageGroupsDescription');
+            if (manageGroupsDescription) manageGroupsDescription.textContent = t.manageGroupsDescription;
+            
+            const mainActionsTitle = document.getElementById('mainActionsTitle');
+            if (mainActionsTitle) mainActionsTitle.innerHTML = '🎯 ' + t.mainActionsTitle;
+            
+            // Textos adicionales
+            const noTripsYet = document.getElementById('noTripsYet');
+            if (noTripsYet) noTripsYet.textContent = t.noTripsYet;
+            
+            const noTripsYetDescription = document.getElementById('noTripsYetDescription');
+            if (noTripsYetDescription) noTripsYetDescription.textContent = t.noTripsYetDescription;
+            
+            const noExpectedExpensesYet = document.getElementById('noExpectedExpensesYet');
+            if (noExpectedExpensesYet) noExpectedExpensesYet.textContent = t.noExpectedExpensesYet;
+            
+            const noExpectedExpensesYetDescription = document.getElementById('noExpectedExpensesYetDescription');
+            if (noExpectedExpensesYetDescription) noExpectedExpensesYetDescription.textContent = t.noExpectedExpensesYetDescription;
+            
+            // Grupos
+            const groupsSummaryTitle = document.getElementById('groupsSummaryTitle');
+            if (groupsSummaryTitle) groupsSummaryTitle.innerHTML = '🎯 ' + t.groupsSummaryTitle;
+            
+            const groupsManagementTitle = document.getElementById('groupsManagementTitle');
+            if (groupsManagementTitle) groupsManagementTitle.textContent = t.groupsManagementTitle;
+            
+            const groupsManagementDescription = document.getElementById('groupsManagementDescription');
+            if (groupsManagementDescription) groupsManagementDescription.textContent = t.groupsManagementDescription;
+            
+            const noExpectedExpenses = document.getElementById('noExpectedExpenses');
+            if (noExpectedExpenses) noExpectedExpenses.innerHTML = '💰 ' + t.noExpectedExpenses;
+            
+            const useFormAbove = document.getElementById('useFormAbove');
+            if (useFormAbove) useFormAbove.textContent = t.useFormAbove;
+            
+            const createFirstTrip = document.getElementById('createFirstTrip');
+            if (createFirstTrip) createFirstTrip.textContent = t.createFirstTrip;
+            
+            // Textos adicionales que faltaban
+            const dateFilteringTitle = document.getElementById('dateFilteringTitle');
+            if (dateFilteringTitle) dateFilteringTitle.innerHTML = '🗓️ ' + t.dateFilteringTitle;
+            
+            const mainDescription = document.getElementById('mainDescription');
+            if (mainDescription) mainDescription.textContent = t.mainDescription;
+            
+            const selectedGastosCount = document.getElementById('selectedGastosCount');
+            if (selectedGastosCount) {
+                const currentText = selectedGastosCount.textContent;
+                const newText = currentText.replace('tickets seleccionados', t.selectedTickets);
+                selectedGastosCount.textContent = newText;
+            }
+            
+            const selectedDashboardCount = document.getElementById('selectedDashboardCount');
+            if (selectedDashboardCount) {
+                const currentText = selectedDashboardCount.textContent;
+                const newText = currentText.replace('tickets seleccionados', t.selectedTickets);
+                selectedDashboardCount.textContent = newText;
+            }
+            
+            // noExpectedExpenses ya fue procesado arriba
+            
+            // groupsManagementDescription ya fue procesado arriba
+            
+            // useFormAbove ya fue procesado arriba
+            
+            const createFirstTripText = document.getElementById('createFirstTrip');
+            if (createFirstTripText) createFirstTripText.textContent = t.createFirstTripText;
+            
+            const noTripsYetTitle = document.getElementById('noTripsYetTitle');
+            if (noTripsYetTitle) noTripsYetTitle.innerHTML = '🎯 ' + t.noTripsYetTitle;
         }
 
         // === FUNCIÓN DE CAMBIO DE IDIOMA MEJORADA ===
@@ -5932,13 +6377,8 @@
             document.getElementById('langEs').classList.toggle('active', lang === 'es');
             document.getElementById('langFr').classList.toggle('active', lang === 'fr');
             
-            // Mostrar mensaje
-            showMessage(t('langChanged'), 'success');
-            
-            // Aplicar traducciones sin recargar
-            setTimeout(() => {
-                applyTranslations();
-            }, 500);
+            // Redirigir a la URL con el nuevo idioma
+            window.location.href = `/${lang}/`;
         }
 
         // === APLICAR TODAS LAS TRADUCCIONES ===
@@ -6074,7 +6514,7 @@
                 if (dashDateFilterH3[0]) dashDateFilterH3[0].innerHTML = '🗓️ ' + t.dateFiltering;
                 
                 const dashDateFilterP = dashboardView.querySelectorAll('.date-filters-header p');
-                if (dashDateFilterP[0]) dashDateFilterP[0].textContent = (lang === 'es' ? 'Selecciona el rango de fechas para el dashboard' : 'Sélectionnez la plage de dates pour le tableau de bord');
+                if (dashDateFilterP[0]) dashDateFilterP[0].textContent = (lang === 'es' ? 'Selecciona el rango de fechas para el dashboard' : 'Selecciona el rango de fechas pour le tableau de bord');
                 
                 // Día de corte dashboard
                 const dashCutoffStrong = dashboardView.querySelectorAll('.cutoff-day-label strong');
@@ -6161,6 +6601,7 @@
             document.getElementById('langEs').classList.toggle('active', savedLang === 'es');
             document.getElementById('langFr').classList.toggle('active', savedLang === 'fr');
             applyTranslations();
+            applyDynamicTranslations();
         });
 
         // Función para cambiar entre vistas
@@ -6556,11 +6997,11 @@
                     
                     showMessage(checked ? '✅ Gasto confirmado' : '⏳ Gasto marcado como pendiente', 'success');
                 } else {
-                    showMessage('❌ Erreur lors de la mise à jour du statut', 'error');
+                    showMessage(t('errorUpdateStatus'), 'error');
                 }
             } catch (error) {
                 console.error('Error al actualizar estado:', error);
-                showMessage('❌ Error al actualizar el estado', 'error');
+                showMessage(t('errorUpdateStatus'), 'error');
             }
         }
 
@@ -6614,6 +7055,22 @@
             try {
                 // En vista Gastos, TODOS ven solo sus propios gastos (incluso admin)
                 const response = await fetch('/api/gastos');
+                
+                // Verificar si la respuesta es un redirect a login
+                if (response.redirected || response.status === 401 || !response.ok) {
+                    console.error('Sesión expirada, redirigiendo a login');
+                    window.location.href = '/login';
+                    return;
+                }
+                
+                // Verificar que la respuesta es JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    console.error('La respuesta no es JSON, redirigiendo a login');
+                    window.location.href = '/login';
+                    return;
+                }
+                
                 gastos = await response.json();
                 
                 // Verificar si hay filtros de fecha aplicados
@@ -6634,6 +7091,11 @@
                 loadResumenViajes();
             } catch (error) {
                 console.error('Error cargando gastos:', error);
+                // Si hay un error de parsing JSON, probablemente sea un redirect a login
+                if (error.message.includes('Unexpected token') || error.message.includes('JSON')) {
+                    console.error('Sesión expirada por error de JSON, redirigiendo a login');
+                    window.location.href = '/login';
+                }
             }
         }
 
@@ -7129,7 +7591,7 @@
                     showMessage('❌ Erreur lors de l\'ajout du groupe', 'error');
                 }
             } catch (error) {
-                showMessage('❌ Error al añadir el motivo', 'error');
+                showMessage(t('errorAddGroup'), 'error');
                 console.error('Error:', error);
             }
         }
@@ -7369,10 +7831,10 @@
                         showMessage('⚠️ Impossible d\'extraire les informations. Complétez manuellement.', 'warning');
                     }
                 } else {
-                    showMessage('❌ Erreur lors de l\'analyse de l\'image. Voulez-vous compléter manuellement?', 'error');
+                    showMessage(t('errorAnalyzeImage'), 'error');
                 }
             } catch (error) {
-                showMessage('❌ Erreur de connexion lors de l\'analyse de l\'image. Complétez manuellement.', 'error');
+                showMessage(t('errorConnectionAnalyze'), 'error');
                 console.error('Error:', error);
             }
         }
@@ -7476,11 +7938,11 @@
                     
                     return true;
                 } else {
-                    showMessage(`❌ Erreur lors de l'enregistrement: ${result.message || 'Erreur inconnue'}`, 'error');
+                    showMessage(`${t('errorSaving')}: ${result.message || t('errorUnknown')}`, 'error');
                     return false;
                 }
             } catch (error) {
-                showMessage('❌ Erreur de connexion lors de l\'enregistrement', 'error');
+                showMessage(t('errorConnectionSaving'), 'error');
                 console.error('Error:', error);
                 return false;
             } finally {
@@ -7579,7 +8041,7 @@
                     showMessage('❌ Dépense non trouvée', 'error');
                 }
             } catch (error) {
-                showMessage('❌ Erreur lors du chargement de la dépense', 'error');
+                showMessage(t('errorLoadingExpense'), 'error');
                 console.error('Error:', error);
             }
         }
@@ -7598,10 +8060,10 @@
                         showMessage('✅ Dépense supprimée correctement', 'success');
                         loadGastos();
                     } else {
-                        showMessage('❌ Erreur lors de la suppression de la dépense', 'error');
+                        showMessage(t('errorDeletingExpense'), 'error');
                     }
                 } catch (error) {
-                    showMessage('❌ Error al eliminar el gasto', 'error');
+                    showMessage(t('errorDeletingExpense'), 'error');
                     console.error('Error:', error);
                 }
             }
@@ -7899,7 +8361,7 @@
                 renderMotivosList(motivosData);
             } catch (error) {
                 console.error('Error cargando motivos:', error);
-                showMessage('❌ Erreur lors du chargement des groupes', 'error');
+                showMessage(t('errorLoadingGroups'), 'error');
             }
         }
 
@@ -7910,8 +8372,8 @@
             if (motivosData.length === 0) {
                 container.innerHTML = `
                     <div style="text-align: center; padding: 32px; color: var(--text-secondary);">
-                        <h3>🎯 Sin viajes aún</h3>
-                        <p>Utiliza el formulario de arriba para crear tu primer viaje</p>
+                        <h3 id="noTripsYetTitle">🎯 Sin viajes aún</h3>
+                        <p id="createFirstTrip">Utiliza el formulario de arriba para crear tu primer viaje</p>
                     </div>
                 `;
                 return;
@@ -7969,7 +8431,7 @@
                 }
             } catch (error) {
                 console.error('Error toggle viaje:', error);
-                showMessage('❌ Erreur lors du changement de statut du groupe', 'error');
+                showMessage(t('errorChangingGroupStatus'), 'error');
             }
         }
 
@@ -8146,7 +8608,7 @@
                 }
             } catch (error) {
                 console.error('Error cargando detalles:', error);
-                showMessage('❌ Erreur lors du chargement des détails du groupe', 'error');
+                showMessage(t('errorLoadingGroupDetails'), 'error');
             }
         }
 
@@ -8157,8 +8619,8 @@
             if (detalles.length === 0) {
                 container.innerHTML = `
                     <div style="text-align: center; padding: 32px; color: var(--text-secondary);">
-                        <h4>💰 Sin gastos esperados aún</h4>
-                        <p>Utiliza el formulario de arriba para añadir gastos esperados para este viaje</p>
+                        <h4 id="noExpectedExpenses">💰 Sin gastos esperados aún</h4>
+                        <p id="useFormAbove">Utiliza el formulario de arriba para añadir gastos esperados para este viaje</p>
                         ${metadata && metadata.total_gastos_esperados > 0 ? 
                             `<p style="margin-top: 16px; font-size: 0.9em; color: var(--text-secondary);">
                                 💰 Total: ${metadata.total_gastos_esperados} gasto${metadata.total_gastos_esperados === 1 ? '' : 's'} esperado${metadata.total_gastos_esperados === 1 ? '' : 's'} en este viaje
@@ -8216,7 +8678,7 @@
             }
             
             if (!currentViajeDetalle) {
-                showMessage('❌ Erreur: Aucun groupe sélectionné', 'error');
+                showMessage(t('errorNoGroupSelected'), 'error');
                 return;
             }
             
@@ -9011,6 +9473,7 @@
             const modal = document.getElementById('batchVerificationModal');
             modal.style.display = 'none';
             modal.classList.remove('show');
+            document.getElementById('batchVerificationFooter').style.display = 'none';
             
             // Limpiar datos
             batchTickets = [];
@@ -9030,7 +9493,7 @@
                 // Actualizar progreso
                 const progress = ((i + 1) / total) * 100;
                 document.getElementById('batchProgressFill').style.width = progress + '%';
-                document.getElementById('batchProgressText').textContent = `Traitement ${i + 1} sur ${total}: ${ticket.filename}`;
+                document.getElementById('batchProgressText').textContent = `Procesando ${i + 1} de ${total}: ${ticket.filename}`;
 
                 try {
                     // Procesar imagen con IA
@@ -9058,11 +9521,11 @@
                             currency: ticket.extractedData?.currency
                         });
                     } else {
-                        ticket.error = result.error || 'Erreur lors du traitement de l\'image';
+                        ticket.error = result.error || t('cantExtract');
                         errors++;
                     }
                 } catch (error) {
-                    ticket.error = 'Erreur de connexion: ' + error.message;
+                    ticket.error = t('connectionError') + ': ' + error.message;
                     errors++;
                 }
 
@@ -9073,6 +9536,7 @@
             // Procesamiento completado
             document.getElementById('batchProcessingStatus').style.display = 'none';
             document.getElementById('batchVerificationContainer').style.display = 'block';
+            document.getElementById('batchVerificationFooter').style.display = 'block';
             
             // Actualizar estadísticas
             document.getElementById('batchTotalCount').textContent = total;
@@ -9106,42 +9570,42 @@
                 const ticketHtml = `
                     <div class="batch-ticket-item ${ticket.processed ? 'success' : 'error'}" data-index="${index}">
                         <div class="batch-ticket-header">
-                            <span class="batch-ticket-filename">${ticket.filename}</span>
+                            <span class="batch-ticket-filename">📄 ${ticket.filename}</span>
                             <span class="batch-ticket-status ${ticket.processed ? 'success' : 'error'}">
-                                ${ticket.processed ? 'Traité' : 'Erreur'}
+                                ${ticket.processed ? '✅ Procesado' : '❌ Error'}
                             </span>
                         </div>
                         
-                        ${ticket.error ? `<div class="error-message" style="color: #dc2626; font-size: 12px; margin-bottom: 10px;">❌ ${ticket.error}</div>` : ''}
+                        ${ticket.error ? `<div class="error-message" style="color: #dc2626; font-size: 13px; margin-bottom: 10px; padding: 10px; background: #fee2e2; border-radius: 8px;">❌ ${ticket.error}</div>` : ''}
                         
                         <div class="batch-ticket-preview">
-                            <img src="${ticket.imageData}" alt="Ticket" class="batch-ticket-image">
+                            <img src="${ticket.imageData}" alt="Ticket" class="batch-ticket-image" style="border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                             <div class="batch-ticket-data">
                                 <div class="batch-ticket-field">
-                                    <label>Fecha</label>
-                                    <input type="date" id="batch_fecha_${index}" value="${ticket.extractedData?.date || ''}" ${!ticket.processed ? 'disabled' : ''}>
+                                    <label>📅 Fecha</label>
+                                    <input type="date" id="batch_fecha_${index}" value="${ticket.extractedData?.date || ''}" ${!ticket.processed ? 'disabled' : ''} style="border-radius: 8px;">
                                 </div>
                                 <div class="batch-ticket-field">
-                                    <label>Importe</label>
-                                    <input type="number" id="batch_importe_${index}" value="${ticket.extractedData?.amount || ''}" step="0.01" ${!ticket.processed ? 'disabled' : ''}>
+                                    <label>💰 Importe</label>
+                                    <input type="number" id="batch_importe_${index}" value="${ticket.extractedData?.amount || ''}" step="0.01" ${!ticket.processed ? 'disabled' : ''} style="border-radius: 8px;">
                                 </div>
                                 <div class="batch-ticket-field">
-                                    <label>Moneda</label>
-                                    <input type="text" id="batch_moneda_${index}" value="${ticket.extractedData?.currency || 'EUR'}" ${!ticket.processed ? 'disabled' : ''}>
+                                    <label>💱 Moneda</label>
+                                    <input type="text" id="batch_moneda_${index}" value="${ticket.extractedData?.currency || 'EUR'}" ${!ticket.processed ? 'disabled' : ''} style="border-radius: 8px;">
                                 </div>
                                 <div class="batch-ticket-field">
-                                    <label>Descripción</label>
-                                    <input type="text" id="batch_descripcion_${index}" value="${ticket.extractedData?.description || ''}" ${!ticket.processed ? 'disabled' : ''}>
+                                    <label>📝 Descripción</label>
+                                    <input type="text" id="batch_descripcion_${index}" value="${ticket.extractedData?.description || ''}" ${!ticket.processed ? 'disabled' : ''} style="border-radius: 8px;">
                                 </div>
                                 <div class="batch-ticket-field">
-                                    <label>Concepto</label>
-                                    <select id="batch_concepto_${index}" ${!ticket.processed ? 'disabled' : ''}>
-                                        <option value="">Sélectionner un concept</option>
+                                    <label>🏷️ Concepto *</label>
+                                    <select id="batch_concepto_${index}" ${!ticket.processed ? 'disabled' : ''} style="border-radius: 8px;">
+                                        <option value="">Seleccionar concepto...</option>
                                     </select>
                                 </div>
                                 <div class="batch-ticket-field">
-                                    <label>Viaje</label>
-                                    <select id="batch_motivo_${index}" ${!ticket.processed ? 'disabled' : ''}>
+                                    <label>✈️ Viaje</label>
+                                    <select id="batch_motivo_${index}" ${!ticket.processed ? 'disabled' : ''} style="border-radius: 8px;">
                                         <option value="">Sélectionner un voyage</option>
                                     </select>
                                 </div>
@@ -9163,7 +9627,8 @@
                 container.innerHTML += ticketHtml;
             });
             
-            // Llenar los selects de motivos después de renderizar
+            // Llenar los selects de conceptos y motivos después de renderizar
+            populateBatchConceptos();
             populateBatchMotivos();
             
             // Actualizar valores de campos después de renderizar
@@ -9247,6 +9712,53 @@
         }
 
         // Llenar los selects de motivos para procesamiento por lotes
+        // Llenar los selects de conceptos en batch
+        async function populateBatchConceptos() {
+            // Asegurarse de que los conceptos están cargados
+            if (conceptos.length === 0) {
+                await loadConceptos();
+            }
+            
+            // Llenar cada select de concepto
+            batchTickets.forEach((ticket, index) => {
+                const conceptoSelect = document.getElementById(`batch_concepto_${index}`);
+                if (conceptoSelect && ticket.processed) {
+                    // Llenar opciones
+                    conceptoSelect.innerHTML = '<option value="">Seleccionar concepto...</option>' + 
+                        conceptos.map(concepto => `<option value="${concepto}">${concepto}</option>`).join('');
+                    
+                    // Seleccionar automáticamente el concepto si fue extraído
+                    if (ticket.extractedData?.concept) {
+                        const extractedConcept = ticket.extractedData.concept.trim();
+                        
+                        // Buscar coincidencia exacta
+                        const exactMatch = conceptos.find(c => c.toLowerCase() === extractedConcept.toLowerCase());
+                        if (exactMatch) {
+                            conceptoSelect.value = exactMatch;
+                            console.log(`✅ Concepto auto-seleccionado para ticket ${index}: ${exactMatch}`);
+                        } else {
+                            // Buscar coincidencia parcial
+                            const partialMatch = conceptos.find(c => 
+                                c.toLowerCase().includes(extractedConcept.toLowerCase()) || 
+                                extractedConcept.toLowerCase().includes(c.toLowerCase())
+                            );
+                            if (partialMatch) {
+                                conceptoSelect.value = partialMatch;
+                                console.log(`✅ Concepto auto-seleccionado (coincidencia parcial) para ticket ${index}: ${partialMatch}`);
+                            } else {
+                                console.log(`⚠️ No se encontró coincidencia para concepto: ${extractedConcept}`);
+                            }
+                        }
+                    }
+                    
+                    // Si no se seleccionó un concepto, usar el último concepto usado
+                    if (!conceptoSelect.value && lastUsedConcepto && conceptos.includes(lastUsedConcepto)) {
+                        conceptoSelect.value = lastUsedConcepto;
+                    }
+                }
+            });
+        }
+
         async function populateBatchMotivos() {
             // Asegurarse de que los motivos están cargados
             if (motivos.length === 0) {
@@ -9260,9 +9772,9 @@
                 const motivoSelect = document.getElementById(`batch_motivo_${index}`);
                 if (motivoSelect && ticket.processed) {
                     // Llenar opciones
-                    motivoSelect.innerHTML = '<option value="">Sélectionner un voyage</option>' + 
+                    motivoSelect.innerHTML = '<option value="">Seleccionar viaje...</option>' + 
                         motivos.map(motivo => `<option value="${motivo}">${motivo}</option>`).join('') +
-                        '<option value="__NEW__">➕ Créer nouveau voyage...</option>';
+                        '<option value="__NEW__">➕ Crear nuevo viaje...</option>';
                     
                     // Seleccionar automáticamente el motivo si existe
                     let motivoSeleccionado = false;
@@ -9296,7 +9808,7 @@
                     // Agregar listener para crear nuevo motivo
                     motivoSelect.addEventListener('change', function() {
                         if (this.value === '__NEW__') {
-                            const nuevoMotivo = prompt('Introduire le nouveau voyage:');
+                            const nuevoMotivo = prompt('Introducir el nombre del nuevo viaje:');
                             if (nuevoMotivo && nuevoMotivo.trim()) {
                                 addNewMotivoBatch(nuevoMotivo.trim(), index);
                             } else {
@@ -9341,7 +9853,7 @@
                     showMessage('❌ Erreur lors de l\'ajout du groupe', 'error');
                 }
             } catch (error) {
-                showMessage('❌ Error al añadir el motivo', 'error');
+                showMessage(t('errorAddGroup'), 'error');
                 console.error('Error:', error);
             }
         }
